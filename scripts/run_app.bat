@@ -1,0 +1,3 @@
+@echo off
+echo Starting Streamlit app...
+python run_app.py

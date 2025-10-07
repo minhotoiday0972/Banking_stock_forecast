@@ -130,21 +130,21 @@ dmypy.json
 .pyre/
 
 # Project specific
-data/raw/*.csv
-data/processed/*.csv
-data/processed/*.pkl
-data/processed/*.npz
-data/database/*.db
-data/database/*.db-*
-models/*.pt
-models/*.pth
-models/*.pkl
-outputs/*.png
-outputs/*.jpg
-outputs/*.npy
-outputs/*.txt
-logs/*.log
-*.log
+# data/raw/*.csv
+# data/processed/*.csv
+# data/processed/*.pkl
+# data/processed/*.npz
+# data/database/*.db
+# data/database/*.db-*
+# models/*.pt
+# models/*.pth
+# models/*.pkl
+# outputs/*.png
+# outputs/*.jpg
+# outputs/*.npy
+# outputs/*.txt
+# logs/*.log
+# *.log
 
 # Temporary files
 *.tmp

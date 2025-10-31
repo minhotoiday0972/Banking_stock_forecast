@@ -124,26 +124,26 @@ def run_quick_pipeline():
     """Run pipeline with only transformer model (faster)"""
     start_time = time.time()
     
-    print("🚀 STARTING QUICK PIPELINE (Transformer only)")
-    print(f"📅 Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("STARTING QUICK PIPELINE (Transformer only)")
+    print(f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     # Prerequisites check
     if not check_prerequisites():
         return False
     
-    print("📅 Data collection will automatically use latest available date")
+    print("Data collection will automatically use latest available date")
     
     # Quick pipeline steps
     steps = [
         ("python main.py collect", "Data Collection"),
         ("python main.py features", "Feature Engineering"),
         ("python main.py train --models transformer", "Training Transformer Model"),
-        ("python main.py predict", "Generating Predictions")
+        ("python main.py app", "Generating Predictions")
     ]
     
     for command, description in steps:
         if not run_command(command, description):
-            print(f"❌ {description} failed. Exiting.")
+            print(f"{description} failed. Exiting.")
             return False
     
     total_time = time.time() - start_time
@@ -151,7 +151,7 @@ def run_quick_pipeline():
     seconds = int(total_time % 60)
     
     log_step("QUICK PIPELINE COMPLETED", "FINISH")
-    print(f"⏱️ Total time: {minutes:02d}:{seconds:02d}")
+    print(f"Total time: {minutes:02d}:{seconds:02d}")
     
     return True
 

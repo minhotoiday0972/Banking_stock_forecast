@@ -1,14 +1,19 @@
 # src/models/base_model.py
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
+import pandas as pd
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple, Optional, Any
-from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score, accuracy_score, classification_report, confusion_matrix, precision_recall_fscore_support
+from typing import Dict, List, Tuple
+from sklearn.metrics import (
+    mean_squared_error, mean_absolute_error, r2_score,
+    accuracy_score, classification_report, confusion_matrix,
+    precision_recall_fscore_support, balanced_accuracy_score
+)
+import joblib
 import matplotlib.pyplot as plt
 
 from ..utils.config import get_config
@@ -16,463 +21,327 @@ from ..utils.logger import get_logger
 
 logger = get_logger("models")
 
-class FocalLoss(nn.Module):
-    """Focal Loss for addressing class imbalance"""
-    
-    def __init__(self, alpha=1.0, gamma=2.0, reduction='mean'):
-        super(FocalLoss, self).__init__()
-        self.alpha = alpha
-        self.gamma = gamma
-        self.reduction = reduction
-    
-    def forward(self, inputs, targets):
-        ce_loss = F.cross_entropy(inputs, targets, reduction='none')
-        pt = torch.exp(-ce_loss)
-        focal_loss = self.alpha * (1 - pt) ** self.gamma * ce_loss
-        
-        if self.reduction == 'mean':
-            return focal_loss.mean()
-        elif self.reduction == 'sum':
-            return focal_loss.sum()
-        else:
-            return focal_loss
-
+# --- ĐỊNH NGHĨA LỚP CƠ SỞ ---
 class BaseModel(nn.Module, ABC):
-    """Base class for all models"""
+    """Lớp cơ sở trừu tượng cho tất cả các mô hình."""
     
-    def __init__(self, input_dim: int, config: Dict[str, Any]):
+    def __init__(self, input_dim: int, config: Dict):
         super(BaseModel, self).__init__()
         self.input_dim = input_dim
-        self.config = config
-        self.horizons = config.get('forecast_horizons', [1, 3, 5])
+        
+        # Lấy các tham số dùng chung từ config
+        shared_config = config.get('shared', {})
+        
+        # horizons giờ đây có thể là ['1', '3', '5'] (Nhánh 1) 
+        # hoặc ['1Q'] (Nhánh 2)
+        self.horizons = shared_config.get('forecast_horizons', ['1', '3', '5'])
         
     @abstractmethod
     def forward(self, x: torch.Tensor) -> Dict[str, torch.Tensor]:
-        """Forward pass - must return dict with keys for each target"""
+        """
+        Phương thức forward bắt buộc phải được triển khai bởi các lớp con.
+        Phải trả về một dictionary chứa các tensor đầu ra cho mỗi target.
+        """
         pass
+# --- KẾT THÚC LỚP CƠ SỞ ---
+
 
 class ModelTrainer:
-    """Centralized model training"""
+    """Lớp trung tâm để điều phối việc huấn luyện model (CHO NHÁNH 1)."""
     
     def __init__(self, model_name: str):
         self.model_name = model_name
         self.config = get_config()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        logger.info(f"Using device: {self.device}")
-    
+        logger.info(f"Sử dụng thiết bị: {self.device}")
+        self.feature_columns = []
+        self.class_weights = {}
+
     def _calculate_class_weights(self, target_data: np.ndarray) -> torch.Tensor:
-        """Calculate enhanced class weights for imbalanced classification"""
-        from sklearn.utils.class_weight import compute_class_weight
+        """Tính toán trọng số để xử lý mất cân bằng lớp trong bài toán phân loại."""
+        num_classes = self.config.get('models.shared.num_classes', 2)
+        class_counts = np.bincount(target_data.astype(int), minlength=num_classes)
         
-        # Get unique classes and their weights
-        unique_classes = np.unique(target_data)
-        class_weights = compute_class_weight(
-            'balanced', 
-            classes=unique_classes, 
-            y=target_data
-        )
+        total_samples = class_counts.sum()
+        if total_samples == 0:
+            return torch.ones(num_classes, dtype=torch.float32)
+
+        weights = total_samples / (len(class_counts) * class_counts)
+        weights[np.isinf(weights)] = 1.0 # Gán trọng số cơ bản nếu lớp không có mẫu
         
-        # Convert to tensor
-        weights_tensor = torch.zeros(3)  # 3 classes: Down(0), Flat(1), Up(2)
-        for i, class_idx in enumerate(unique_classes):
-            weights_tensor[int(class_idx)] = class_weights[i]
+        if weights.mean() > 0:
+            weights = weights / weights.mean() # Chuẩn hóa
+        weights = np.clip(weights, 0.5, 8.0) # Kẹp giá trị để ổn định
         
-        # ENHANCED: Apply EXTREME penalty to dominant class
-        # Find dominant class (usually class 1 - Flat)
-        class_counts = np.bincount(target_data.astype(int), minlength=3)
-        dominant_class = np.argmax(class_counts)
+        return torch.tensor(weights, dtype=torch.float32)
+
+    def prepare_data_pipeline(self, df: pd.DataFrame) -> Dict:
+        """
+        Chuẩn bị pipeline từ dataframe đã được scale: chỉ chia và tạo chuỗi.
+        """
         
-        # EXTREME enhancement for stubborn models
-        enhancement_factor = 10.0  # Much stronger
-        for i in range(3):
-            if i == dominant_class:
-                weights_tensor[i] = weights_tensor[i] * 0.1  # EXTREME penalty for dominant
-            else:
-                weights_tensor[i] = weights_tensor[i] * enhancement_factor  # EXTREME boost minorities
+        # Di chuyển logic dropna từ feature_engineer sang đây
+        target_cols = [col for col in df.columns if col.startswith('Target_')]
+        df = df.dropna(subset=target_cols)
+        df = df.reset_index(drop=True)
         
-        logger.info(f"Class distribution: {class_counts}")
-        logger.info(f"Dominant class: {dominant_class}")
-        logger.info(f"Enhanced class weights: {weights_tensor.tolist()}")
-        return weights_tensor
-    
-    def prepare_data(self, sequences: Dict[str, np.ndarray], 
-                    train_split: float = 0.8, val_split: float = 0.1) -> Dict[str, Any]:
-        """Prepare data for training"""
-        X = sequences['X']
-        total_samples = len(X)
+        config = self.config.get('training', {})
+        train_split = config.get('train_split', 0.8)
+        val_split = config.get('val_split', 0.1)
+        timesteps = config.get('timesteps', 30)
+        batch_size = config.get('batch_size', 32)
         
-        # Calculate split indices
-        train_size = int(total_samples * train_split)
-        val_size = int(total_samples * val_split)
+        train_size = int(len(df) * train_split)
+        val_size = int(len(df) * val_split)
+
+        df_train = df.iloc[:train_size]
+        df_val = df.iloc[train_size:train_size + val_size]
+        df_test = df.iloc[train_size + val_size:]
+        logger.info(f"Chia dữ liệu (sau khi lọc): Train={len(df_train)}, Val={len(df_val)}, Test={len(df_test)}")
+
+        metadata_cols = self._load_feature_columns_from_metadata(df['Ticker'].iloc[0])
+        if metadata_cols:
+             self.feature_columns = metadata_cols
+        else:
+            numeric_features = df.select_dtypes(include=np.number).columns.tolist()
+            self.feature_columns = [col for col in numeric_features if not col.startswith('Target_')]
+
+        if not self.feature_columns:
+            raise ValueError("Không tìm thấy đặc trưng số nào để huấn luyện.")
+
+        X_train, y_train_dict = self._create_sequences(df_train, self.feature_columns, timesteps)
+        X_val, y_val_dict = self._create_sequences(df_val, self.feature_columns, timesteps)
+        X_test, y_test_dict = self._create_sequences(df_test, self.feature_columns, timesteps)
         
-        # Split data
-        X_train = X[:train_size]
-        X_val = X[train_size:train_size + val_size]
-        X_test = X[train_size + val_size:]
+        data_loaders = {}
+        all_targets_data = {}
         
-        # Prepare targets
-        targets = {}
-        for key, values in sequences.items():
-            if key.startswith('Target_'):
-                targets[key] = {
-                    'train': values[:train_size],
-                    'val': values[train_size:train_size + val_size],
-                    'test': values[train_size + val_size:]
-                }
+        for split_name, (X, y_dict) in [('train', (X_train, y_train_dict)), ('val', (X_val, y_val_dict)), ('test', (X_test, y_test_dict))]:
+            all_targets_data[split_name] = y_dict
+            if X.shape[0] > 0:
+                target_tensors = [torch.tensor(y_dict[key], dtype=torch.long if 'Direction' in key else torch.float32) for key in sorted(y_dict.keys())]
+                dataset = TensorDataset(torch.tensor(X, dtype=torch.float32), *target_tensors)
+                data_loaders[split_name] = DataLoader(dataset, batch_size=batch_size, shuffle=(split_name == 'train'))
         
         return {
-            'X_train': X_train, 'X_val': X_val, 'X_test': X_test,
-            'targets': targets,
-            'input_dim': X.shape[2]
+            'data_loaders': data_loaders,
+            'input_dim': len(self.feature_columns),
+            'targets_meta': all_targets_data
         }
-    
-    def create_data_loaders(self, X: np.ndarray, targets: Dict[str, np.ndarray], 
-                           batch_size: int = 32, shuffle: bool = True) -> DataLoader:
-        """Create data loader"""
-        X_tensor = torch.tensor(X, dtype=torch.float32)
-        target_tensors = []
-        
-        for key in sorted(targets.keys()):
-            target_tensors.append(torch.tensor(targets[key], dtype=torch.float32))
-        
-        dataset = TensorDataset(X_tensor, *target_tensors)
-        return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
-    
-    def calculate_metrics(self, predictions: Dict[str, np.ndarray], 
-                         targets: Dict[str, np.ndarray]) -> Dict[str, Dict[str, float]]:
-        """Calculate comprehensive metrics for all targets"""
-        metrics = {}
-        
-        for target_name in predictions.keys():
-            if target_name not in targets:
-                continue
-                
-            pred = predictions[target_name]
-            true = targets[target_name]
-            
-            if 'Direction' in target_name:
-                # Enhanced classification metrics
-                accuracy = accuracy_score(true, pred)
-                
-                # Per-class metrics
-                precision, recall, f1, support = precision_recall_fscore_support(
-                    true, pred, average=None, zero_division=0
-                )
-                
-                # Balanced accuracy (more reliable for imbalanced data)
-                balanced_acc = accuracy_score(true, pred)  # Will implement balanced version
-                
-                # Confusion matrix for detailed analysis
-                cm = confusion_matrix(true, pred, labels=[0, 1, 2])
-                
-                # Check if model is just predicting one class
-                unique_predictions = len(np.unique(pred))
-                is_constant_prediction = unique_predictions == 1
-                
-                metrics[target_name] = {
-                    'accuracy': accuracy,
-                    'balanced_accuracy': balanced_acc,
-                    'precision_per_class': precision.tolist(),
-                    'recall_per_class': recall.tolist(),
-                    'f1_per_class': f1.tolist(),
-                    'support_per_class': support.tolist(),
-                    'confusion_matrix': cm.tolist(),
-                    'unique_predictions': unique_predictions,
-                    'is_constant_prediction': is_constant_prediction,
-                    'type': 'classification'
-                }
-                
-                # Log warning if constant prediction detected
-                if is_constant_prediction:
-                    predicted_class = pred[0]
-                    logger.warning(f"⚠️  {target_name}: Model predicting ONLY class {predicted_class}! (Fake learning detected)")
-                    logger.warning(f"   Accuracy {accuracy:.4f} is MISLEADING!")
-                
-            else:
-                # Regression metrics
-                mse = mean_squared_error(true, pred)
-                mae = mean_absolute_error(true, pred)
-                rmse = np.sqrt(mse)
-                r2 = r2_score(true, pred)
-                
-                metrics[target_name] = {
-                    'mse': mse,
-                    'mae': mae,
-                    'rmse': rmse,
-                    'r2': r2,
-                    'type': 'regression'
-                }
-        
-        return metrics
-    
-    def train_model(self, model: BaseModel, data: Dict[str, Any], 
-                   epochs: int = 50, batch_size: int = 32, 
-                   learning_rate: float = 0.001, 
-                   early_stopping_patience: int = 10) -> Dict[str, Any]:
-        """Train model with early stopping"""
+
+    def _load_feature_columns_from_metadata(self, ticker: str) -> List[str]:
+        """Tải danh sách đặc trưng từ file metadata."""
+        try:
+            processed_dir = self.config.get('paths.processed', 'data/processed')
+            metadata_path = os.path.join(processed_dir, f"{ticker}_metadata.pkl")
+            if os.path.exists(metadata_path):
+                metadata = joblib.load(metadata_path)
+                return metadata.get('feature_columns', [])
+        except Exception as e:
+            logger.warning(f"Không thể tải metadata cho {ticker}: {e}")
+        return []
+
+    def _create_sequences(self, df: pd.DataFrame, feature_cols: List[str], timesteps: int) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
+        """Hàm trợ giúp để tạo các chuỗi dữ liệu đầu vào và đầu ra."""
+        X, targets = [], {}
+        target_cols = [col for col in df.columns if col.startswith('Target_')]
+        for col in target_cols:
+            targets[col] = []
+
+        if len(df) < timesteps:
+            return np.empty((0, timesteps, len(feature_cols))), {k: np.array(v) for k, v in targets.items()}
+
+        valid_feature_cols = [col for col in feature_cols if col in df.columns]
+        if len(valid_feature_cols) != len(feature_cols):
+             logger.warning(f"Một số cột đặc trưng trong metadata không có trong dataframe. Chỉ sử dụng các cột hợp lệ.")
+
+        for i in range(len(df) - timesteps + 1):
+            X.append(df[valid_feature_cols].iloc[i:i + timesteps].values)
+            for col in target_cols:
+                targets[col].append(df[col].iloc[i + timesteps - 1])
+
+        return np.array(X), {k: np.array(v) for k, v in targets.items()}
+
+    def train_model(self, model: BaseModel, data: Dict) -> Dict:
+        """Hàm chính để huấn luyện model với early stopping."""
+        training_config = self.config.get('training', {})
+        epochs = training_config.get('epochs', 50)
+        learning_rate = training_config.get('learning_rate', 0.0001)
+        patience = training_config.get('early_stopping_patience', 10)
         
         model = model.to(self.device)
-        
-        # Prepare optimizers and criteria
         optimizer = optim.Adam(model.parameters(), lr=learning_rate)
-        
-        # Create data loaders
-        train_targets = {k: v['train'] for k, v in data['targets'].items()}
-        val_targets = {k: v['val'] for k, v in data['targets'].items()}
-        test_targets = {k: v['test'] for k, v in data['targets'].items()}
-        
-        train_loader = self.create_data_loaders(data['X_train'], train_targets, batch_size, True)
-        val_loader = self.create_data_loaders(data['X_val'], val_targets, batch_size, False)
-        test_loader = self.create_data_loaders(data['X_test'], test_targets, batch_size, False)
-        
-        # Training history
-        history = {
-            'train_loss': [],
-            'val_loss': [],
-            'metrics': []
-        }
-        
+
+        train_loader = data['data_loaders'].get('train')
+        val_loader = data['data_loaders'].get('val')
+        if not train_loader or not val_loader:
+            logger.error("Không có đủ dữ liệu trong train_loader hoặc val_loader. Dừng huấn luyện.")
+            return {}
+
+        train_targets = data['targets_meta']['train']
+        for key, target_data in train_targets.items():
+            if 'Direction' in key and len(target_data) > 0:
+                self.class_weights[key] = self._calculate_class_weights(target_data).to(self.device)
+
+        history = {'train_loss': [], 'val_loss': []}
         best_val_loss = float('inf')
         patience_counter = 0
         best_model_state = None
-        
+
         for epoch in range(epochs):
-            # Training phase
             model.train()
-            train_loss = 0.0
-            
+            total_train_loss = 0
             for batch_data in train_loader:
                 X_batch = batch_data[0].to(self.device)
                 target_batch = [t.to(self.device) for t in batch_data[1:]]
                 
                 optimizer.zero_grad()
-                
-                # Forward pass
                 outputs = model(X_batch)
                 
-                # Calculate loss for all targets with enhanced weighting
-                total_loss = 0
-                regression_loss = 0
-                classification_loss = 0
-                target_keys = sorted(data['targets'].keys())
-                
-                for i, target_key in enumerate(target_keys):
-                    if 'Direction' in target_key:
-                        # ENHANCED: Use Focal Loss instead of CrossEntropy
-                        if not hasattr(self, 'class_weights'):
-                            self.class_weights = self._calculate_class_weights(data['targets'][target_key]['train'])
-                        
-                        # Use EXTREME Focal Loss for stubborn models
-                        focal_criterion = FocalLoss(alpha=2.0, gamma=5.0)  # Much stronger
-                        loss = focal_criterion(outputs[target_key], target_batch[i].long())
-                        
-                        # Apply class weights manually to focal loss
-                        class_weights_expanded = self.class_weights.to(self.device)[target_batch[i].long()]
-                        loss = (loss * class_weights_expanded).mean()
-                        
-                        classification_loss += loss
-                    else:
-                        # Regression loss
-                        criterion = nn.MSELoss()
-                        loss = criterion(outputs[target_key].squeeze(), target_batch[i])
-                        regression_loss += loss
-                
-                # EXTREME: Weighted combination with HEAVY emphasis on classification
-                classification_weight = 5.0  # EXTREME emphasis
-                regression_weight = 1.0
-                
-                total_loss = (regression_weight * regression_loss + 
-                             classification_weight * classification_loss)
-                
-                total_loss.backward()
+                loss = self._calculate_combined_loss(outputs, target_batch, sorted(train_targets.keys()))
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
                 optimizer.step()
-                train_loss += total_loss.item()
-            
-            avg_train_loss = train_loss / len(train_loader)
+                total_train_loss += loss.item()
+
+            avg_train_loss = total_train_loss / len(train_loader)
             history['train_loss'].append(avg_train_loss)
-            
-            # Validation phase
-            model.eval()
-            val_loss = 0.0
-            val_predictions = {key: [] for key in data['targets'].keys()}
-            val_true = {key: [] for key in data['targets'].keys()}
-            
-            with torch.no_grad():
-                for batch_data in val_loader:
-                    X_batch = batch_data[0].to(self.device)
-                    target_batch = [t.to(self.device) for t in batch_data[1:]]
-                    
-                    outputs = model(X_batch)
-                    
-                    # Calculate validation loss and collect predictions
-                    total_loss = 0
-                    target_keys = sorted(data['targets'].keys())
-                    
-                    for i, target_key in enumerate(target_keys):
-                        if 'Direction' in target_key:
-                            # Use EXTREME Focal Loss for validation too
-                            focal_criterion = FocalLoss(alpha=2.0, gamma=5.0)  # Much stronger
-                            loss = focal_criterion(outputs[target_key], target_batch[i].long())
-                            
-                            # Apply class weights
-                            class_weights_expanded = self.class_weights.to(self.device)[target_batch[i].long()]
-                            loss = (loss * class_weights_expanded).mean()
-                            
-                            # Get predicted classes
-                            pred_classes = torch.argmax(outputs[target_key], dim=1)
-                            val_predictions[target_key].extend(pred_classes.cpu().numpy())
-                            
-                            total_loss += loss * 5.0  # Same EXTREME weighting as training
-                        else:
-                            criterion = nn.MSELoss()
-                            loss = criterion(outputs[target_key].squeeze(), target_batch[i])
-                            val_predictions[target_key].extend(outputs[target_key].squeeze().cpu().numpy())
-                            total_loss += loss
-                        
-                        val_true[target_key].extend(target_batch[i].cpu().numpy())
-                    
-                    val_loss += total_loss.item()
-            
-            avg_val_loss = val_loss / len(val_loader)
+
+            avg_val_loss, _ = self._evaluate_model(model, val_loader, data['targets_meta']['val'])
             history['val_loss'].append(avg_val_loss)
             
-            # Calculate metrics
-            val_predictions_np = {k: np.array(v) for k, v in val_predictions.items()}
-            val_true_np = {k: np.array(v) for k, v in val_true.items()}
-            metrics = self.calculate_metrics(val_predictions_np, val_true_np)
-            history['metrics'].append(metrics)
-            
-            # Enhanced Logging
-            if (epoch + 1) % 5 == 0 or epoch == 0 or epoch == epochs - 1:
-                logger.info(f"Epoch {epoch+1}/{epochs} - Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}")
-                
-                # Log detailed metrics
-                for target_name, target_metrics in metrics.items():
-                    if target_metrics['type'] == 'regression':
-                        logger.info(f"  {target_name} - RMSE: {target_metrics['rmse']:.6f}, R²: {target_metrics['r2']:.6f}")
-                    else:
-                        # Enhanced classification logging
-                        acc = target_metrics['accuracy']
-                        is_constant = target_metrics['is_constant_prediction']
-                        unique_preds = target_metrics['unique_predictions']
-                        
-                        if is_constant:
-                            logger.warning(f"  🚨 {target_name} - Accuracy: {acc:.6f} [FAKE - Only {unique_preds} class predicted!]")
-                        else:
-                            logger.info(f"  ✅ {target_name} - Accuracy: {acc:.6f} [Real - {unique_preds} classes predicted]")
-                        
-                        # Log per-class metrics
-                        precision = target_metrics['precision_per_class']
-                        recall = target_metrics['recall_per_class']
-                        f1 = target_metrics['f1_per_class']
-                        
-                        logger.info(f"    Per-class Precision: Down={precision[0]:.3f}, Flat={precision[1]:.3f}, Up={precision[2]:.3f}")
-                        logger.info(f"    Per-class Recall:    Down={recall[0]:.3f}, Flat={recall[1]:.3f}, Up={recall[2]:.3f}")
-                        logger.info(f"    Per-class F1:        Down={f1[0]:.3f}, Flat={f1[1]:.3f}, Up={f1[2]:.3f}")
-            
-            # Early stopping
+            logger.info(f"Epoch {epoch+1}/{epochs} - Train Loss: {avg_train_loss:.6f}, Val Loss: {avg_val_loss:.6f}")
+
             if avg_val_loss < best_val_loss:
                 best_val_loss = avg_val_loss
                 patience_counter = 0
-                best_model_state = model.state_dict().copy()
+                best_model_state = model.state_dict()
             else:
                 patience_counter += 1
-                if patience_counter >= early_stopping_patience:
-                    logger.info(f"Early stopping at epoch {epoch+1}")
+                if patience_counter >= patience:
+                    logger.info(f"Early stopping tại epoch {epoch+1}")
                     break
         
-        # Load best model and evaluate on test set
-        if best_model_state is not None:
+        if best_model_state:
             model.load_state_dict(best_model_state)
+            
+        _, test_metrics = self._evaluate_model(model, data['data_loaders'].get('test'), data['targets_meta']['test'])
+
+        return {'model': model, 'history': history, 'test_metrics': test_metrics}
+
+    def _calculate_combined_loss(self, outputs, targets, target_keys):
+        """Tính toán loss tổng hợp cho cả tác vụ hồi quy và phân loại."""
+        total_loss = 0
+        loss_weights = self.config.get('training.loss_weights', {})
         
-        # Test evaluation
-        test_metrics = self._evaluate_model(model, test_loader, data['targets'])
+        for i, key in enumerate(target_keys):
+            if key not in outputs: continue # Bỏ qua nếu model không có đầu ra này
+                
+            output = outputs[key]
+            target = targets[i]
+            
+            if 'Direction' in key:
+                weight = self.class_weights.get(key)
+                criterion = nn.CrossEntropyLoss(weight=weight)
+                loss = criterion(output, target.long())
+                total_loss += loss * loss_weights.get('classification', 1.0)
+            else:
+                criterion = nn.MSELoss()
+                loss = criterion(output.squeeze(), target)
+                total_loss += loss * loss_weights.get('regression', 1.0)
+                
+        return total_loss
         
-        return {
-            'model': model,
-            'history': history,
-            'test_metrics': test_metrics,
-            'best_val_loss': best_val_loss
-        }
-    
-    def _evaluate_model(self, model: BaseModel, test_loader: DataLoader, 
-                       targets_info: Dict[str, Any]) -> Dict[str, Dict[str, float]]:
-        """Evaluate model on test set"""
+    def _evaluate_model(self, model, data_loader, targets_meta):
+        """Đánh giá hiệu suất của model trên một tập dữ liệu."""
+        if not data_loader:
+            return 0.0, {}
+            
         model.eval()
-        test_predictions = {key: [] for key in targets_info.keys()}
-        test_true = {key: [] for key in targets_info.keys()}
+        total_loss = 0
+        predictions = {key: [] for key in targets_meta.keys()}
         
         with torch.no_grad():
-            for batch_data in test_loader:
+            for batch_data in data_loader:
                 X_batch = batch_data[0].to(self.device)
                 target_batch = [t.to(self.device) for t in batch_data[1:]]
                 
                 outputs = model(X_batch)
-                target_keys = sorted(targets_info.keys())
+                loss = self._calculate_combined_loss(outputs, target_batch, sorted(targets_meta.keys()))
+                total_loss += loss.item()
                 
-                for i, target_key in enumerate(target_keys):
-                    if 'Direction' in target_key:
-                        pred_classes = torch.argmax(outputs[target_key], dim=1)
-                        test_predictions[target_key].extend(pred_classes.cpu().numpy())
+                for i, key in enumerate(sorted(targets_meta.keys())):
+                    if key not in outputs: continue
+                    if 'Direction' in key:
+                        preds = torch.argmax(outputs[key], dim=1)
+                        predictions[key].extend(preds.cpu().numpy())
                     else:
-                        test_predictions[target_key].extend(outputs[target_key].squeeze().cpu().numpy())
-                    
-                    test_true[target_key].extend(target_batch[i].cpu().numpy())
-        
-        # Calculate test metrics
-        test_predictions_np = {k: np.array(v) for k, v in test_predictions.items()}
-        test_true_np = {k: np.array(v) for k, v in test_true.items()}
-        
-        return self.calculate_metrics(test_predictions_np, test_true_np)
-    
+                        predictions[key].extend(outputs[key].squeeze().cpu().numpy())
+
+        avg_loss = total_loss / len(data_loader)
+        metrics = self._calculate_metrics(predictions, targets_meta)
+        return avg_loss, metrics
+
+    def _calculate_metrics(self, predictions, targets):
+        """Tính toán các chỉ số đánh giá."""
+        metrics = {}
+        for key, pred_values in predictions.items():
+            true_values = targets.get(key)
+            if true_values is None or len(true_values) == 0:
+                continue
+
+            pred_values = np.array(pred_values)
+            true_values = np.array(true_values)
+            
+            if len(pred_values) == 0: continue # Không có dự đoán nào
+
+            valid_indices = np.isfinite(true_values) & np.isfinite(pred_values)
+            true_values = true_values[valid_indices]
+            pred_values = pred_values[valid_indices]
+
+            if len(true_values) == 0 or len(pred_values) == 0 or len(true_values) != len(pred_values):
+                continue
+
+            if 'Direction' in key:
+                if len(np.unique(true_values)) < 2:
+                     acc = accuracy_score(true_values, pred_values)
+                     metrics[key] = {'accuracy': acc, 'balanced_accuracy': acc}
+                else:
+                    metrics[key] = {
+                        'accuracy': accuracy_score(true_values, pred_values),
+                        'balanced_accuracy': balanced_accuracy_score(true_values, pred_values)
+                    }
+            else:
+                if len(true_values) < 2: # Không thể tính R2 nếu chỉ có 1 mẫu
+                    metrics[key] = {'rmse': np.sqrt(mean_squared_error(true_values, pred_values)), 'r2': 0.0}
+                else:
+                    metrics[key] = {
+                        'rmse': np.sqrt(mean_squared_error(true_values, pred_values)),
+                        'r2': r2_score(true_values, pred_values)
+                    }
+        return metrics
+
     def save_model(self, model: BaseModel, ticker: str, model_type: str):
-        """Save trained model"""
-        models_dir = self.config.models_dir
+        """Lưu model đã huấn luyện."""
+        models_dir = self.config.get('paths.models', 'models')
         os.makedirs(models_dir, exist_ok=True)
-        
         model_path = os.path.join(models_dir, f"{ticker}_{model_type}_best.pt")
         torch.save(model.state_dict(), model_path)
-        logger.info(f"Saved model: {model_path}")
+        logger.info(f"Đã lưu model tại: {model_path}")
     
-    def plot_training_history(self, history: Dict[str, List], ticker: str, model_type: str):
-        """Plot training history"""
-        outputs_dir = self.config.outputs_dir
+    def plot_training_history(self, history, ticker, model_type):
+        """Vẽ và lưu biểu đồ quá trình huấn luyện."""
+        outputs_dir = self.config.get('paths.outputs', 'outputs')
         os.makedirs(outputs_dir, exist_ok=True)
-        
-        plt.figure(figsize=(12, 4))
-        
-        # Loss plot
-        plt.subplot(1, 2, 1)
+        plt.figure(figsize=(10, 5))
         plt.plot(history['train_loss'], label='Train Loss')
         plt.plot(history['val_loss'], label='Validation Loss')
-        plt.title(f'{ticker} - {model_type} Loss Curve')
+        plt.title(f'Training History for {ticker} - {model_type}')
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         plt.legend()
         plt.grid(True)
-        
-        # Metrics plot (example for first regression target)
-        plt.subplot(1, 2, 2)
-        if history['metrics']:
-            # Find first regression target
-            regression_target = None
-            for target_name in history['metrics'][0].keys():
-                if history['metrics'][0][target_name]['type'] == 'regression':
-                    regression_target = target_name
-                    break
-            
-            if regression_target:
-                r2_scores = [m[regression_target]['r2'] for m in history['metrics']]
-                plt.plot(r2_scores, label=f'{regression_target} R²')
-                plt.title(f'{ticker} - {model_type} R² Score')
-                plt.xlabel('Epoch')
-                plt.ylabel('R² Score')
-                plt.legend()
-                plt.grid(True)
-        
-        plt.tight_layout()
         plot_path = os.path.join(outputs_dir, f"{ticker}_{model_type}_training.png")
         plt.savefig(plot_path)
         plt.close()
-        
-        logger.info(f"Saved training plot: {plot_path}")
+        logger.info(f"Đã lưu biểu đồ huấn luyện tại: {plot_path}")

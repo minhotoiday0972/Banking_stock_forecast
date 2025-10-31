@@ -37,250 +37,88 @@ def init_app():
 def main():
     """Main Streamlit application"""
     
-    # Initialize
     config, predictor = init_app()
     if config is None or predictor is None:
         st.stop()
     
-    # Title and description
     st.title("🏦 Vietnamese Banking Stock Predictor")
     st.markdown("""
-    Predict Vietnamese banking stock trends using advanced deep learning models.
-    Choose a bank, model, and forecast horizon to get predictions.
+    Dự đoán xu hướng cổ phiếu ngành ngân hàng Việt Nam bằng các mô hình học sâu.
+    Chọn một ngân hàng, mô hình và chu kỳ dự báo để nhận kết quả.
     """)
     
-    # Sidebar controls
-    st.sidebar.header("Prediction Settings")
+    st.sidebar.header("Cài đặt Dự báo")
     
-    # Ticker selection
-    tickers = config.tickers
-    ticker = st.sidebar.selectbox(
-        "Select Bank",
-        tickers,
-        help="Choose the banking stock to predict"
-    )
+    tickers = config.get('data.tickers', [])
+    ticker = st.sidebar.selectbox("Chọn Ngân hàng", tickers)
     
-    # Check available models for selected ticker
     available_models = predictor.get_available_models(ticker)
-    
     if not available_models:
-        st.error(f"No trained models found for {ticker}. Please train models first.")
-        st.info("Run the following command to train models:")
-        st.code("python main.py train --models all --tickers " + ticker)
+        st.error(f"Không tìm thấy model đã huấn luyện cho mã {ticker}. Vui lòng huấn luyện trước.")
+        st.code(f"python main.py train --models all --tickers {ticker}")
         st.stop()
     
-    # Model selection
-    model_type = st.sidebar.selectbox(
-        "Select Model",
-        available_models,
-        help="Choose the prediction model"
-    )
+    model_type = st.sidebar.selectbox("Chọn Model", available_models)
+    horizons = config.get('models.shared.forecast_horizons', [1, 3, 5])
+    horizon = st.sidebar.selectbox("Chu kỳ Dự báo (ngày)", horizons)
     
-    # Horizon selection
-    horizons = config.get('models.forecast_horizons', [1, 3, 5])
-    horizon = st.sidebar.selectbox(
-        "Forecast Horizon (days)",
-        horizons,
-        help="Number of days ahead to predict"
-    )
-    
-    # Prediction button
-    if st.sidebar.button("Make Prediction", type="primary"):
-        with st.spinner("Making prediction..."):
+    if st.sidebar.button("Thực hiện Dự báo", type="primary"):
+        with st.spinner("Đang thực hiện dự báo..."):
             prediction = predictor.predict(ticker, model_type, horizon)
         
         if prediction is None:
-            st.error("Failed to make prediction. Please check logs.")
-            return
+            st.error("Thực hiện dự báo thất bại. Vui lòng kiểm tra logs để biết chi tiết.")
+            st.stop()
+
+        st.header("📊 Kết quả Dự báo")
+        st.session_state['prediction'] = prediction
+
+    # Display prediction results if they exist in session state
+    if 'prediction' in st.session_state:
+        prediction = st.session_state['prediction']
         
-        # Display prediction results
-        st.header("📊 Prediction Results")
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if 'predicted_direction' in prediction:
-                direction = prediction['predicted_direction']
-                confidence = prediction['direction_confidence']
-                
-                # Color based on direction
-                color = {
-                    'Up': 'green',
-                    'Down': 'red',
-                    'Flat': 'orange'
-                }.get(direction, 'gray')
-                
-                st.metric(
-                    "Predicted Direction",
-                    direction,
-                    help=f"Confidence: {confidence:.2%}"
-                )
-                
-                # Direction probabilities
-                if 'direction_probabilities' in prediction:
-                    probs = prediction['direction_probabilities']
-                    st.write("**Direction Probabilities:**")
-                    for label, prob in probs.items():
-                        st.write(f"- {label}: {prob:.2%}")
-        
-        with col2:
-            if 'predicted_price' in prediction:
-                predicted_price = prediction['predicted_price']
-                
-                # Show price change if available
-                if 'current_price' in prediction and 'price_change_pct' in prediction:
-                    current_price = prediction['current_price']
-                    price_change_pct = prediction['price_change_pct']
+        # Check if the prediction is for the currently selected options
+        if prediction.get('ticker') == ticker and prediction.get('model_type') == model_type and prediction.get('horizon') == horizon:
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                direction = prediction.get('predicted_direction', 'N/A')
+                confidence = prediction.get('direction_confidence', 0)
+                direction_emoji = {'Up': '🔼', 'Down': '🔽'}.get(direction, '↔️')
+                st.metric("Xu hướng Dự báo", f"{direction} {direction_emoji}", help=f"Độ tin cậy: {confidence:.2%}")
+
+            with col2:
+                predicted_price = prediction.get('predicted_price')
+                if predicted_price is not None:
+                    metric_delta = None
+                    metric_help = f"Giá dự báo cho {horizon} ngày tới"
+                    if 'current_price' in prediction and 'price_change_pct' in prediction:
+                        price_change_pct = prediction['price_change_pct']
+                        metric_delta = f"{price_change_pct:+.2%}"
+                        metric_help = f"Hiện tại: {prediction['current_price']:,.0f} VND → Dự báo: {predicted_price:,.0f} VND"
                     
-                    st.metric(
-                        "Predicted Price",
-                        f"{predicted_price:.2f} VND",
-                        delta=f"{price_change_pct:+.2f}%",
-                        help=f"Current: {current_price:.2f} VND → Predicted: {predicted_price:.2f} VND"
-                    )
-                else:
-                    st.metric(
-                        "Predicted Price",
-                        f"{predicted_price:.2f} VND",
-                        help=f"Price prediction for {horizon} days ahead"
-                    )
-        
-        with col3:
-            st.metric(
-                "Model Used",
-                model_type.upper(),
-                help=f"Forecast horizon: {horizon} days"
-            )
-    
+                    st.metric("Giá Dự báo", f"{predicted_price:,.0f} VND", delta=metric_delta, help=metric_help)
+            
+            with col3:
+                st.metric("Model sử dụng", model_type.upper(), help=f"Chu kỳ dự báo: {horizon} ngày")
+
     # Historical data visualization
-    st.header("📈 Historical Price Data")
-    
-    # Get historical data
+    st.header("📈 Biểu đồ Lịch sử Giá")
     historical_data = predictor.get_historical_data(ticker, days=90)
-    
     if historical_data is not None and not historical_data.empty:
-        # Create candlestick chart
-        fig = make_subplots(
-            rows=2, cols=1,
-            shared_xaxes=True,
-            vertical_spacing=0.1,
-            subplot_titles=(f'{ticker} Price Chart', 'Volume'),
-            row_width=[0.7, 0.3]
-        )
-        
-        # Candlestick chart
-        fig.add_trace(
-            go.Candlestick(
-                x=historical_data['time'],
-                open=historical_data['Open'],
-                high=historical_data['High'],
-                low=historical_data['Low'],
-                close=historical_data['Close'],
-                name='Price'
-            ),
-            row=1, col=1
-        )
-        
-        # Volume chart
-        fig.add_trace(
-            go.Bar(
-                x=historical_data['time'],
-                y=historical_data['Volume'],
-                name='Volume',
-                marker_color='lightblue'
-            ),
-            row=2, col=1
-        )
-        
-        fig.update_layout(
-            title=f"{ticker} - Last 90 Days",
-            xaxis_title="Date",
-            yaxis_title="Price (VND)",
-            height=600,
-            showlegend=False
-        )
-        
+        fig = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.1, subplot_titles=(f'Biểu đồ giá {ticker}', 'Khối lượng Giao dịch'), row_heights=[0.7, 0.3])
+        fig.add_trace(go.Candlestick(x=historical_data['time'], open=historical_data['Open'], high=historical_data['High'], low=historical_data['Low'], close=historical_data['Close'], name='Giá'), row=1, col=1)
+        fig.add_trace(go.Bar(x=historical_data['time'], y=historical_data['Volume'], name='Volume', marker_color='lightblue'), row=2, col=1)
+        fig.update_layout(title_text=f"{ticker} - Dữ liệu 90 ngày gần nhất", xaxis_title="Ngày", yaxis_title="Giá (VND)", height=600, showlegend=False)
         fig.update_xaxes(rangeslider_visible=False)
-        
         st.plotly_chart(fig, use_container_width=True)
-        
-        # Recent price statistics
-        st.subheader("📊 Recent Statistics")
-        
-        col1, col2, col3, col4 = st.columns(4)
-        
-        latest_price = historical_data['Close'].iloc[-1]
-        price_change = historical_data['Close'].iloc[-1] - historical_data['Close'].iloc[-2]
-        price_change_pct = (price_change / historical_data['Close'].iloc[-2]) * 100
-        
-        with col1:
-            st.metric("Latest Price", f"{latest_price:.2f} VND")
-        
-        with col2:
-            st.metric(
-                "Daily Change", 
-                f"{price_change:+.2f} VND",
-                f"{price_change_pct:+.2f}%"
-            )
-        
-        with col3:
-            high_52w = historical_data['High'].max()
-            st.metric("90-Day High", f"{high_52w:.2f} VND")
-        
-        with col4:
-            low_52w = historical_data['Low'].min()
-            st.metric("90-Day Low", f"{low_52w:.2f} VND")
-        
-        # Price distribution
-        st.subheader("📊 Price Distribution")
-        
-        fig_hist = px.histogram(
-            historical_data, 
-            x='Close', 
-            nbins=20,
-            title=f"{ticker} Price Distribution (Last 90 Days)"
-        )
-        fig_hist.update_layout(
-            xaxis_title="Price (VND)",
-            yaxis_title="Frequency"
-        )
-        st.plotly_chart(fig_hist, use_container_width=True)
-    
     else:
-        st.warning(f"No historical data available for {ticker}")
+        st.warning(f"Không có dữ liệu lịch sử cho mã {ticker}")
     
     # Model information
-    st.header("🤖 Model Information")
-    
-    model_info = {
-        'cnn_bilstm': {
-            'name': 'CNN-BiLSTM',
-            'description': 'Combines Convolutional Neural Networks with Bidirectional LSTM for pattern recognition and sequence modeling.',
-            'strengths': ['Good for local pattern detection', 'Captures long-term dependencies', 'Robust performance']
-        },
-        'transformer': {
-            'name': 'Transformer',
-            'description': 'Uses self-attention mechanism to model complex temporal relationships in stock data.',
-            'strengths': ['Excellent for long sequences', 'Captures complex patterns', 'State-of-the-art architecture']
-        },
-
-    }
-    
-    if model_type in model_info:
-        info = model_info[model_type]
-        st.subheader(f"📋 {info['name']}")
-        st.write(info['description'])
-        st.write("**Strengths:**")
-        for strength in info['strengths']:
-            st.write(f"- {strength}")
-    
-    # Footer
-    st.markdown("---")
-    st.markdown("""
-    **Disclaimer:** This application is for educational and research purposes only. 
-    Stock predictions are inherently uncertain and should not be used as the sole basis for investment decisions.
-    Always consult with financial professionals before making investment choices.
-    """)
+    st.sidebar.markdown("---")
+    st.sidebar.info("Thông tin về các mô hình được sử dụng trong dự án.")
+    st.sidebar.expander("CNN-BiLSTM").write("Kết hợp Mạng Tích chập (CNN) để nhận dạng mẫu và Mạng LSTM Hai chiều (BiLSTM) để mô hình hóa chuỗi thời gian. Mạnh trong việc nhận dạng mẫu cục bộ và nắm bắt các phụ thuộc dài hạn.")
+    st.sidebar.expander("Transformer").write("Sử dụng cơ chế tự chú ý (self-attention) để mô hình hóa các mối quan hệ phức tạp trong dữ liệu. Vượt trội với chuỗi dữ liệu dài và nắm bắt các mẫu hình phức tạp.")
 
 if __name__ == "__main__":
     main()

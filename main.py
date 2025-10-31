@@ -1,13 +1,16 @@
 # main.py
 """
-Main pipeline script for stock prediction system
+Script pipeline chính cho hệ thống dự báo chứng khoán
+Bao gồm 2 nhánh:
+1. (Mặc định) Dự đoán Ngắn hạn (t+1, t+3, t+5) dùng Deep Learning
+2. (Quarterly) Dự đoán Dài hạn (t+1Q) dùng Deep Learning (LSTM)
 """
 import argparse
 import sys
 import os
 
-# Add src to path
-sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+# Thêm thư mục src vào path để có thể import
+sys.path.append(os.path.dirname(__file__))
 
 from src.utils.config import get_config
 from src.utils.logger import get_logger
@@ -15,254 +18,301 @@ from src.data.data_collector import DataCollector
 from src.features.feature_engineer import FeatureEngineer
 from src.training.trainer import ModelTrainingPipeline
 
+# --- THÊM MỚI: Import 2 file của Nhánh 2 (Phiên bản DL) ---
+from src.features.feature_engineer_quarterly import FeatureEngineerQuarterly
+from src.training.train_quarterly import train_all_quarterly_models # Đổi tên hàm import
+
 logger = get_logger("main")
 
 
 def run_data_collection():
-    """Run data collection pipeline"""
+    """Chạy pipeline thu thập dữ liệu (Dùng chung cho cả 2 nhánh)"""
     print("\n" + "=" * 60)
-    print("DATA COLLECTION")
+    print("BƯỚC 1: THU THẬP DỮ LIỆU")
     print("=" * 60)
-    logger.info("Starting data collection...")
-
+    logger.info("Bắt đầu thu thập dữ liệu...")
     collector = DataCollector()
     available, failed = collector.collect_all_data()
-
-    print(f"\nData Collection Results:")
-    print(f"Available tickers: {available}")
+    print(f"\nKết quả Thu thập Dữ liệu:")
+    print(f"  - Các mã có sẵn: {available}")
     if failed:
-        print(f"Failed tickers: {failed}")
-    print(
-        f"Success rate: {len(available)}/{len(available) + len(failed)} ({len(available)/(len(available) + len(failed))*100:.1f}%)"
-    )
-
+        print(f"  - Các mã thất bại: {failed}")
+    if (len(available) + len(failed)) > 0:
+        print(f"  - Tỷ lệ thành công: {len(available)}/{len(available) + len(failed)} ({len(available)/(len(available) + len(failed))*100:.1f}%)")
     return available, failed
 
+# --- NHÁNH 1: DỰ ĐOÁN NGẮN HẠN (HÀNG NGÀY) ---
 
 def run_feature_engineering(tickers=None):
-    """Run feature engineering pipeline"""
+    """(Nhánh 1) Chạy pipeline xử lý đặc trưng hàng ngày"""
     print("\n" + "=" * 60)
-    print("FEATURE ENGINEERING")
+    print("BƯỚC 2 (NHÁNH 1): XỬ LÝ ĐẶC TRƯNG HÀNG NGÀY")
     print("=" * 60)
-    logger.info("Starting feature engineering...")
-
+    logger.info("Bắt đầu xử lý đặc trưng hàng ngày...")
     engineer = FeatureEngineer()
     results = engineer.process_all_tickers(tickers)
-
     successful = [ticker for ticker, success in results.items() if success]
     failed = [ticker for ticker, success in results.items() if not success]
-
-    print(f"\nFeature Engineering Results:")
-    print(f"Successful: {successful}")
+    print(f"\nKết quả Xử lý Đặc trưng (Hàng ngày):")
+    print(f"  - Thành công: {successful}")
     if failed:
-        print(f"Failed: {failed}")
-    print(
-        f"Success rate: {len(successful)}/{len(results)} ({len(successful)/len(results)*100:.1f}%)"
-    )
-
+        print(f"  - Thất bại: {failed}")
+    if results:
+        print(f"  - Tỷ lệ thành công: {len(successful)}/{len(results)} ({len(successful)/len(results)*100:.1f}%)")
     return successful, failed
 
 
 def run_model_training(model_types=None, tickers=None):
-    """Run model training pipeline"""
+    """(Nhánh 1) Chạy pipeline huấn luyện model hàng ngày (Deep Learning)."""
     print("\n" + "=" * 60)
-    print("MODEL TRAINING")
+    print("BƯỚC 3 (NHÁNH 1): HUẤN LUYỆN MODEL HÀNG NGÀY (DEEP LEARNING)")
     print("=" * 60)
-    logger.info("Starting model training...")
-
+    logger.info("Bắt đầu huấn luyện model hàng ngày...")
     pipeline = ModelTrainingPipeline()
     results = pipeline.train_all_models(model_types, tickers)
-
-    print(f"\nModel Training Results:")
+    print(f"\n" + "=" * 60)
+    print("TỔNG KẾT HUẤN LUYỆN (HÀNG NGÀY)")
+    print("=" * 60)
+    total_success = 0
+    total_attempted = 0
     for model_type, model_results in results.items():
-        successful_models = [t for t, r in model_results.items() if r is not None]
-        print(f"{model_type}: {len(successful_models)} models trained")
-
+        successful_models = [t for t, r in model_results.items() if r and r.get('test_metrics')]
+        total_tried = len(model_results)
+        success_count = len(successful_models)
+        total_success += success_count
+        total_attempted += total_tried
+        print(f"--- Model: {model_type.upper()} ---")
+        print(f"  Hoàn thành: {success_count}/{total_tried} mã cổ phiếu.")
+    print("\nToàn bộ quá trình huấn luyện hàng ngày đã hoàn tất.")
+    print(f"Tổng cộng: {total_success}/{total_attempted} model đã được huấn luyện thành công.")
+    print(f"Chi tiết kết quả đã được lưu vào file log (ví dụ: logs/trainer.log).")
     return results
 
 
-def run_full_pipeline(model_types=None):
-    """Run complete pipeline from data collection to model training"""
-    print("\nBANKING STOCK PREDICTION PIPELINE")
-    print("=" * 60)
-    logger.info("Starting full pipeline...")
-
-    # Step 1: Data Collection
-    available_tickers, failed_collection = run_data_collection()
+def run_full_pipeline_daily(model_types=None):
+    """(Nhánh 1) Chạy toàn bộ pipeline hàng ngày."""
+    print("\n>>> PIPELINE DỰ BÁO NGẮN HẠN (HÀNG NGÀY) <<<")
+    logger.info("Bắt đầu chạy toàn bộ pipeline hàng ngày...")
+    available_tickers, _ = run_data_collection()
     if not available_tickers:
-        logger.error("No data collected successfully. Stopping pipeline.")
+        logger.error("Không có dữ liệu nào được thu thập. Dừng pipeline.")
         return
-
-    # Step 2: Feature Engineering
-    successful_features, failed_features = run_feature_engineering(available_tickers)
+    successful_features, _ = run_feature_engineering(available_tickers)
     if not successful_features:
-        logger.error("No features engineered successfully. Stopping pipeline.")
+        logger.error("Không có đặc trưng nào được xử lý. Dừng pipeline.")
+        return
+    run_model_training(model_types, successful_features)
+    print("\n" + "=" * 60)
+    print("PIPELINE HÀNG NGÀY HOÀN THÀNH!")
+    print("=" * 60)
+
+
+# --- CẬP NHẬT: NHÁNH 2 (DỰ ĐOÁN DÀI HẠN / HÀNG QUÝ - PHIÊN BẢN DL) ---
+
+def run_feature_engineering_quarterly(tickers=None):
+    """(Nhánh 2) Chạy pipeline xử lý đặc trưng hàng quý (Phiên bản DL)."""
+    print("\n" + "=" * 60)
+    print("BƯỚC 2 (NHÁNH 2): XỬ LÝ ĐẶC TRƯNG HÀNG QUÝ (CHO DL)")
+    print("=" * 60)
+    logger.info("Bắt đầu xử lý đặc trưng hàng quý...")
+    engineer = FeatureEngineerQuarterly()
+    engineer.process_all_tickers(tickers)
+    print("\nKết quả Xử lý Đặc trưng (Hàng quý): Hoàn thành (Xem log để biết chi tiết).")
+
+def run_model_training_quarterly():
+    """(Nhánh 2) Chạy pipeline huấn luyện model hàng quý (LSTM)."""
+    # Hàm train_all_quarterly_models đã bao gồm tiêu đề
+    train_all_quarterly_models()
+
+def run_full_pipeline_quarterly():
+    """(Nhánh 2) Chạy toàn bộ pipeline hàng quý (Phiên bản DL)."""
+    print("\n>>> PIPELINE DỰ BÁO DÀI HẠN (HÀNG QUÝ) <<<")
+    logger.info("Bắt đầu chạy toàn bộ pipeline hàng quý...")
+    
+    available_tickers, _ = run_data_collection()
+    if not available_tickers:
+        logger.error("Không có dữ liệu nào được thu thập. Dừng pipeline.")
         return
 
-    # Step 3: Model Training
-    training_results = run_model_training(model_types, successful_features)
-
-    # Final Summary
+    run_feature_engineering_quarterly(available_tickers)
+    run_model_training_quarterly()
+    
     print("\n" + "=" * 60)
-    print("PIPELINE SUMMARY")
+    print("PIPELINE HÀNG QUÝ HOÀN THÀNH!")
     print("=" * 60)
-    print(
-        f"Data Collection: {len(available_tickers)} successful, {len(failed_collection)} failed"
-    )
-    print(
-        f"Feature Engineering: {len(successful_features)} successful, {len(failed_features)} failed"
-    )
 
-    total_models = 0
-    for model_type, model_results in training_results.items():
-        successful_models = [t for t, r in model_results.items() if r is not None]
-        total_models += len(successful_models)
-        print(f"{model_type}: {len(successful_models)} models")
-
-    print(f"\nPIPELINE COMPLETED!")
-    print(
-        f"Total: {total_models} models trained for {len(successful_features)} banks"
-    )
-    print(f"Ready to run: streamlit run app.py")
-
-    logger.info("Full pipeline completed successfully")
-
+# --- CÁC HÀM TIỆN ÍCH (Cập nhật run_status_check) ---
 
 def run_status_check():
-    """Check pipeline status"""
+    """Kiểm tra trạng thái của cả hai nhánh pipeline"""
     print("\n" + "=" * 60)
-    print("PIPELINE STATUS CHECK")
+    print("KIỂM TRA TRẠNG THÁI PIPELINE")
     print("=" * 60)
 
-    import os
+    config = get_config()
+    expected_tickers = config.get('data.tickers', [])
+    model_configs = config.get('models', {})
+    expected_models_dl = [m for m in model_configs.keys() if m != 'shared']
 
-    # Create directories if needed
-    os.makedirs("data/database", exist_ok=True)
-    os.makedirs("data/processed", exist_ok=True)
-    os.makedirs("models", exist_ok=True)
+    # Tạo thư mục
+    os.makedirs(config.get('paths.database', 'data/database'), exist_ok=True)
+    os.makedirs(config.get('paths.processed', 'data/processed'), exist_ok=True)
+    os.makedirs(config.get('paths.models', 'models'), exist_ok=True)
 
-    # Check data collection
-    db_file = "data/database/stock_data.db"
+    # 1. Thu thập dữ liệu (Chung)
+    db_file = os.path.join(config.get('paths.database', 'data/database'), 'stock_data.db')
     data_status = os.path.exists(db_file)
-    print(f"Data Collection: {'Complete' if data_status else 'Missing'}")
+    print(f"1. Thu thập dữ liệu (Chung):    {'HOÀN THÀNH' if data_status else 'CHƯA CÓ'}")
 
-    # Check feature engineering
-    processed_dir = "data/processed"
-    feature_files = (
-        [f for f in os.listdir(processed_dir) if f.endswith("_features.csv")]
-        if os.path.exists(processed_dir)
-        else []
-    )
-    features_status = len(feature_files) >= 10
-    print(
-        f"Feature Engineering: {'Complete' if features_status else 'Missing'} ({len(feature_files)} files)"
-    )
+    # --- NHÁNH 1: DỰ ĐOÁN NGẮN HẠN (DEEP LEARNING) ---
+    print("\n--- NHÁNH 1: DỰ ĐOÁN NGẮN HẠN (DEEP LEARNING) ---")
+    processed_dir = config.get('paths.processed', 'data/processed')
+    models_dir = config.get('paths.models', 'models')
 
-    # Check model training
-    models_dir = "models"
-    model_files = (
-        [f for f in os.listdir(models_dir) if f.endswith(".pt")]
-        if os.path.exists(models_dir)
-        else []
-    )
-    models_status = len(model_files) >= 30
-    print(
-        f"Model Training: {'Complete' if models_status else 'Missing'} ({len(model_files)} models)"
-    )
+    # Initialize statuses for Nhánh 1
+    features_status_dl = False
+    models_status_dl = False
+    app_status = False # <<< FIX: Initialize app_status here
 
-    # Check app readiness
-    app_status = os.path.exists("app.py") and models_status
-    print(f"App Ready: {'Ready' if app_status else 'Not Ready'}")
+    feature_files_dl = [f for f in os.listdir(processed_dir) if f.endswith("_metadata.pkl")] if os.path.exists(processed_dir) else []
+    features_status_dl = len(feature_files_dl) >= len(expected_tickers)
+    print(f"2a. Xử lý đặc trưng (Hàng ngày): {'HOÀN THÀNH' if features_status_dl else 'CHƯA CÓ'} ({len(feature_files_dl)}/{len(expected_tickers)} file metadata)")
 
-    print(f"\nNEXT STEPS:")
-    if not data_status:
-        print("   python main.py collect")
-    elif not features_status:
-        print("   python main.py features")
-    elif not models_status:
-        print("   python main.py train --models all")
-    elif app_status:
-        print("   streamlit run app.py")
+    if features_status_dl: # Only check models if features exist
+        model_files_dl = [f for f in os.listdir(models_dir) if f.endswith(".pt") and not "quarterly" in f] if os.path.exists(models_dir) else []
+        expected_model_count_dl = len(expected_tickers) * len(expected_models_dl)
+        models_status_dl = len(model_files_dl) >= expected_model_count_dl
+        print(f"3a. Huấn luyện model (Hàng ngày):   {'HOÀN THÀNH' if models_status_dl else 'CHƯA CÓ'} ({len(model_files_dl)}/{expected_model_count_dl} model)")
+
+        if models_status_dl: # Only check app if models exist
+             app_status = os.path.exists("app.py")
+             print(f"4a. Sẵn sàng của App (Hàng ngày):   {'SẴN SÀNG' if app_status else 'CHƯA SẴN SÀNG'}")
+        else:
+             print(f"4a. Sẵn sàng của App (Hàng ngày):   CHƯA SẴN SÀNG (Thiếu model)")
     else:
-        print("   Check app.py file exists")
+        print(f"3a. Huấn luyện model (Hàng ngày):   CHƯA CÓ (Thiếu đặc trưng)")
+        print(f"4a. Sẵn sàng của App (Hàng ngày):   CHƯA SẴN SÀNG (Thiếu đặc trưng)")
+
+
+    # --- NHÁNH 2: DỰ ĐOÁN DÀI HẠN (DEEP LEARNING) ---
+    print("\n--- NHÁNH 2: DỰ ĐOÁN DÀI HẠN (DEEP LEARNING) ---")
+    # Initialize statuses for Nhánh 2
+    features_status_q = False
+    models_status_q = False
+
+    feature_files_q = [f for f in os.listdir(processed_dir) if f.endswith("_quarterly_features.csv")] if os.path.exists(processed_dir) else []
+    features_status_q = len(feature_files_q) >= len(expected_tickers)
+    print(f"2b. Xử lý đặc trưng (Hàng quý):  {'HOÀN THÀNH' if features_status_q else 'CHƯA CÓ'} ({len(feature_files_q)}/{len(expected_tickers)} file)")
+
+    if features_status_q: # Only check models if features exist
+        model_files_q = [f for f in os.listdir(models_dir) if f.endswith("_quarterly_cnn_bilstm.pt") or f.endswith("_quarterly_transformer.pt")] if os.path.exists(models_dir) else []
+        expected_model_count_q = len(expected_tickers) * len(expected_models_dl) # Uses same model types
+        models_status_q = len(model_files_q) >= expected_model_count_q
+        print(f"3b. Huấn luyện model (Hàng quý):    {'HOÀN THÀNH' if models_status_q else 'CHƯA CÓ'} ({len(model_files_q)}/{expected_model_count_q} model)")
+    else:
+         print(f"3b. Huấn luyện model (Hàng quý):    CHƯA CÓ (Thiếu đặc trưng)")
+
+    # --- Đề xuất bước tiếp theo ---
+    print("\n=> BƯỚC TIẾP THEO ĐƯỢC ĐỀ XUẤT:")
+    if not data_status:
+        print("     python main.py collect")
+    elif not features_status_dl:
+        print("     python main.py features")
+    elif not features_status_q:
+         print("     python main.py features_quarterly")
+    elif not models_status_dl:
+        print("     python main.py train --models all")
+    elif not models_status_q:
+        print("     python main.py train_quarterly")
+    elif app_status: # Only suggest app if Nhánh 1 is fully ready
+        print("     python main.py app")
+    else:
+        # Fallback if app isn't ready but everything else is
+        print("     Kiểm tra file app.py hoặc chạy lại huấn luyện Nhánh 1.")
 
 
 def run_app():
-    """Launch the Streamlit app"""
+    """Khởi chạy ứng dụng Streamlit (Chỉ cho Nhánh 1)"""
     print("\n" + "=" * 60)
-    print("LAUNCHING PREDICTION APP")
+    print("KHỞI CHẠY ỨNG DỤNG DỰ BÁO (NGẮN HẠN)")
     print("=" * 60)
-    print("App will be available at: http://localhost:8501")
-    print("Press Ctrl+C to stop the app")
-
+    print("Ứng dụng sẽ có tại: http://localhost:8501")
+    print("Nhấn Ctrl+C để dừng ứng dụng")
     import subprocess
-
     try:
-        subprocess.run("streamlit run app.py", shell=True)
+        subprocess.run(["streamlit", "run", "app.py"], check=True)
+    except FileNotFoundError:
+        logger.error("Lệnh `streamlit` không tồn tại. Hãy đảm bảo Streamlit đã được cài đặt (`pip install streamlit`).")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"Lỗi khi chạy ứng dụng Streamlit: {e}")
     except KeyboardInterrupt:
-        print("\nApp stopped")
-
+        print("\nỨng dụng đã được dừng bởi người dùng.")
 
 def main():
-    """Main function"""
+    """Hàm chính"""
     parser = argparse.ArgumentParser(
         description="Banking Stock Prediction Pipeline",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=argparse.RawTextHelpFormatter,
         epilog="""
-Examples:
-  python main.py collect              # Collect banking data
-  python main.py features             # Engineer features
-  python main.py train --models all   # Train all models
-  python main.py full                 # Run complete pipeline
-  python main.py app                  # Launch prediction app
-  python main.py status               # Check pipeline status
-        """,
+Các ví dụ sử dụng:
+  python main.py collect                  # Chỉ thu thập dữ liệu (Dùng chung)
+  python main.py status                   # Kiểm tra trạng thái của cả 2 nhánh
+  
+  --- NHÁNH 1: DỰ ĐOÁN NGẮN HẠN (HÀNG NGÀY) ---
+  python main.py features                 # Xử lý đặc trưng hàng ngày
+  python main.py train --models all       # Huấn luyện model Deep Learning hàng ngày
+  python main.py full_daily               # Chạy toàn bộ nhánh 1
+  python main.py app                      # Khởi chạy ứng dụng (Nhánh 1)
+
+  --- NHÁNH 2: DỰ ĐOÁN DÀI HẠN (HÀNG QUÝ) ---
+  python main.py features_quarterly       # Xử lý đặc trưng hàng quý (cho DL)
+  python main.py train_quarterly          # Huấn luyện model (CNN-LSTM, Trans) hàng quý
+  python main.py full_quarterly           # Chạy toàn bộ nhánh 2
+"""
     )
-    parser.add_argument(
-        "command",
-        choices=["collect", "features", "train", "full", "status", "app"],
-        help="Pipeline step to run",
-    )
-    parser.add_argument(
-        "--models",
-        nargs="+",
-        default=["cnn_bilstm"],
-        choices=["cnn_bilstm", "transformer", "all"],
-        help="Models to train (for train/full commands)",
-    )
-    parser.add_argument(
-        "--tickers", nargs="+", default=None, help="Specific tickers to process"
-    )
-    parser.add_argument("--config", default="config.yaml", help="Config file path")
+    
+    commands = [
+        "collect", "status", "app",
+        "features", "train", "full_daily",
+        "features_quarterly", "train_quarterly", "full_quarterly"
+    ]
+    parser.add_argument("command", choices=commands, help="Bước pipeline cần chạy")
+    
+    parser.add_argument("--models", nargs="+", default=None, help="[Nhánh 1] Các model DL cần huấn luyện (ví dụ: cnn_bilstm transformer). Mặc định là tất cả.")
+    parser.add_argument("--tickers", nargs="+", default=None, help="[Nhánh 1 & 2] Các mã ticker cụ thể để xử lý.")
+    parser.add_argument("--config", default="config.yaml", help="Đường dẫn file config.")
 
     args = parser.parse_args()
-
-    # Handle 'all' models option
+    
     if args.models and "all" in args.models:
-        args.models = ["cnn_bilstm", "transformer"]
+        config = get_config(args.config)
+        all_model_configs = config.get('models', {})
+        args.models = [model_name for model_name in all_model_configs.keys() if model_name != 'shared']
 
     try:
-        # Load config
-        config = get_config(args.config)
-        logger.info(f"Loaded config from {args.config}")
-
-        # Run requested command
         if args.command == "collect":
             run_data_collection()
-        elif args.command == "features":
-            run_feature_engineering(args.tickers)
-        elif args.command == "train":
-            run_model_training(args.models, args.tickers)
-        elif args.command == "full":
-            run_full_pipeline(args.models)
         elif args.command == "status":
             run_status_check()
         elif args.command == "app":
             run_app()
+            
+        elif args.command == "features":
+            run_feature_engineering(args.tickers)
+        elif args.command == "train":
+            run_model_training(args.models, args.tickers)
+        elif args.command == "full_daily":
+            run_full_pipeline_daily(args.models)
+
+        elif args.command == "features_quarterly":
+            run_feature_engineering_quarterly(args.tickers)
+        elif args.command == "train_quarterly":
+            run_model_training_quarterly()
+        elif args.command == "full_quarterly":
+            run_full_pipeline_quarterly()
 
     except Exception as e:
-        logger.error(f"Pipeline failed: {e}")
-        print(f"Error: {e}")
+        logger.error(f"Một lỗi đã xảy ra trong pipeline: {e}", exc_info=True)
         sys.exit(1)
 
 

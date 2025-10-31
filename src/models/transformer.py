@@ -1,172 +1,82 @@
+# src/models/transformer.py
 import torch
 import torch.nn as nn
-import numpy as np
-from typing import Dict, Any
+import math
+from typing import Dict
 
+# --- THAY ĐỔI: Import BaseModel ---
 from .base_model import BaseModel
 
 class PositionalEncoding(nn.Module):
-    """Positional encoding for transformer"""
-    
-    def __init__(self, d_model: int, max_len: int = 5000):
+    def __init__(self, d_model: int, dropout: float = 0.1, max_len: int = 5000):
         super(PositionalEncoding, self).__init__()
-        pe = torch.zeros(max_len, d_model)
-        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, d_model, 2).float() * (-np.log(10000.0) / d_model))
-        pe[:, 0::2] = torch.sin(position * div_term)
-        pe[:, 1::2] = torch.cos(position * div_term)
-        pe = pe.unsqueeze(0)
+        self.dropout = nn.Dropout(p=dropout)
+        position = torch.arange(max_len).unsqueeze(1)
+        div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
+        pe = torch.zeros(max_len, 1, d_model)
+        pe[:, 0, 0::2] = torch.sin(position * div_term)
+        pe[:, 0, 1::2] = torch.cos(position * div_term)
         self.register_buffer('pe', pe)
-    
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return x + self.pe[:, :x.size(1), :]
 
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = x + self.pe[:x.size(0)]
+        return self.dropout(x)
+
+# --- THAY ĐỔI: Kế thừa từ BaseModel ---
 class TransformerModel(BaseModel):
-    """Transformer model for multi-horizon forecasting"""
-    
-    def __init__(self, input_dim: int, config: Dict[str, Any]):
+    def __init__(self, input_dim: int, config: Dict):
+        # --- THAY ĐỔI: Gọi super().__init__ ---
         super(TransformerModel, self).__init__(input_dim, config)
         
-        # Model parameters
-        self.d_model = config.get('d_model', 64)
-        self.nhead = config.get('nhead', 4)
-        self.num_layers = config.get('num_layers', 2)
-        self.dim_feedforward = config.get('dim_feedforward', 128)
-        self.dropout_rate = config.get('dropout_rate', 0.1)
+        model_config = config.get('transformer', {})
+        d_model = model_config.get('d_model', 128)
+        nhead = model_config.get('nhead', 4)
+        num_layers = model_config.get('num_layers', 2)
+        dim_feedforward = model_config.get('dim_feedforward', 256)
+        dropout = model_config.get('dropout_rate', 0.2)
+
+        self.input_projection = nn.Linear(input_dim, d_model)
+        self.pos_encoder = PositionalEncoding(d_model, dropout)
         
-        # Input projection
-        self.input_fc = nn.Linear(input_dim, self.d_model)
-        
-        # Positional encoding
-        self.pos_encoder = PositionalEncoding(self.d_model)
-        
-        # Transformer encoder
-        encoder_layers = nn.TransformerEncoderLayer(
-            d_model=self.d_model,
-            nhead=self.nhead,
-            dim_feedforward=self.dim_feedforward,
-            dropout=self.dropout_rate,
+        encoder_layer = nn.TransformerEncoderLayer(
+            d_model=d_model,
+            nhead=nhead,
+            dim_feedforward=dim_feedforward,
+            dropout=dropout,
             batch_first=True
         )
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layers, self.num_layers)
+        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
-        # Output heads for different horizons and tasks
-        self.regression_heads = nn.ModuleDict()
-        self.classification_heads = nn.ModuleDict()
+        self.d_model = d_model
         
-        for horizon in self.horizons:
-            # Regression head (price prediction)
-            self.regression_heads[f'Target_Close_t+{horizon}'] = nn.Sequential(
-                nn.Linear(self.d_model, self.d_model // 2),
-                nn.ReLU(),
-                nn.Dropout(self.dropout_rate),
-                nn.Linear(self.d_model // 2, 1)
-            )
-            
-            # Classification head (direction prediction)
-            self.classification_heads[f'Target_Direction_t+{horizon}'] = nn.Sequential(
-                nn.Linear(self.d_model, self.d_model // 2),
-                nn.ReLU(),
-                nn.Dropout(self.dropout_rate),
-                nn.Linear(self.d_model // 2, 3)  # 3 classes: Down, Flat, Up
-            )
-    
+        # --- THAY ĐỔI: Tạo đầu ra động ---
+        self.output_heads = nn.ModuleDict()
+        
+        # self.horizons đến từ BaseModel, có thể là ['1','3','5'] hoặc ['1Q']
+        for h in self.horizons:
+            # Đầu ra Hồi quy
+            self.output_heads[f'Target_Close_t+{h}'] = nn.Linear(d_model, 1)
+            # Đầu ra Phân loại
+            self.output_heads[f'Target_Direction_t+{h}'] = nn.Linear(d_model, 2)
+        # --- KẾT THÚC THAY ĐỔI ---
+
     def forward(self, x: torch.Tensor) -> Dict[str, torch.Tensor]:
-        # Input projection
-        x = self.input_fc(x)  # (batch, seq_len, d_model)
-        
-        # Add positional encoding
+        # x shape: (batch_size, timesteps, features)
+        x = self.input_projection(x) * math.sqrt(self.d_model)
+        x = x.permute(1, 0, 2) # (timesteps, batch_size, d_model)
         x = self.pos_encoder(x)
+        x = x.permute(1, 0, 2) # (batch_size, timesteps, d_model)
         
-        # Transformer encoding
-        x = self.transformer_encoder(x)  # (batch, seq_len, d_model)
+        x = self.transformer_encoder(x)
         
-        # Use last time step output
-        features = x[:, -1, :]  # (batch, d_model)
+        # Lấy output của bước thời gian cuối cùng
+        last_output = x[:, -1, :] 
         
-        # Generate outputs for all horizons
+        # --- THAY ĐỔI: Đưa qua tất cả các đầu ra ---
         outputs = {}
-        
-        # Regression outputs
-        for key, head in self.regression_heads.items():
-            outputs[key] = head(features)
-        
-        # Classification outputs
-        for key, head in self.classification_heads.items():
-            outputs[key] = head(features)
-        
+        for h in self.horizons:
+            outputs[f'Target_Close_t+{h}'] = self.output_heads[f'Target_Close_t+{h}'](last_output)
+            outputs[f'Target_Direction_t+{h}'] = self.output_heads[f'Target_Direction_t+{h}'](last_output)
+            
         return outputs
-
-def train_transformer_model(ticker: str) -> Dict[str, Any]:
-    """Train Transformer model for a ticker"""
-    from .base_model import ModelTrainer
-    from ..utils.config import get_config
-    import numpy as np
-    import os
-    
-    config = get_config()
-    trainer = ModelTrainer("transformer")
-    
-    # Load sequences
-    sequences_path = os.path.join(config.processed_dir, f"{ticker}_sequences.npz")
-    sequences = dict(np.load(sequences_path))
-    
-    # Prepare data
-    data = trainer.prepare_data(
-        sequences,
-        train_split=config.get('training.train_split', 0.8),
-        val_split=config.get('training.val_split', 0.1)
-    )
-    
-    # Create model
-    model_config = config.get('models.transformer', {})
-    model_config['forecast_horizons'] = config.get('models.forecast_horizons', [1, 3, 5])
-    model = TransformerModel(data['input_dim'], model_config)
-    
-    # Train model
-    results = trainer.train_model(
-        model, data,
-        epochs=config.get('training.epochs', 50),
-        batch_size=config.get('training.batch_size', 32),
-        learning_rate=0.001,
-        early_stopping_patience=config.get('training.early_stopping_patience', 10)
-    )
-    
-    # Save model and plots
-    trainer.save_model(results['model'], ticker, "transformer")
-    trainer.plot_training_history(results['history'], ticker, "Transformer")
-    
-    return results
-
-def main():
-    """Main function for Transformer training"""
-    from ..utils.config import get_config
-    from ..utils.logger import get_logger
-    
-    config = get_config()
-    logger = get_logger("transformer")
-    
-    tickers = config.tickers
-    results = {}
-    
-    for ticker in tickers:
-        try:
-            logger.info(f"Training Transformer for {ticker}")
-            result = train_transformer_model(ticker)
-            results[ticker] = result
-            logger.info(f"Successfully trained Transformer for {ticker}")
-        except Exception as e:
-            logger.error(f"Failed to train Transformer for {ticker}: {e}")
-            results[ticker] = None
-    
-    # Summary
-    successful = [t for t, r in results.items() if r is not None]
-    failed = [t for t, r in results.items() if r is None]
-    
-    print(f"\n=== Transformer Training Summary ===")
-    print(f"Successful: {successful}")
-    print(f"Failed: {failed}")
-    print(f"Success rate: {len(successful)}/{len(tickers)} ({len(successful)/len(tickers)*100:.1f}%)")
-
-if __name__ == "__main__":
-    main()
+        # --- KẾT THÚC THAY ĐỔI ---

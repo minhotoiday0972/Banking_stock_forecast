@@ -1,0 +1,592 @@
+2025-11-20 19:32:23,951 - trainer - INFO - Horizons initialized in ModelTrainingPipeline: [1, 3, 5, 30, 60, 90] (type: <class 'list'>)
+2025-11-20 19:32:23,951 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+1 =====
+2025-11-20 19:32:23,971 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+1
+2025-11-20 19:32:23,981 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:25,183 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[527 499], Class 1 (Up)=499
+2025-11-20 19:32:25,184 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=0.9734, Class 1=1.0281
+2025-11-20 19:32:25,185 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:25,662 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6975 | Val Loss: 0.6891 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:25,856 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6923 | Val Loss: 0.6924 | Val F1: 0.1400 | LR: 0.000500
+2025-11-20 19:32:26,029 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6929 | Val Loss: 0.6915 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:26,206 - trainer - INFO - Epoch 4/120 | Train Loss: 0.6942 | Val Loss: 0.6915 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:26,378 - trainer - INFO - Epoch 5/120 | Train Loss: 0.6937 | Val Loss: 0.6944 | Val F1: 0.5574 | LR: 0.000500
+2025-11-20 19:32:26,551 - trainer - INFO - Epoch 6/120 | Train Loss: 0.6938 | Val Loss: 0.6904 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:26,729 - trainer - INFO - Epoch 7/120 | Train Loss: 0.6946 | Val Loss: 0.6904 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:26,910 - trainer - INFO - Epoch 8/120 | Train Loss: 0.6929 | Val Loss: 0.6946 | Val F1: 0.5574 | LR: 0.000500
+2025-11-20 19:32:27,080 - trainer - INFO - Epoch 9/120 | Train Loss: 0.6931 | Val Loss: 0.6904 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:27,269 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6935 | Val Loss: 0.6892 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:27,445 - trainer - INFO - Epoch 11/120 | Train Loss: 0.6931 | Val Loss: 0.6903 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:27,621 - trainer - INFO - Epoch 12/120 | Train Loss: 0.6941 | Val Loss: 0.6912 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:27,792 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6926 | Val Loss: 0.6918 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:27,978 - trainer - INFO - Epoch 14/120 | Train Loss: 0.6946 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:28,148 - trainer - INFO - Epoch 15/120 | Train Loss: 0.6928 | Val Loss: 0.6935 | Val F1: 0.5435 | LR: 0.000250
+2025-11-20 19:32:28,336 - trainer - INFO - Epoch 16/120 | Train Loss: 0.6925 | Val Loss: 0.6931 | Val F1: 0.3195 | LR: 0.000250
+2025-11-20 19:32:28,505 - trainer - INFO - Epoch 17/120 | Train Loss: 0.6918 | Val Loss: 0.6925 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:28,682 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6953 | Val Loss: 0.6933 | Val F1: 0.4670 | LR: 0.000250
+2025-11-20 19:32:28,860 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6947 | Val Loss: 0.6919 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:29,060 - trainer - INFO - Epoch 20/120 | Train Loss: 0.6941 | Val Loss: 0.6921 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:29,229 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6931 | Val Loss: 0.6922 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:29,403 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6954 | Val Loss: 0.6912 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:29,589 - trainer - INFO - Epoch 23/120 | Train Loss: 0.6940 | Val Loss: 0.6911 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:29,772 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6945 | Val Loss: 0.6915 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:29,944 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6927 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:30,123 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6940 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:30,123 - trainer - INFO - 🛑 Early stopping tại epoch 26
+2025-11-20 19:32:30,377 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:32:30,407 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 56.56%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=125, FP=0, FN=96, TP=0
+2025-11-20 19:32:30,410 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+1_best.pt
+2025-11-20 19:32:30,410 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+3 =====
+2025-11-20 19:32:30,429 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+3
+2025-11-20 19:32:30,433 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:30,453 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[484 542], Class 1 (Up)=542
+2025-11-20 19:32:30,454 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.0599, Class 1=0.9465
+2025-11-20 19:32:30,454 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:30,651 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6960 | Val Loss: 0.6916 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:30,837 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6934 | Val Loss: 0.6940 | Val F1: 0.6544 | LR: 0.000500
+2025-11-20 19:32:31,014 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6913 | Val Loss: 0.6953 | Val F1: 0.6544 | LR: 0.000500
+2025-11-20 19:32:31,207 - trainer - INFO - Epoch 4/120 | Train Loss: 0.6960 | Val Loss: 0.6932 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:31,420 - trainer - INFO - Epoch 5/120 | Train Loss: 0.6941 | Val Loss: 0.6947 | Val F1: 0.6544 | LR: 0.000500
+2025-11-20 19:32:31,618 - trainer - INFO - Epoch 6/120 | Train Loss: 0.6918 | Val Loss: 0.6936 | Val F1: 0.5424 | LR: 0.000500
+2025-11-20 19:32:31,794 - trainer - INFO - Epoch 7/120 | Train Loss: 0.6936 | Val Loss: 0.6921 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:31,968 - trainer - INFO - Epoch 8/120 | Train Loss: 0.6944 | Val Loss: 0.6932 | Val F1: 0.0690 | LR: 0.000500
+2025-11-20 19:32:32,138 - trainer - INFO - Epoch 9/120 | Train Loss: 0.6940 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:32,322 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6933 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:32,508 - trainer - INFO - Epoch 11/120 | Train Loss: 0.6936 | Val Loss: 0.6926 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:32,680 - trainer - INFO - Epoch 12/120 | Train Loss: 0.6926 | Val Loss: 0.6932 | Val F1: 0.0968 | LR: 0.000250
+2025-11-20 19:32:32,855 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6941 | Val Loss: 0.6939 | Val F1: 0.6544 | LR: 0.000250
+2025-11-20 19:32:33,026 - trainer - INFO - Epoch 14/120 | Train Loss: 0.6920 | Val Loss: 0.6937 | Val F1: 0.5512 | LR: 0.000250
+2025-11-20 19:32:33,201 - trainer - INFO - Epoch 15/120 | Train Loss: 0.6940 | Val Loss: 0.6932 | Val F1: 0.0672 | LR: 0.000250
+2025-11-20 19:32:33,382 - trainer - INFO - Epoch 16/120 | Train Loss: 0.6932 | Val Loss: 0.6923 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:33,553 - trainer - INFO - Epoch 17/120 | Train Loss: 0.6929 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:33,721 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6918 | Val Loss: 0.6923 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:33,888 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6918 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:34,062 - trainer - INFO - Epoch 20/120 | Train Loss: 0.6939 | Val Loss: 0.6926 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:34,266 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6929 | Val Loss: 0.6926 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:34,449 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6924 | Val Loss: 0.6926 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:34,619 - trainer - INFO - Epoch 23/120 | Train Loss: 0.6923 | Val Loss: 0.6927 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:34,830 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6926 | Val Loss: 0.6925 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:35,024 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6926 | Val Loss: 0.6931 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:35,238 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6921 | Val Loss: 0.6934 | Val F1: 0.1538 | LR: 0.000125
+2025-11-20 19:32:35,238 - trainer - INFO - 🛑 Early stopping tại epoch 26
+2025-11-20 19:32:35,432 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:32:35,460 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 44.80%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=99, FP=0, FN=122, TP=0
+2025-11-20 19:32:35,462 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+3_best.pt
+2025-11-20 19:32:35,463 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+5 =====
+2025-11-20 19:32:35,480 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+5
+2025-11-20 19:32:35,483 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:35,500 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[466 560], Class 1 (Up)=560
+2025-11-20 19:32:35,500 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.1009, Class 1=0.9161
+2025-11-20 19:32:35,501 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:35,702 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6939 | Val Loss: 0.6937 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:32:35,898 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6935 | Val Loss: 0.6931 | Val F1: 0.6788 | LR: 0.000500
+2025-11-20 19:32:36,088 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6940 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:36,270 - trainer - INFO - Epoch 4/120 | Train Loss: 0.6929 | Val Loss: 0.6916 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:36,447 - trainer - INFO - Epoch 5/120 | Train Loss: 0.6938 | Val Loss: 0.6922 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:36,618 - trainer - INFO - Epoch 6/120 | Train Loss: 0.6937 | Val Loss: 0.6925 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:36,793 - trainer - INFO - Epoch 7/120 | Train Loss: 0.6936 | Val Loss: 0.6931 | Val F1: 0.6603 | LR: 0.000500
+2025-11-20 19:32:36,976 - trainer - INFO - Epoch 8/120 | Train Loss: 0.6912 | Val Loss: 0.6931 | Val F1: 0.6447 | LR: 0.000500
+2025-11-20 19:32:37,158 - trainer - INFO - Epoch 9/120 | Train Loss: 0.6935 | Val Loss: 0.6919 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:37,343 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6927 | Val Loss: 0.6939 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:32:37,520 - trainer - INFO - Epoch 11/120 | Train Loss: 0.6938 | Val Loss: 0.6947 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:32:37,706 - trainer - INFO - Epoch 12/120 | Train Loss: 0.6925 | Val Loss: 0.6934 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:32:37,898 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6917 | Val Loss: 0.6919 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:38,077 - trainer - INFO - Epoch 14/120 | Train Loss: 0.6917 | Val Loss: 0.6929 | Val F1: 0.6431 | LR: 0.000250
+2025-11-20 19:32:38,248 - trainer - INFO - Epoch 15/120 | Train Loss: 0.6924 | Val Loss: 0.6923 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:38,441 - trainer - INFO - Epoch 16/120 | Train Loss: 0.6908 | Val Loss: 0.6937 | Val F1: 0.6747 | LR: 0.000250
+2025-11-20 19:32:38,641 - trainer - INFO - Epoch 17/120 | Train Loss: 0.6891 | Val Loss: 0.6931 | Val F1: 0.6775 | LR: 0.000250
+2025-11-20 19:32:38,840 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6922 | Val Loss: 0.6919 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:39,031 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6903 | Val Loss: 0.6930 | Val F1: 0.4928 | LR: 0.000250
+2025-11-20 19:32:39,214 - trainer - INFO - Epoch 20/120 | Train Loss: 0.6888 | Val Loss: 0.6918 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:39,388 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6904 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:39,587 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6896 | Val Loss: 0.6910 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:39,770 - trainer - INFO - Epoch 23/120 | Train Loss: 0.6911 | Val Loss: 0.6935 | Val F1: 0.6730 | LR: 0.000250
+2025-11-20 19:32:39,953 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6915 | Val Loss: 0.6935 | Val F1: 0.6436 | LR: 0.000250
+2025-11-20 19:32:40,128 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6896 | Val Loss: 0.6944 | Val F1: 0.6747 | LR: 0.000250
+2025-11-20 19:32:40,347 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6903 | Val Loss: 0.6933 | Val F1: 0.3696 | LR: 0.000250
+2025-11-20 19:32:40,557 - trainer - INFO - Epoch 27/120 | Train Loss: 0.6879 | Val Loss: 0.6921 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:40,768 - trainer - INFO - Epoch 28/120 | Train Loss: 0.6891 | Val Loss: 0.6928 | Val F1: 0.0678 | LR: 0.000250
+2025-11-20 19:32:40,977 - trainer - INFO - Epoch 29/120 | Train Loss: 0.6847 | Val Loss: 0.6918 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:41,175 - trainer - INFO - Epoch 30/120 | Train Loss: 0.6894 | Val Loss: 0.6922 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:41,359 - trainer - INFO - Epoch 31/120 | Train Loss: 0.6907 | Val Loss: 0.6950 | Val F1: 0.6603 | LR: 0.000250
+2025-11-20 19:32:41,550 - trainer - INFO - Epoch 32/120 | Train Loss: 0.6942 | Val Loss: 0.6919 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:41,726 - trainer - INFO - Epoch 33/120 | Train Loss: 0.6862 | Val Loss: 0.6936 | Val F1: 0.2625 | LR: 0.000125
+2025-11-20 19:32:41,925 - trainer - INFO - Epoch 34/120 | Train Loss: 0.6862 | Val Loss: 0.6940 | Val F1: 0.4322 | LR: 0.000125
+2025-11-20 19:32:42,103 - trainer - INFO - Epoch 35/120 | Train Loss: 0.6857 | Val Loss: 0.6933 | Val F1: 0.0896 | LR: 0.000125
+2025-11-20 19:32:42,281 - trainer - INFO - Epoch 36/120 | Train Loss: 0.6886 | Val Loss: 0.6933 | Val F1: 0.0916 | LR: 0.000125
+2025-11-20 19:32:42,450 - trainer - INFO - Epoch 37/120 | Train Loss: 0.6845 | Val Loss: 0.6929 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:42,618 - trainer - INFO - Epoch 38/120 | Train Loss: 0.6866 | Val Loss: 0.6935 | Val F1: 0.0870 | LR: 0.000125
+2025-11-20 19:32:42,811 - trainer - INFO - Epoch 39/120 | Train Loss: 0.6860 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:42,988 - trainer - INFO - Epoch 40/120 | Train Loss: 0.6869 | Val Loss: 0.6937 | Val F1: 0.1014 | LR: 0.000125
+2025-11-20 19:32:43,155 - trainer - INFO - Epoch 41/120 | Train Loss: 0.6860 | Val Loss: 0.6932 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:43,337 - trainer - INFO - Epoch 42/120 | Train Loss: 0.6829 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:43,542 - trainer - INFO - Epoch 43/120 | Train Loss: 0.6863 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:43,728 - trainer - INFO - Epoch 44/120 | Train Loss: 0.6834 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:43,916 - trainer - INFO - Epoch 45/120 | Train Loss: 0.6871 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:44,097 - trainer - INFO - Epoch 46/120 | Train Loss: 0.6843 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:44,292 - trainer - INFO - Epoch 47/120 | Train Loss: 0.6837 | Val Loss: 0.6926 | Val F1: 0.0000 | LR: 0.000063
+2025-11-20 19:32:44,292 - trainer - INFO - 🛑 Early stopping tại epoch 47
+2025-11-20 19:32:44,478 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:32:44,506 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 47.96%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=106, FP=0, FN=115, TP=0
+2025-11-20 19:32:44,509 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+5_best.pt
+2025-11-20 19:32:44,509 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+30 =====
+2025-11-20 19:32:44,527 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+30
+2025-11-20 19:32:44,533 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:44,546 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[361 665], Class 1 (Up)=665
+2025-11-20 19:32:44,547 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.4211, Class 1=0.7714
+2025-11-20 19:32:44,547 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:44,754 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6916 | Val Loss: 0.6938 | Val F1: 0.7393 | LR: 0.000500
+2025-11-20 19:32:44,956 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6904 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:45,146 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6860 | Val Loss: 0.6885 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:45,338 - trainer - INFO - Epoch 4/120 | Train Loss: 0.6794 | Val Loss: 0.6968 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:45,559 - trainer - INFO - Epoch 5/120 | Train Loss: 0.6213 | Val Loss: 0.8183 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:45,745 - trainer - INFO - Epoch 6/120 | Train Loss: 0.5936 | Val Loss: 0.8345 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:45,922 - trainer - INFO - Epoch 7/120 | Train Loss: 0.5812 | Val Loss: 0.7887 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:46,100 - trainer - INFO - Epoch 8/120 | Train Loss: 0.5743 | Val Loss: 0.8112 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:46,281 - trainer - INFO - Epoch 9/120 | Train Loss: 0.5424 | Val Loss: 0.9048 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:46,459 - trainer - INFO - Epoch 10/120 | Train Loss: 0.5562 | Val Loss: 0.8125 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:46,633 - trainer - INFO - Epoch 11/120 | Train Loss: 0.5360 | Val Loss: 0.7961 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:46,819 - trainer - INFO - Epoch 12/120 | Train Loss: 0.5109 | Val Loss: 0.8422 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:47,001 - trainer - INFO - Epoch 13/120 | Train Loss: 0.5295 | Val Loss: 0.8722 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:47,178 - trainer - INFO - Epoch 14/120 | Train Loss: 0.5070 | Val Loss: 0.8847 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:47,359 - trainer - INFO - Epoch 15/120 | Train Loss: 0.4897 | Val Loss: 0.8629 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:47,555 - trainer - INFO - Epoch 16/120 | Train Loss: 0.5034 | Val Loss: 0.8464 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:47,746 - trainer - INFO - Epoch 17/120 | Train Loss: 0.5270 | Val Loss: 0.9201 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:47,953 - trainer - INFO - Epoch 18/120 | Train Loss: 0.4885 | Val Loss: 0.9022 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:48,150 - trainer - INFO - Epoch 19/120 | Train Loss: 0.4989 | Val Loss: 0.8871 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:48,340 - trainer - INFO - Epoch 20/120 | Train Loss: 0.4973 | Val Loss: 0.8669 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:48,531 - trainer - INFO - Epoch 21/120 | Train Loss: 0.4926 | Val Loss: 0.9125 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:32:48,737 - trainer - INFO - Epoch 22/120 | Train Loss: 0.4946 | Val Loss: 0.9003 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:48,907 - trainer - INFO - Epoch 23/120 | Train Loss: 0.4856 | Val Loss: 0.9051 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,082 - trainer - INFO - Epoch 24/120 | Train Loss: 0.4791 | Val Loss: 0.9093 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,277 - trainer - INFO - Epoch 25/120 | Train Loss: 0.4787 | Val Loss: 0.8914 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,450 - trainer - INFO - Epoch 26/120 | Train Loss: 0.4972 | Val Loss: 0.9142 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,621 - trainer - INFO - Epoch 27/120 | Train Loss: 0.4786 | Val Loss: 0.8936 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,807 - trainer - INFO - Epoch 28/120 | Train Loss: 0.5170 | Val Loss: 0.8919 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:32:49,807 - trainer - INFO - 🛑 Early stopping tại epoch 28
+2025-11-20 19:32:49,989 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:32:50,028 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 45.25%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=100, FP=0, FN=121, TP=0
+2025-11-20 19:32:50,031 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+30_best.pt
+2025-11-20 19:32:50,031 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+60 =====
+2025-11-20 19:32:50,057 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+60
+2025-11-20 19:32:50,062 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:50,082 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[303 723], Class 1 (Up)=723
+2025-11-20 19:32:50,083 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.6931, Class 1=0.7095
+2025-11-20 19:32:50,083 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:50,307 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6935 | Val Loss: 0.6977 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:50,503 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6821 | Val Loss: 0.6974 | Val F1: 0.0503 | LR: 0.000500
+2025-11-20 19:32:50,724 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6130 | Val Loss: 0.7155 | Val F1: 0.1977 | LR: 0.000500
+2025-11-20 19:32:50,919 - trainer - INFO - Epoch 4/120 | Train Loss: 0.5339 | Val Loss: 0.6977 | Val F1: 0.5425 | LR: 0.000500
+2025-11-20 19:32:51,097 - trainer - INFO - Epoch 5/120 | Train Loss: 0.5178 | Val Loss: 0.6763 | Val F1: 0.5859 | LR: 0.000500
+2025-11-20 19:32:51,295 - trainer - INFO - Epoch 6/120 | Train Loss: 0.4955 | Val Loss: 0.7968 | Val F1: 0.1657 | LR: 0.000500
+2025-11-20 19:32:51,468 - trainer - INFO - Epoch 7/120 | Train Loss: 0.4716 | Val Loss: 0.6532 | Val F1: 0.8221 | LR: 0.000500
+2025-11-20 19:32:51,659 - trainer - INFO - Epoch 8/120 | Train Loss: 0.4301 | Val Loss: 0.7413 | Val F1: 0.8134 | LR: 0.000500
+2025-11-20 19:32:51,842 - trainer - INFO - Epoch 9/120 | Train Loss: 0.3965 | Val Loss: 0.9162 | Val F1: 0.8204 | LR: 0.000500
+2025-11-20 19:32:52,026 - trainer - INFO - Epoch 10/120 | Train Loss: 0.4593 | Val Loss: 0.7232 | Val F1: 0.8481 | LR: 0.000500
+2025-11-20 19:32:52,219 - trainer - INFO - Epoch 11/120 | Train Loss: 0.3900 | Val Loss: 0.7646 | Val F1: 0.8146 | LR: 0.000500
+2025-11-20 19:32:52,389 - trainer - INFO - Epoch 12/120 | Train Loss: 0.3701 | Val Loss: 0.7175 | Val F1: 0.8088 | LR: 0.000500
+2025-11-20 19:32:52,557 - trainer - INFO - Epoch 13/120 | Train Loss: 0.3610 | Val Loss: 0.8296 | Val F1: 0.8111 | LR: 0.000500
+2025-11-20 19:32:52,755 - trainer - INFO - Epoch 14/120 | Train Loss: 0.3503 | Val Loss: 0.8362 | Val F1: 0.8100 | LR: 0.000500
+2025-11-20 19:32:52,942 - trainer - INFO - Epoch 15/120 | Train Loss: 0.2959 | Val Loss: 1.0123 | Val F1: 0.8135 | LR: 0.000500
+2025-11-20 19:32:53,122 - trainer - INFO - Epoch 16/120 | Train Loss: 0.3232 | Val Loss: 1.0939 | Val F1: 0.8333 | LR: 0.000500
+2025-11-20 19:32:53,309 - trainer - INFO - Epoch 17/120 | Train Loss: 0.2765 | Val Loss: 1.1429 | Val F1: 0.8201 | LR: 0.000250
+2025-11-20 19:32:53,477 - trainer - INFO - Epoch 18/120 | Train Loss: 0.2785 | Val Loss: 1.4335 | Val F1: 0.8204 | LR: 0.000250
+2025-11-20 19:32:53,652 - trainer - INFO - Epoch 19/120 | Train Loss: 0.3062 | Val Loss: 1.1826 | Val F1: 0.8201 | LR: 0.000250
+2025-11-20 19:32:53,827 - trainer - INFO - Epoch 20/120 | Train Loss: 0.2966 | Val Loss: 1.1189 | Val F1: 0.8121 | LR: 0.000250
+2025-11-20 19:32:53,996 - trainer - INFO - Epoch 21/120 | Train Loss: 0.2567 | Val Loss: 1.2491 | Val F1: 0.8262 | LR: 0.000250
+2025-11-20 19:32:54,182 - trainer - INFO - Epoch 22/120 | Train Loss: 0.2640 | Val Loss: 1.2000 | Val F1: 0.8270 | LR: 0.000250
+2025-11-20 19:32:54,353 - trainer - INFO - Epoch 23/120 | Train Loss: 0.2779 | Val Loss: 1.2202 | Val F1: 0.8314 | LR: 0.000250
+2025-11-20 19:32:54,542 - trainer - INFO - Epoch 24/120 | Train Loss: 0.2757 | Val Loss: 1.4300 | Val F1: 0.8204 | LR: 0.000250
+2025-11-20 19:32:54,728 - trainer - INFO - Epoch 25/120 | Train Loss: 0.2957 | Val Loss: 1.4931 | Val F1: 0.8204 | LR: 0.000250
+2025-11-20 19:32:54,902 - trainer - INFO - Epoch 26/120 | Train Loss: 0.2593 | Val Loss: 1.4474 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:55,078 - trainer - INFO - Epoch 27/120 | Train Loss: 0.2448 | Val Loss: 1.3905 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:55,286 - trainer - INFO - Epoch 28/120 | Train Loss: 0.2360 | Val Loss: 1.6861 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:55,470 - trainer - INFO - Epoch 29/120 | Train Loss: 0.2625 | Val Loss: 1.2707 | Val F1: 0.8300 | LR: 0.000125
+2025-11-20 19:32:55,673 - trainer - INFO - Epoch 30/120 | Train Loss: 0.2540 | Val Loss: 1.5594 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:55,865 - trainer - INFO - Epoch 31/120 | Train Loss: 0.2517 | Val Loss: 1.6101 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:56,068 - trainer - INFO - Epoch 32/120 | Train Loss: 0.2679 | Val Loss: 1.6725 | Val F1: 0.8204 | LR: 0.000125
+2025-11-20 19:32:56,068 - trainer - INFO - 🛑 Early stopping tại epoch 32
+2025-11-20 19:32:56,265 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:32:56,294 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 44.34%
+      - Balanced Accuracy: 51.57%
+      - Precision: 43.32%
+      - Recall: 100.00%
+      - F1-Score: 60.45%
+      - Confusion Matrix: TN=4, FP=123, FN=0, TP=94
+2025-11-20 19:32:56,296 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+60_best.pt
+2025-11-20 19:32:56,296 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_cnn_bilstm_t+90 =====
+2025-11-20 19:32:56,317 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+90
+2025-11-20 19:32:56,324 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:32:56,337 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[292 734], Class 1 (Up)=734
+2025-11-20 19:32:56,338 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.7568, Class 1=0.6989
+2025-11-20 19:32:56,338 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:32:56,550 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6946 | Val Loss: 0.6994 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:56,750 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6706 | Val Loss: 0.6915 | Val F1: 0.5249 | LR: 0.000500
+2025-11-20 19:32:56,939 - trainer - INFO - Epoch 3/120 | Train Loss: 0.5154 | Val Loss: 0.9339 | Val F1: 0.1685 | LR: 0.000500
+2025-11-20 19:32:57,132 - trainer - INFO - Epoch 4/120 | Train Loss: 0.4064 | Val Loss: 0.5934 | Val F1: 0.7508 | LR: 0.000500
+2025-11-20 19:32:57,303 - trainer - INFO - Epoch 5/120 | Train Loss: 0.3887 | Val Loss: 1.1816 | Val F1: 0.2473 | LR: 0.000500
+2025-11-20 19:32:57,493 - trainer - INFO - Epoch 6/120 | Train Loss: 0.3760 | Val Loss: 1.0587 | Val F1: 0.2751 | LR: 0.000500
+2025-11-20 19:32:57,678 - trainer - INFO - Epoch 7/120 | Train Loss: 0.3895 | Val Loss: 1.2645 | Val F1: 0.2283 | LR: 0.000500
+2025-11-20 19:32:57,867 - trainer - INFO - Epoch 8/120 | Train Loss: 0.3831 | Val Loss: 0.5678 | Val F1: 0.8129 | LR: 0.000500
+2025-11-20 19:32:58,044 - trainer - INFO - Epoch 9/120 | Train Loss: 0.3964 | Val Loss: 1.2632 | Val F1: 0.1582 | LR: 0.000500
+2025-11-20 19:32:58,242 - trainer - INFO - Epoch 10/120 | Train Loss: 0.3875 | Val Loss: 1.1852 | Val F1: 0.2283 | LR: 0.000500
+2025-11-20 19:32:58,416 - trainer - INFO - Epoch 11/120 | Train Loss: 0.3790 | Val Loss: 1.2682 | Val F1: 0.1989 | LR: 0.000500
+2025-11-20 19:32:58,597 - trainer - INFO - Epoch 12/120 | Train Loss: 0.3844 | Val Loss: 1.0940 | Val F1: 0.2567 | LR: 0.000500
+2025-11-20 19:32:58,791 - trainer - INFO - Epoch 13/120 | Train Loss: 0.3893 | Val Loss: 1.4343 | Val F1: 0.0595 | LR: 0.000500
+2025-11-20 19:32:58,989 - trainer - INFO - Epoch 14/120 | Train Loss: 0.3727 | Val Loss: 1.4398 | Val F1: 0.0361 | LR: 0.000500
+2025-11-20 19:32:59,166 - trainer - INFO - Epoch 15/120 | Train Loss: 0.3819 | Val Loss: 1.2785 | Val F1: 0.1685 | LR: 0.000500
+2025-11-20 19:32:59,332 - trainer - INFO - Epoch 16/120 | Train Loss: 0.3960 | Val Loss: 1.4310 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:32:59,501 - trainer - INFO - Epoch 17/120 | Train Loss: 0.3740 | Val Loss: 1.1330 | Val F1: 0.1685 | LR: 0.000500
+2025-11-20 19:32:59,688 - trainer - INFO - Epoch 18/120 | Train Loss: 0.3508 | Val Loss: 1.3200 | Val F1: 0.1156 | LR: 0.000250
+2025-11-20 19:32:59,853 - trainer - INFO - Epoch 19/120 | Train Loss: 0.3326 | Val Loss: 1.3195 | Val F1: 0.2088 | LR: 0.000250
+2025-11-20 19:33:00,042 - trainer - INFO - Epoch 20/120 | Train Loss: 0.3364 | Val Loss: 1.3313 | Val F1: 0.1582 | LR: 0.000250
+2025-11-20 19:33:00,229 - trainer - INFO - Epoch 21/120 | Train Loss: 0.3195 | Val Loss: 1.2642 | Val F1: 0.2088 | LR: 0.000250
+2025-11-20 19:33:00,404 - trainer - INFO - Epoch 22/120 | Train Loss: 0.3408 | Val Loss: 1.3312 | Val F1: 0.1889 | LR: 0.000250
+2025-11-20 19:33:00,584 - trainer - INFO - Epoch 23/120 | Train Loss: 0.2864 | Val Loss: 1.2774 | Val F1: 0.1889 | LR: 0.000250
+2025-11-20 19:33:00,786 - trainer - INFO - Epoch 24/120 | Train Loss: 0.2857 | Val Loss: 1.3619 | Val F1: 0.1685 | LR: 0.000250
+2025-11-20 19:33:00,968 - trainer - INFO - Epoch 25/120 | Train Loss: 0.3096 | Val Loss: 1.4750 | Val F1: 0.0824 | LR: 0.000250
+2025-11-20 19:33:01,154 - trainer - INFO - Epoch 26/120 | Train Loss: 0.2852 | Val Loss: 1.3791 | Val F1: 0.1477 | LR: 0.000250
+2025-11-20 19:33:01,359 - trainer - INFO - Epoch 27/120 | Train Loss: 0.2678 | Val Loss: 1.4478 | Val F1: 0.1264 | LR: 0.000125
+2025-11-20 19:33:01,540 - trainer - INFO - Epoch 28/120 | Train Loss: 0.2821 | Val Loss: 1.5247 | Val F1: 0.0710 | LR: 0.000125
+2025-11-20 19:33:01,716 - trainer - INFO - Epoch 29/120 | Train Loss: 0.3047 | Val Loss: 1.4637 | Val F1: 0.1371 | LR: 0.000125
+2025-11-20 19:33:01,890 - trainer - INFO - Epoch 30/120 | Train Loss: 0.2822 | Val Loss: 1.4762 | Val F1: 0.1371 | LR: 0.000125
+2025-11-20 19:33:02,096 - trainer - INFO - Epoch 31/120 | Train Loss: 0.3004 | Val Loss: 1.5249 | Val F1: 0.0936 | LR: 0.000125
+2025-11-20 19:33:02,270 - trainer - INFO - Epoch 32/120 | Train Loss: 0.2839 | Val Loss: 1.5412 | Val F1: 0.0710 | LR: 0.000125
+2025-11-20 19:33:02,445 - trainer - INFO - Epoch 33/120 | Train Loss: 0.2782 | Val Loss: 1.5348 | Val F1: 0.1047 | LR: 0.000125
+2025-11-20 19:33:02,445 - trainer - INFO - 🛑 Early stopping tại epoch 33
+2025-11-20 19:33:02,638 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:02,667 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 51.13%
+      - Balanced Accuracy: 50.04%
+      - Precision: 51.15%
+      - Recall: 98.23%
+      - F1-Score: 67.27%
+      - Confusion Matrix: TN=2, FP=106, FN=2, TP=111
+2025-11-20 19:33:02,670 - trainer - INFO - Đã lưu model tại: models/ACB_cnn_bilstm_t+90_best.pt
+2025-11-20 19:33:02,670 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+1 =====
+2025-11-20 19:33:02,688 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+1
+2025-11-20 19:33:02,692 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:02,710 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[527 499], Class 1 (Up)=499
+2025-11-20 19:33:02,711 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=0.9734, Class 1=1.0281
+2025-11-20 19:33:02,711 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:03,051 - trainer - INFO - Epoch 1/120 | Train Loss: 0.7863 | Val Loss: 0.6856 | Val F1: 0.1920 | LR: 0.000500
+2025-11-20 19:33:03,364 - trainer - INFO - Epoch 2/120 | Train Loss: 0.7868 | Val Loss: 0.6815 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:03,666 - trainer - INFO - Epoch 3/120 | Train Loss: 0.7767 | Val Loss: 0.6796 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:03,991 - trainer - INFO - Epoch 4/120 | Train Loss: 0.7309 | Val Loss: 0.6877 | Val F1: 0.1429 | LR: 0.000500
+2025-11-20 19:33:04,305 - trainer - INFO - Epoch 5/120 | Train Loss: 0.7150 | Val Loss: 0.6921 | Val F1: 0.3077 | LR: 0.000500
+2025-11-20 19:33:04,651 - trainer - INFO - Epoch 6/120 | Train Loss: 0.7168 | Val Loss: 0.6876 | Val F1: 0.0233 | LR: 0.000500
+2025-11-20 19:33:04,931 - trainer - INFO - Epoch 7/120 | Train Loss: 0.7224 | Val Loss: 0.6872 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:05,231 - trainer - INFO - Epoch 8/120 | Train Loss: 0.6946 | Val Loss: 0.6874 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:05,565 - trainer - INFO - Epoch 9/120 | Train Loss: 0.7033 | Val Loss: 0.7018 | Val F1: 0.5574 | LR: 0.000500
+2025-11-20 19:33:05,889 - trainer - INFO - Epoch 10/120 | Train Loss: 0.7164 | Val Loss: 0.6879 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:06,210 - trainer - INFO - Epoch 11/120 | Train Loss: 0.7095 | Val Loss: 0.6887 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:06,515 - trainer - INFO - Epoch 12/120 | Train Loss: 0.7021 | Val Loss: 0.6890 | Val F1: 0.0233 | LR: 0.000500
+2025-11-20 19:33:06,837 - trainer - INFO - Epoch 13/120 | Train Loss: 0.7092 | Val Loss: 0.6884 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:07,168 - trainer - INFO - Epoch 14/120 | Train Loss: 0.6990 | Val Loss: 0.6928 | Val F1: 0.3095 | LR: 0.000250
+2025-11-20 19:33:07,459 - trainer - INFO - Epoch 15/120 | Train Loss: 0.7074 | Val Loss: 0.6926 | Val F1: 0.2981 | LR: 0.000250
+2025-11-20 19:33:07,745 - trainer - INFO - Epoch 16/120 | Train Loss: 0.7010 | Val Loss: 0.6897 | Val F1: 0.0233 | LR: 0.000250
+2025-11-20 19:33:08,042 - trainer - INFO - Epoch 17/120 | Train Loss: 0.6933 | Val Loss: 0.6952 | Val F1: 0.5540 | LR: 0.000250
+2025-11-20 19:33:08,308 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6943 | Val Loss: 0.6911 | Val F1: 0.1373 | LR: 0.000250
+2025-11-20 19:33:08,606 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6980 | Val Loss: 0.6910 | Val F1: 0.1373 | LR: 0.000250
+2025-11-20 19:33:08,940 - trainer - INFO - Epoch 20/120 | Train Loss: 0.7024 | Val Loss: 0.6941 | Val F1: 0.4589 | LR: 0.000250
+2025-11-20 19:33:09,223 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6984 | Val Loss: 0.6933 | Val F1: 0.3711 | LR: 0.000250
+2025-11-20 19:33:09,497 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6966 | Val Loss: 0.6922 | Val F1: 0.2556 | LR: 0.000125
+2025-11-20 19:33:09,833 - trainer - INFO - Epoch 23/120 | Train Loss: 0.7023 | Val Loss: 0.6915 | Val F1: 0.2000 | LR: 0.000125
+2025-11-20 19:33:10,119 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6959 | Val Loss: 0.6907 | Val F1: 0.1020 | LR: 0.000125
+2025-11-20 19:33:10,446 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6977 | Val Loss: 0.6940 | Val F1: 0.4874 | LR: 0.000125
+2025-11-20 19:33:10,745 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6967 | Val Loss: 0.6948 | Val F1: 0.5568 | LR: 0.000125
+2025-11-20 19:33:11,069 - trainer - INFO - Epoch 27/120 | Train Loss: 0.6969 | Val Loss: 0.6919 | Val F1: 0.2479 | LR: 0.000125
+2025-11-20 19:33:11,357 - trainer - INFO - Epoch 28/120 | Train Loss: 0.6994 | Val Loss: 0.6921 | Val F1: 0.2636 | LR: 0.000125
+2025-11-20 19:33:11,358 - trainer - INFO - 🛑 Early stopping tại epoch 28
+2025-11-20 19:33:11,724 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:11,759 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 56.56%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=125, FP=0, FN=96, TP=0
+2025-11-20 19:33:11,763 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+1_best.pt
+2025-11-20 19:33:11,763 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+3 =====
+2025-11-20 19:33:11,782 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+3
+2025-11-20 19:33:11,787 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:11,800 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[484 542], Class 1 (Up)=542
+2025-11-20 19:33:11,800 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.0599, Class 1=0.9465
+2025-11-20 19:33:11,800 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:12,127 - trainer - INFO - Epoch 1/120 | Train Loss: 0.7848 | Val Loss: 0.6956 | Val F1: 0.1094 | LR: 0.000500
+2025-11-20 19:33:12,448 - trainer - INFO - Epoch 2/120 | Train Loss: 0.7853 | Val Loss: 0.6976 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:12,749 - trainer - INFO - Epoch 3/120 | Train Loss: 0.7291 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:13,023 - trainer - INFO - Epoch 4/120 | Train Loss: 0.7293 | Val Loss: 0.6952 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:13,283 - trainer - INFO - Epoch 5/120 | Train Loss: 0.7296 | Val Loss: 0.6938 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:13,580 - trainer - INFO - Epoch 6/120 | Train Loss: 0.7496 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:13,867 - trainer - INFO - Epoch 7/120 | Train Loss: 0.7162 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:14,155 - trainer - INFO - Epoch 8/120 | Train Loss: 0.7122 | Val Loss: 0.6936 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:14,432 - trainer - INFO - Epoch 9/120 | Train Loss: 0.6982 | Val Loss: 0.6932 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:14,765 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6953 | Val Loss: 0.6932 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:15,045 - trainer - INFO - Epoch 11/120 | Train Loss: 0.7135 | Val Loss: 0.6933 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:15,308 - trainer - INFO - Epoch 12/120 | Train Loss: 0.7021 | Val Loss: 0.6927 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:15,587 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6977 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:15,875 - trainer - INFO - Epoch 14/120 | Train Loss: 0.7004 | Val Loss: 0.6925 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:16,150 - trainer - INFO - Epoch 15/120 | Train Loss: 0.7025 | Val Loss: 0.6923 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:16,425 - trainer - INFO - Epoch 16/120 | Train Loss: 0.6953 | Val Loss: 0.6933 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:16,780 - trainer - INFO - Epoch 17/120 | Train Loss: 0.7000 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:17,064 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6929 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:17,333 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6987 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:17,648 - trainer - INFO - Epoch 20/120 | Train Loss: 0.6892 | Val Loss: 0.6939 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:17,915 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6944 | Val Loss: 0.6933 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:18,201 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6909 | Val Loss: 0.6930 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:18,516 - trainer - INFO - Epoch 23/120 | Train Loss: 0.6884 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:18,833 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6902 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:19,156 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6914 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:19,461 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6958 | Val Loss: 0.6937 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:19,736 - trainer - INFO - Epoch 27/120 | Train Loss: 0.7014 | Val Loss: 0.6936 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:20,033 - trainer - INFO - Epoch 28/120 | Train Loss: 0.6917 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:20,300 - trainer - INFO - Epoch 29/120 | Train Loss: 0.6919 | Val Loss: 0.6936 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:20,612 - trainer - INFO - Epoch 30/120 | Train Loss: 0.7034 | Val Loss: 0.6933 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:20,890 - trainer - INFO - Epoch 31/120 | Train Loss: 0.6925 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:21,182 - trainer - INFO - Epoch 32/120 | Train Loss: 0.6964 | Val Loss: 0.6937 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:21,462 - trainer - INFO - Epoch 33/120 | Train Loss: 0.6936 | Val Loss: 0.6933 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:21,736 - trainer - INFO - Epoch 34/120 | Train Loss: 0.6946 | Val Loss: 0.6938 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:22,004 - trainer - INFO - Epoch 35/120 | Train Loss: 0.6924 | Val Loss: 0.6937 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:22,305 - trainer - INFO - Epoch 36/120 | Train Loss: 0.6922 | Val Loss: 0.6939 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:22,569 - trainer - INFO - Epoch 37/120 | Train Loss: 0.6904 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:22,902 - trainer - INFO - Epoch 38/120 | Train Loss: 0.6886 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:23,196 - trainer - INFO - Epoch 39/120 | Train Loss: 0.6922 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:23,463 - trainer - INFO - Epoch 40/120 | Train Loss: 0.6914 | Val Loss: 0.6934 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:23,464 - trainer - INFO - 🛑 Early stopping tại epoch 40
+2025-11-20 19:33:23,658 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:23,694 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 44.80%
+      - Balanced Accuracy: 50.00%
+      - Precision: 0.00%
+      - Recall: 0.00%
+      - F1-Score: 0.00%
+      - Confusion Matrix: TN=99, FP=0, FN=122, TP=0
+2025-11-20 19:33:23,698 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+3_best.pt
+2025-11-20 19:33:23,698 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+5 =====
+2025-11-20 19:33:23,716 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+5
+2025-11-20 19:33:23,721 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:23,738 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[466 560], Class 1 (Up)=560
+2025-11-20 19:33:23,739 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.1009, Class 1=0.9161
+2025-11-20 19:33:23,739 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:24,050 - trainer - INFO - Epoch 1/120 | Train Loss: 0.8077 | Val Loss: 0.6969 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:33:24,322 - trainer - INFO - Epoch 2/120 | Train Loss: 0.7409 | Val Loss: 0.7030 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:33:24,636 - trainer - INFO - Epoch 3/120 | Train Loss: 0.7440 | Val Loss: 0.7039 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:33:24,943 - trainer - INFO - Epoch 4/120 | Train Loss: 0.7426 | Val Loss: 0.6940 | Val F1: 0.6728 | LR: 0.000500
+2025-11-20 19:33:25,231 - trainer - INFO - Epoch 5/120 | Train Loss: 0.7335 | Val Loss: 0.6929 | Val F1: 0.6622 | LR: 0.000500
+2025-11-20 19:33:25,498 - trainer - INFO - Epoch 6/120 | Train Loss: 0.7069 | Val Loss: 0.6985 | Val F1: 0.6747 | LR: 0.000500
+2025-11-20 19:33:25,772 - trainer - INFO - Epoch 7/120 | Train Loss: 0.7141 | Val Loss: 0.6918 | Val F1: 0.4421 | LR: 0.000500
+2025-11-20 19:33:26,066 - trainer - INFO - Epoch 8/120 | Train Loss: 0.7025 | Val Loss: 0.6921 | Val F1: 0.5091 | LR: 0.000500
+2025-11-20 19:33:26,346 - trainer - INFO - Epoch 9/120 | Train Loss: 0.7014 | Val Loss: 0.6917 | Val F1: 0.3931 | LR: 0.000500
+2025-11-20 19:33:26,663 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6967 | Val Loss: 0.6932 | Val F1: 0.6007 | LR: 0.000500
+2025-11-20 19:33:26,952 - trainer - INFO - Epoch 11/120 | Train Loss: 0.7060 | Val Loss: 0.6936 | Val F1: 0.6434 | LR: 0.000500
+2025-11-20 19:33:27,248 - trainer - INFO - Epoch 12/120 | Train Loss: 0.6942 | Val Loss: 0.6911 | Val F1: 0.0517 | LR: 0.000500
+2025-11-20 19:33:27,535 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6914 | Val Loss: 0.6923 | Val F1: 0.4476 | LR: 0.000500
+2025-11-20 19:33:27,813 - trainer - INFO - Epoch 14/120 | Train Loss: 0.6996 | Val Loss: 0.6953 | Val F1: 0.6829 | LR: 0.000500
+2025-11-20 19:33:28,082 - trainer - INFO - Epoch 15/120 | Train Loss: 0.6958 | Val Loss: 0.6925 | Val F1: 0.4519 | LR: 0.000500
+2025-11-20 19:33:28,373 - trainer - INFO - Epoch 16/120 | Train Loss: 0.6955 | Val Loss: 0.6923 | Val F1: 0.3723 | LR: 0.000500
+2025-11-20 19:33:28,660 - trainer - INFO - Epoch 17/120 | Train Loss: 0.6956 | Val Loss: 0.6909 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:28,937 - trainer - INFO - Epoch 18/120 | Train Loss: 0.6988 | Val Loss: 0.6913 | Val F1: 0.0513 | LR: 0.000500
+2025-11-20 19:33:29,214 - trainer - INFO - Epoch 19/120 | Train Loss: 0.6920 | Val Loss: 0.6917 | Val F1: 0.3543 | LR: 0.000500
+2025-11-20 19:33:29,508 - trainer - INFO - Epoch 20/120 | Train Loss: 0.6919 | Val Loss: 0.6915 | Val F1: 0.2692 | LR: 0.000500
+2025-11-20 19:33:29,811 - trainer - INFO - Epoch 21/120 | Train Loss: 0.6958 | Val Loss: 0.6907 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:30,110 - trainer - INFO - Epoch 22/120 | Train Loss: 0.6857 | Val Loss: 0.6943 | Val F1: 0.6406 | LR: 0.000500
+2025-11-20 19:33:30,443 - trainer - INFO - Epoch 23/120 | Train Loss: 0.6972 | Val Loss: 0.6917 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:30,757 - trainer - INFO - Epoch 24/120 | Train Loss: 0.6918 | Val Loss: 0.6929 | Val F1: 0.2959 | LR: 0.000500
+2025-11-20 19:33:31,061 - trainer - INFO - Epoch 25/120 | Train Loss: 0.6950 | Val Loss: 0.6922 | Val F1: 0.0508 | LR: 0.000500
+2025-11-20 19:33:31,355 - trainer - INFO - Epoch 26/120 | Train Loss: 0.6931 | Val Loss: 0.6926 | Val F1: 0.2014 | LR: 0.000500
+2025-11-20 19:33:31,673 - trainer - INFO - Epoch 27/120 | Train Loss: 0.6925 | Val Loss: 0.6920 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:31,953 - trainer - INFO - Epoch 28/120 | Train Loss: 0.6909 | Val Loss: 0.6928 | Val F1: 0.0500 | LR: 0.000500
+2025-11-20 19:33:32,287 - trainer - INFO - Epoch 29/120 | Train Loss: 0.6932 | Val Loss: 0.6934 | Val F1: 0.1504 | LR: 0.000500
+2025-11-20 19:33:32,594 - trainer - INFO - Epoch 30/120 | Train Loss: 0.6894 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:32,897 - trainer - INFO - Epoch 31/120 | Train Loss: 0.6859 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:33,227 - trainer - INFO - Epoch 32/120 | Train Loss: 0.6839 | Val Loss: 0.6924 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:33,543 - trainer - INFO - Epoch 33/120 | Train Loss: 0.6879 | Val Loss: 0.6928 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:33,852 - trainer - INFO - Epoch 34/120 | Train Loss: 0.6796 | Val Loss: 0.6931 | Val F1: 0.0508 | LR: 0.000250
+2025-11-20 19:33:34,130 - trainer - INFO - Epoch 35/120 | Train Loss: 0.6852 | Val Loss: 0.6931 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:34,410 - trainer - INFO - Epoch 36/120 | Train Loss: 0.6849 | Val Loss: 0.6935 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:34,698 - trainer - INFO - Epoch 37/120 | Train Loss: 0.6940 | Val Loss: 0.6935 | Val F1: 0.0174 | LR: 0.000250
+2025-11-20 19:33:34,979 - trainer - INFO - Epoch 38/120 | Train Loss: 0.6836 | Val Loss: 0.6939 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:35,269 - trainer - INFO - Epoch 39/120 | Train Loss: 0.6884 | Val Loss: 0.6936 | Val F1: 0.0348 | LR: 0.000250
+2025-11-20 19:33:35,556 - trainer - INFO - Epoch 40/120 | Train Loss: 0.6881 | Val Loss: 0.6938 | Val F1: 0.0345 | LR: 0.000125
+2025-11-20 19:33:35,851 - trainer - INFO - Epoch 41/120 | Train Loss: 0.6819 | Val Loss: 0.6946 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:36,130 - trainer - INFO - Epoch 42/120 | Train Loss: 0.6856 | Val Loss: 0.6942 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:36,408 - trainer - INFO - Epoch 43/120 | Train Loss: 0.6912 | Val Loss: 0.6944 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:36,731 - trainer - INFO - Epoch 44/120 | Train Loss: 0.6854 | Val Loss: 0.6944 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:37,075 - trainer - INFO - Epoch 45/120 | Train Loss: 0.6838 | Val Loss: 0.6944 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:37,423 - trainer - INFO - Epoch 46/120 | Train Loss: 0.6955 | Val Loss: 0.6945 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:37,423 - trainer - INFO - 🛑 Early stopping tại epoch 46
+2025-11-20 19:33:37,643 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:37,681 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 49.77%
+      - Balanced Accuracy: 51.74%
+      - Precision: 100.00%
+      - Recall: 3.48%
+      - F1-Score: 6.72%
+      - Confusion Matrix: TN=106, FP=0, FN=111, TP=4
+2025-11-20 19:33:37,686 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+5_best.pt
+2025-11-20 19:33:37,686 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+30 =====
+2025-11-20 19:33:37,707 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+30
+2025-11-20 19:33:37,714 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:37,732 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[361 665], Class 1 (Up)=665
+2025-11-20 19:33:37,733 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.4211, Class 1=0.7714
+2025-11-20 19:33:37,733 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:38,089 - trainer - INFO - Epoch 1/120 | Train Loss: 0.7983 | Val Loss: 0.7166 | Val F1: 0.7393 | LR: 0.000500
+2025-11-20 19:33:38,401 - trainer - INFO - Epoch 2/120 | Train Loss: 0.7311 | Val Loss: 0.7064 | Val F1: 0.7393 | LR: 0.000500
+2025-11-20 19:33:38,706 - trainer - INFO - Epoch 3/120 | Train Loss: 0.7232 | Val Loss: 0.6986 | Val F1: 0.1622 | LR: 0.000500
+2025-11-20 19:33:38,993 - trainer - INFO - Epoch 4/120 | Train Loss: 0.7076 | Val Loss: 0.6959 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:39,300 - trainer - INFO - Epoch 5/120 | Train Loss: 0.6840 | Val Loss: 0.6968 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:39,614 - trainer - INFO - Epoch 6/120 | Train Loss: 0.6845 | Val Loss: 0.6986 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:39,908 - trainer - INFO - Epoch 7/120 | Train Loss: 0.6790 | Val Loss: 0.7196 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:40,236 - trainer - INFO - Epoch 8/120 | Train Loss: 0.6659 | Val Loss: 0.7103 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:40,573 - trainer - INFO - Epoch 9/120 | Train Loss: 0.6652 | Val Loss: 0.7830 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:40,893 - trainer - INFO - Epoch 10/120 | Train Loss: 0.6377 | Val Loss: 0.8097 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:41,210 - trainer - INFO - Epoch 11/120 | Train Loss: 0.6532 | Val Loss: 0.8378 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:41,535 - trainer - INFO - Epoch 12/120 | Train Loss: 0.6276 | Val Loss: 0.8075 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:41,823 - trainer - INFO - Epoch 13/120 | Train Loss: 0.6068 | Val Loss: 0.8950 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:42,131 - trainer - INFO - Epoch 14/120 | Train Loss: 0.5940 | Val Loss: 0.8857 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:42,422 - trainer - INFO - Epoch 15/120 | Train Loss: 0.5984 | Val Loss: 0.8942 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:42,748 - trainer - INFO - Epoch 16/120 | Train Loss: 0.5818 | Val Loss: 0.9193 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:43,079 - trainer - INFO - Epoch 17/120 | Train Loss: 0.5843 | Val Loss: 0.9385 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:43,358 - trainer - INFO - Epoch 18/120 | Train Loss: 0.5846 | Val Loss: 0.9577 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:43,638 - trainer - INFO - Epoch 19/120 | Train Loss: 0.5816 | Val Loss: 0.9466 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:43,934 - trainer - INFO - Epoch 20/120 | Train Loss: 0.5765 | Val Loss: 0.9592 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:44,257 - trainer - INFO - Epoch 21/120 | Train Loss: 0.5744 | Val Loss: 0.9674 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:44,574 - trainer - INFO - Epoch 22/120 | Train Loss: 0.5804 | Val Loss: 0.9739 | Val F1: 0.0000 | LR: 0.000250
+2025-11-20 19:33:44,905 - trainer - INFO - Epoch 23/120 | Train Loss: 0.5610 | Val Loss: 0.9809 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:45,201 - trainer - INFO - Epoch 24/120 | Train Loss: 0.5597 | Val Loss: 0.9879 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:45,514 - trainer - INFO - Epoch 25/120 | Train Loss: 0.5615 | Val Loss: 0.9897 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:45,833 - trainer - INFO - Epoch 26/120 | Train Loss: 0.5396 | Val Loss: 1.0162 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:46,135 - trainer - INFO - Epoch 27/120 | Train Loss: 0.5628 | Val Loss: 1.0035 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:46,413 - trainer - INFO - Epoch 28/120 | Train Loss: 0.5421 | Val Loss: 1.0135 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:46,739 - trainer - INFO - Epoch 29/120 | Train Loss: 0.5495 | Val Loss: 1.0274 | Val F1: 0.0000 | LR: 0.000125
+2025-11-20 19:33:46,739 - trainer - INFO - 🛑 Early stopping tại epoch 29
+2025-11-20 19:33:46,936 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:46,971 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 49.77%
+      - Balanced Accuracy: 52.31%
+      - Precision: 59.62%
+      - Recall: 25.62%
+      - F1-Score: 35.84%
+      - Confusion Matrix: TN=79, FP=21, FN=90, TP=31
+2025-11-20 19:33:46,976 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+30_best.pt
+2025-11-20 19:33:46,976 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+60 =====
+2025-11-20 19:33:46,995 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+60
+2025-11-20 19:33:47,000 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:47,016 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[303 723], Class 1 (Up)=723
+2025-11-20 19:33:47,016 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.6931, Class 1=0.7095
+2025-11-20 19:33:47,017 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:47,340 - trainer - INFO - Epoch 1/120 | Train Loss: 0.7465 | Val Loss: 0.7127 | Val F1: 0.4279 | LR: 0.000500
+2025-11-20 19:33:47,724 - trainer - INFO - Epoch 2/120 | Train Loss: 0.6978 | Val Loss: 0.7234 | Val F1: 0.3251 | LR: 0.000500
+2025-11-20 19:33:48,064 - trainer - INFO - Epoch 3/120 | Train Loss: 0.6579 | Val Loss: 0.7532 | Val F1: 0.0964 | LR: 0.000500
+2025-11-20 19:33:48,421 - trainer - INFO - Epoch 4/120 | Train Loss: 0.6108 | Val Loss: 0.7809 | Val F1: 0.1437 | LR: 0.000500
+2025-11-20 19:33:48,739 - trainer - INFO - Epoch 5/120 | Train Loss: 0.5925 | Val Loss: 0.7994 | Val F1: 0.1765 | LR: 0.000500
+2025-11-20 19:33:49,071 - trainer - INFO - Epoch 6/120 | Train Loss: 0.6210 | Val Loss: 0.7417 | Val F1: 0.3491 | LR: 0.000500
+2025-11-20 19:33:49,420 - trainer - INFO - Epoch 7/120 | Train Loss: 0.5498 | Val Loss: 0.8644 | Val F1: 0.1437 | LR: 0.000500
+2025-11-20 19:33:49,741 - trainer - INFO - Epoch 8/120 | Train Loss: 0.5440 | Val Loss: 0.8016 | Val F1: 0.2584 | LR: 0.000500
+2025-11-20 19:33:50,064 - trainer - INFO - Epoch 9/120 | Train Loss: 0.5272 | Val Loss: 0.8943 | Val F1: 0.2081 | LR: 0.000500
+2025-11-20 19:33:50,346 - trainer - INFO - Epoch 10/120 | Train Loss: 0.4839 | Val Loss: 1.0563 | Val F1: 0.1098 | LR: 0.000500
+2025-11-20 19:33:50,668 - trainer - INFO - Epoch 11/120 | Train Loss: 0.4651 | Val Loss: 0.9111 | Val F1: 0.2386 | LR: 0.000250
+2025-11-20 19:33:50,966 - trainer - INFO - Epoch 12/120 | Train Loss: 0.4370 | Val Loss: 1.0583 | Val F1: 0.1871 | LR: 0.000250
+2025-11-20 19:33:51,245 - trainer - INFO - Epoch 13/120 | Train Loss: 0.4583 | Val Loss: 1.0390 | Val F1: 0.2184 | LR: 0.000250
+2025-11-20 19:33:51,545 - trainer - INFO - Epoch 14/120 | Train Loss: 0.4310 | Val Loss: 1.0738 | Val F1: 0.2184 | LR: 0.000250
+2025-11-20 19:33:51,883 - trainer - INFO - Epoch 15/120 | Train Loss: 0.4339 | Val Loss: 1.1812 | Val F1: 0.1977 | LR: 0.000250
+2025-11-20 19:33:52,216 - trainer - INFO - Epoch 16/120 | Train Loss: 0.4187 | Val Loss: 1.1962 | Val F1: 0.1977 | LR: 0.000250
+2025-11-20 19:33:52,546 - trainer - INFO - Epoch 17/120 | Train Loss: 0.3873 | Val Loss: 1.1167 | Val F1: 0.2386 | LR: 0.000250
+2025-11-20 19:33:52,859 - trainer - INFO - Epoch 18/120 | Train Loss: 0.3912 | Val Loss: 1.1380 | Val F1: 0.2286 | LR: 0.000250
+2025-11-20 19:33:53,177 - trainer - INFO - Epoch 19/120 | Train Loss: 0.4351 | Val Loss: 1.1132 | Val F1: 0.2595 | LR: 0.000250
+2025-11-20 19:33:53,450 - trainer - INFO - Epoch 20/120 | Train Loss: 0.3737 | Val Loss: 1.1803 | Val F1: 0.2286 | LR: 0.000125
+2025-11-20 19:33:53,745 - trainer - INFO - Epoch 21/120 | Train Loss: 0.3543 | Val Loss: 1.2445 | Val F1: 0.2184 | LR: 0.000125
+2025-11-20 19:33:54,087 - trainer - INFO - Epoch 22/120 | Train Loss: 0.3973 | Val Loss: 1.1548 | Val F1: 0.2567 | LR: 0.000125
+2025-11-20 19:33:54,395 - trainer - INFO - Epoch 23/120 | Train Loss: 0.3792 | Val Loss: 1.1915 | Val F1: 0.2500 | LR: 0.000125
+2025-11-20 19:33:54,715 - trainer - INFO - Epoch 24/120 | Train Loss: 0.3616 | Val Loss: 1.1671 | Val F1: 0.2646 | LR: 0.000125
+2025-11-20 19:33:55,003 - trainer - INFO - Epoch 25/120 | Train Loss: 0.3654 | Val Loss: 1.1081 | Val F1: 0.3465 | LR: 0.000125
+2025-11-20 19:33:55,278 - trainer - INFO - Epoch 26/120 | Train Loss: 0.3583 | Val Loss: 1.2216 | Val F1: 0.2486 | LR: 0.000125
+2025-11-20 19:33:55,278 - trainer - INFO - 🛑 Early stopping tại epoch 26
+2025-11-20 19:33:55,471 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:33:55,508 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 72.40%
+      - Balanced Accuracy: 73.91%
+      - Precision: 63.20%
+      - Recall: 84.04%
+      - F1-Score: 72.15%
+      - Confusion Matrix: TN=81, FP=46, FN=15, TP=79
+2025-11-20 19:33:55,512 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+60_best.pt
+2025-11-20 19:33:55,512 - trainer - INFO - ===== BẮT ĐẦU HUẤN LUYỆN: ACB_transformer_t+90 =====
+2025-11-20 19:33:55,531 - trainer - INFO - Đã tải 1497 mẫu cho ACB t+90
+2025-11-20 19:33:55,537 - trainer - INFO - DataLoaders created: Train=1026, Val=220, Test=221
+2025-11-20 19:33:55,551 - trainer - INFO - 📊 Class Distribution: Class 0 (Down)=[292 734], Class 1 (Up)=734
+2025-11-20 19:33:55,551 - trainer - INFO - ⚖️ Balanced Weights (Standard): Class 0=1.7568, Class 1=0.6989
+2025-11-20 19:33:55,552 - trainer - INFO - 🚀 Bắt đầu huấn luyện: ACB (LR=0.0005)
+2025-11-20 19:33:55,871 - trainer - INFO - Epoch 1/120 | Train Loss: 0.6712 | Val Loss: 0.7614 | Val F1: 0.0710 | LR: 0.000500
+2025-11-20 19:33:56,163 - trainer - INFO - Epoch 2/120 | Train Loss: 0.5501 | Val Loss: 0.8291 | Val F1: 0.1371 | LR: 0.000500
+2025-11-20 19:33:56,448 - trainer - INFO - Epoch 3/120 | Train Loss: 0.4891 | Val Loss: 1.1320 | Val F1: 0.0710 | LR: 0.000500
+2025-11-20 19:33:56,720 - trainer - INFO - Epoch 4/120 | Train Loss: 0.4499 | Val Loss: 1.3130 | Val F1: 0.0936 | LR: 0.000500
+2025-11-20 19:33:57,059 - trainer - INFO - Epoch 5/120 | Train Loss: 0.4306 | Val Loss: 1.5447 | Val F1: 0.0122 | LR: 0.000500
+2025-11-20 19:33:57,386 - trainer - INFO - Epoch 6/120 | Train Loss: 0.4289 | Val Loss: 1.4122 | Val F1: 0.0936 | LR: 0.000500
+2025-11-20 19:33:57,700 - trainer - INFO - Epoch 7/120 | Train Loss: 0.4128 | Val Loss: 1.6607 | Val F1: 0.0000 | LR: 0.000500
+2025-11-20 19:33:57,981 - trainer - INFO - Epoch 8/120 | Train Loss: 0.4009 | Val Loss: 1.5656 | Val F1: 0.0595 | LR: 0.000500
+2025-11-20 19:33:58,302 - trainer - INFO - Epoch 9/120 | Train Loss: 0.4689 | Val Loss: 1.7186 | Val F1: 0.0479 | LR: 0.000500
+2025-11-20 19:33:58,597 - trainer - INFO - Epoch 10/120 | Train Loss: 0.4030 | Val Loss: 1.6331 | Val F1: 0.0936 | LR: 0.000500
+2025-11-20 19:33:58,893 - trainer - INFO - Epoch 11/120 | Train Loss: 0.3813 | Val Loss: 1.6413 | Val F1: 0.0595 | LR: 0.000250
+2025-11-20 19:33:59,174 - trainer - INFO - Epoch 12/120 | Train Loss: 0.3727 | Val Loss: 1.7316 | Val F1: 0.0479 | LR: 0.000250
+2025-11-20 19:33:59,507 - trainer - INFO - Epoch 13/120 | Train Loss: 0.3679 | Val Loss: 1.7189 | Val F1: 0.1047 | LR: 0.000250
+2025-11-20 19:33:59,813 - trainer - INFO - Epoch 14/120 | Train Loss: 0.3583 | Val Loss: 1.8675 | Val F1: 0.0123 | LR: 0.000250
+2025-11-20 19:34:00,148 - trainer - INFO - Epoch 15/120 | Train Loss: 0.3812 | Val Loss: 1.7348 | Val F1: 0.1264 | LR: 0.000250
+2025-11-20 19:34:00,426 - trainer - INFO - Epoch 16/120 | Train Loss: 0.3459 | Val Loss: 1.8955 | Val F1: 0.0361 | LR: 0.000250
+2025-11-20 19:34:00,720 - trainer - INFO - Epoch 17/120 | Train Loss: 0.3515 | Val Loss: 1.8635 | Val F1: 0.0479 | LR: 0.000250
+2025-11-20 19:34:01,035 - trainer - INFO - Epoch 18/120 | Train Loss: 0.3339 | Val Loss: 1.8586 | Val F1: 0.0710 | LR: 0.000250
+2025-11-20 19:34:01,299 - trainer - INFO - Epoch 19/120 | Train Loss: 0.3342 | Val Loss: 1.8918 | Val F1: 0.0824 | LR: 0.000250
+2025-11-20 19:34:01,575 - trainer - INFO - Epoch 20/120 | Train Loss: 0.3346 | Val Loss: 1.9586 | Val F1: 0.0361 | LR: 0.000125
+2025-11-20 19:34:01,849 - trainer - INFO - Epoch 21/120 | Train Loss: 0.3417 | Val Loss: 1.9474 | Val F1: 0.0479 | LR: 0.000125
+2025-11-20 19:34:02,189 - trainer - INFO - Epoch 22/120 | Train Loss: 0.3349 | Val Loss: 1.9495 | Val F1: 0.0479 | LR: 0.000125
+2025-11-20 19:34:02,466 - trainer - INFO - Epoch 23/120 | Train Loss: 0.3234 | Val Loss: 1.9753 | Val F1: 0.0479 | LR: 0.000125
+2025-11-20 19:34:02,777 - trainer - INFO - Epoch 24/120 | Train Loss: 0.3732 | Val Loss: 1.9769 | Val F1: 0.0479 | LR: 0.000125
+2025-11-20 19:34:03,117 - trainer - INFO - Epoch 25/120 | Train Loss: 0.3249 | Val Loss: 2.0023 | Val F1: 0.0361 | LR: 0.000125
+2025-11-20 19:34:03,418 - trainer - INFO - Epoch 26/120 | Train Loss: 0.3217 | Val Loss: 1.9915 | Val F1: 0.0479 | LR: 0.000125
+2025-11-20 19:34:03,419 - trainer - INFO - 🛑 Early stopping tại epoch 26
+2025-11-20 19:34:03,615 - trainer - INFO - 📉 Đã lưu biểu đồ tại: outputs/ACB_history.png
+2025-11-20 19:34:03,649 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 47.51%
+      - Balanced Accuracy: 46.64%
+      - Precision: 49.23%
+      - Recall: 84.96%
+      - F1-Score: 62.34%
+      - Confusion Matrix: TN=9, FP=99, FN=17, TP=96
+2025-11-20 19:34:03,653 - trainer - INFO - Đã lưu model tại: models/ACB_transformer_t+90_best.pt

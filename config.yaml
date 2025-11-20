@@ -1,4 +1,4 @@
-# config.yaml
+# config.yaml - Giai đoạn 2: Aggressive Learning & Controlled Capacity
 data:
   raw_dir: "data/raw"
   processed_dir: "data/processed"
@@ -73,26 +73,23 @@ training:
   timesteps: 30
   scaler_type: "minmax"
   batch_size: 32
-  epochs: 150  # Tăng từ 100 để có thêm thời gian học
+  epochs: 120 
   
-  # === HYPERPARAMETERS TỐI ƯU HÓA ===
-  learning_rate: 0.001         # Tăng từ 0.0005 để học nhanh hơn
-  early_stopping_patience: 30  # Tăng từ 20 để cho model thêm thời gian
-  use_f1_early_stopping: false
+  # === TINH CHỈNH GIAI ĐOẠN 3 ===
+  learning_rate: 0.0005        # Giảm nhẹ lại để tránh dao động quá lớn khi gần đích
+  early_stopping_patience: 25
+  use_f1_early_stopping: false 
   
-  # Scheduler ít aggressive hơn
-  scheduler_patience: 10       # Tăng từ 5 - đợi lâu hơn trước khi giảm LR
-  scheduler_factor: 0.7        # Tăng từ 0.5 - giảm ít hơn mỗi lần
-  scheduler_min_lr: 1e-5       # Tăng từ 1e-6 - không giảm quá thấp
+  scheduler_patience: 8
+  scheduler_factor: 0.5
+  scheduler_min_lr: 1e-6
   
-  # Regularization nhẹ hơn
-  weight_decay_short: 5e-6     # Giảm từ 1e-5
-  weight_decay_long: 5e-5      # Giảm từ 1e-4
+  # TĂNG CƯỜNG REGULARIZATION (Chống Overfitting t+60)
+  weight_decay_short: 0.001    # Tăng từ 5e-6 -> 1e-3
+  weight_decay_long: 0.01      # Tăng cực mạnh từ 5e-5 -> 0.01
   gradient_clip_norm: 1.0
   
-  # Tạm tắt Focal Loss, dùng CrossEntropy chuẩn
   use_focal_loss: false       
-  focal_gamma: 2.0
   
   loss_weights:
     classification: 1.0
@@ -101,22 +98,22 @@ training:
 models:
   shared:
     num_classes: 2
-    forecast_horizons: [1, 3, 5, 30, 60, 90]
-    sequence_length: 30  # Độ dài chuỗi thời gian cho model
+    forecast_horizons: 
+    sequence_length: 30 
   
   cnn_bilstm:
-    hidden_dim: 32      # Tăng từ 64 - model mạnh hơn
+    hidden_dim: 32      
     num_layers: 2
     kernel_size: 3
-    dropout_rate: 0.4    # Giảm từ 0.25 - ít regularization hơn
+    dropout_rate: 0.5   # TĂNG: Chống overfitting mạnh hơn
   
   transformer:
-    d_model: 32         # Tăng từ 64 - model mạnh hơn
-    nhead: 4
-    num_layers: 3        # Tăng từ 2 - deeper model
-    dim_feedforward: 256 # Tăng từ 128 - wider feedforward
-    dropout_rate: 0.4    # Giảm từ 0.25 - ít regularization hơn
-
+    d_model: 32         
+    nhead: 2            # GIẢM: Đơn giản hóa attention để bớt nhiễu
+    num_layers: 2       # GIẢM: Trở lại 2 lớp để tránh mô hình quá sâu
+    dim_feedforward: 64 # GIẢM: Ép nén thông tin mạnh hơn
+    dropout_rate: 0.5   # TĂNG   
+    
 paths:
   models: "models/"
   processed: "data/processed/"

@@ -1,117 +1,124 @@
+# config.yaml
 data:
-  batch_size: 3
-  database_dir: data/database
-  delay_between_batches: 10
-  delay_between_requests: 2
-  delay_between_tickers: 5
-  processed_dir: data/processed
-  raw_dir: data/raw
-  start_date: '2020-01-01'
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  database_dir: "data/database"
   tickers:
-  - VIB
-  - VCB
-  - BID
-  - MBB
-  - TCB
-  - VPB
-  - CTG
-  - ACB
-  - SHB
-  - STB
-  - HDB
+    - "VCB"   # Vietcombank
+    - "BID"   # BIDV
+    - "CTG"   # VietinBank
+    - "TCB"   # Techcombank
+    - "MBB"   # MB Bank
+    - "VPB"   # VPBank
+    - "ACB"   # ACB
+    - "STB"   # Sacombank
+    - "HDB"   # HDBank
+    - "TPB"   # TPBank
+  start_date: "2020-01-01"
+  batch_size: 32
+  delay_between_requests: 2
+  delay_between_batches: 10
+  delay_between_tickers: 5
+
 features:
-  banking_specific:
-  - NIM (%)
-  - NPL (%)
-  - CIR (%)
-  - Provision_Coverage (%)
-  - Cost_of_Funds (%)
-  - Equity_Ratio (%)
-  - Loan_to_Deposit (%)
-  - Credit_Growth (%)
-  - Pre_Provision_ROA (%)
-  - Post_Tax_ROA (%)
-  - Non_Interest_Income (%)
-  - Loan_to_Asset (%)
-  - NPL_to_Asset (%)
-  - NIM_Diff
-  - NPL_Diff
-  - CIR_Diff
-  - Credit_Growth_Diff
-  fundamental:
-  - ROE (%)
-  - ROA (%)
-  - P/E
-  - P/B
-  - BVPS (VND)
-  - ROE_Diff
-  - P_E_Diff
-  - PE_to_Close
-  direction_threshold: 0.0
-  market:
-  - Market_Avg_Close
-  - Market_Volatility
   technical:
-  - Open
-  - High
-  - Low
-  - Close
-  - Volume
-  - Close_MA7
-  - Close_MA14
-  - Close_MA30
-  - Volatility_14
-  - Close_to_Open
-  - High_to_Low
-  - Close_Pct_Change
-  - RSI_14
-models:
-  # Các tham số dùng chung cho tất cả model
-  shared:
-    num_classes: 2
-    forecast_horizons: [1, 3, 5]
-
-  # Cấu hình cho từng model cụ thể
-  cnn_bilstm:
-    dropout_rate: 0.5
-    hidden_dim: 128       # <<< THAY ĐỔI: Tăng từ 64 lên 128
-    kernel_size: 3
-    num_layers: 2
-  
-  transformer:
-    d_model: 128          # <<< THAY ĐỔI: Tăng từ 64 lên 128
-    dim_feedforward: 256  # <<< THAY ĐỔI: Tăng từ 128 lên 256
-    dropout_rate: 0.2
-    nhead: 4
-    num_layers: 2
-
-paths:
-  models: models/
-  outputs: outputs/
-  processed: data/processed/
-  database: data/database/
+    - "Open"
+    - "High"
+    - "Low"
+    - "Close"
+    - "Volume"
+    - "Close_MA7"
+    - "Close_MA14"
+    - "Close_MA30"
+    - "Volatility_14"
+    - "Close_to_Open"
+    - "High_to_Low"
+    - "Close_Pct_Change"
+    - "RSI_14"
+  fundamental:
+    - "ROE (%)"
+    - "ROA (%)"
+    - "P/E"
+    - "P/B"
+    - "BVPS (VND)"
+    - "ROE_Diff"
+    - "P_E_Diff"
+    - "PE_to_Close"
+  banking_specific:
+    - "NIM (%)"
+    - "NPL (%)"
+    - "CIR (%)"
+    - "Provision_Coverage (%)"
+    - "Cost_of_Funds (%)"
+    - "Equity_Ratio (%)"
+    - "Loan_to_Deposit (%)"
+    - "Credit_Growth (%)"
+    - "Pre_Provision_ROA (%)"
+    - "Post_Tax_ROA (%)"
+    - "Non_Interest_Income (%)"
+    - "Loan_to_Asset (%)"
+    - "NPL_to_Asset (%)"
+    - "NIM_Diff"
+    - "NPL_Diff"
+    - "CIR_Diff"
+    - "Credit_Growth_Diff"
+  market:
+    - "Market_Avg_Close"
+    - "Market_Volatility"
+  direction_threshold: 0.0
 
 training:
-  batch_size: 32
-  epochs: 100 
-  early_stopping_patience: 20 # <<< THAY ĐỔI: Tăng từ 15 lên 20
-  timesteps: 30
   train_split: 0.8
   val_split: 0.1
-  scaler_type: minmax
+  timesteps: 30
+  scaler_type: "minmax"
+  batch_size: 32
+  epochs: 150  # Tăng từ 100 để có thêm thời gian học
   
-  learning_rate: 0.001      # <<< THAY ĐỔI: Tăng từ 0.0001 lên 0.001
-
+  # === HYPERPARAMETERS TỐI ƯU HÓA ===
+  learning_rate: 0.001         # Tăng từ 0.0005 để học nhanh hơn
+  early_stopping_patience: 30  # Tăng từ 20 để cho model thêm thời gian
+  use_f1_early_stopping: false
+  
+  # Scheduler ít aggressive hơn
+  scheduler_patience: 10       # Tăng từ 5 - đợi lâu hơn trước khi giảm LR
+  scheduler_factor: 0.7        # Tăng từ 0.5 - giảm ít hơn mỗi lần
+  scheduler_min_lr: 1e-5       # Tăng từ 1e-6 - không giảm quá thấp
+  
+  # Regularization nhẹ hơn
+  weight_decay_short: 5e-6     # Giảm từ 1e-5
+  weight_decay_long: 5e-5      # Giảm từ 1e-4
+  gradient_clip_norm: 1.0
+  
+  # Tạm tắt Focal Loss, dùng CrossEntropy chuẩn
+  use_focal_loss: false       
+  focal_gamma: 2.0
+  
   loss_weights:
     classification: 1.0
     regression: 0.0
 
-#config for prediction quarterly
-training_quarterly:
-  # Đây là config cho Nhánh 2 (Hàng quý)
-  timesteps: 4
-  epochs: 100
-  batch_size: 4
-  learning_rate: 0.001
-  early_stopping_patience: 15
-  val_split: 0.2
+models:
+  shared:
+    num_classes: 2
+    forecast_horizons: [1, 3, 5, 30, 60, 90]
+    sequence_length: 30  # Độ dài chuỗi thời gian cho model
+  
+  cnn_bilstm:
+    hidden_dim: 32      # Tăng từ 64 - model mạnh hơn
+    num_layers: 2
+    kernel_size: 3
+    dropout_rate: 0.4    # Giảm từ 0.25 - ít regularization hơn
+  
+  transformer:
+    d_model: 32         # Tăng từ 64 - model mạnh hơn
+    nhead: 4
+    num_layers: 3        # Tăng từ 2 - deeper model
+    dim_feedforward: 256 # Tăng từ 128 - wider feedforward
+    dropout_rate: 0.4    # Giảm từ 0.25 - ít regularization hơn
+
+paths:
+  models: "models/"
+  processed: "data/processed/"
+  database: "data/database/"
+  outputs: "outputs/"

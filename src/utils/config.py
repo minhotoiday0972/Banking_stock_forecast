@@ -39,7 +39,8 @@ class Config:
                 value = value[k]
             else:
                 return default
-        return value
+        # --- FIX: Trả về default nếu giá trị cuối cùng là None ---
+        return value if value is not None else default
     
     def set(self, key: str, value: Any):
         """Set configuration value using dot notation"""

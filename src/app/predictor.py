@@ -3,12 +3,13 @@ import torch
 import numpy as np
 import pandas as pd
 import joblib
-from typing import Dict, Any, Optional, Tuple
+from typing import Dict, Any, Optional
 import os
 
 from ..utils.config import get_config
 from ..utils.logger import get_logger
 from ..utils.database import get_database
+# --- THAY ĐỔI: Import các model đã được đơn giản hóa ---
 from ..models.cnn_bilstm import CNNBiLSTM
 from ..models.transformer import TransformerModel
 
@@ -19,154 +20,182 @@ class StockPredictor:
         self.config = get_config()
         self.db = get_database()
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.models = {}
+        
+        # Cache cho model và metadata
+        self.models_cache = {}
         self.metadata_cache = {}
+        self.main_scaler_cache = {} # Cache cho main scaler
 
-    def _load_metadata(self, ticker: str) -> bool:
-        """Tải metadata (scalers và feature_columns) từ file."""
-        if ticker in self.metadata_cache:
+    def _load_main_scaler(self, ticker: str) -> Optional[joblib.load]:
+        """Tải main scaler (dùng để scale dữ liệu input)."""
+        if ticker in self.main_scaler_cache:
+            return self.main_scaler_cache[ticker]
+            
+        scaler_path = os.path.join(self.config.get('paths.processed'), f"{ticker}_main_scaler.pkl")
+        if not os.path.exists(scaler_path):
+            logger.error(f"Không tìm thấy main scaler: {scaler_path}")
+            return None
+        
+        scaler = joblib.load(scaler_path)
+        self.main_scaler_cache[ticker] = scaler
+        return scaler
+
+    def _load_model_and_metadata(self, ticker: str, model_type: str, horizon: int) -> bool:
+        """Tải model và metadata chuyên biệt cho một horizon."""
+        model_key = f"{ticker}_{model_type}_t+{horizon}"
+        
+        if model_key in self.models_cache:
             return True
+        
         try:
-            metadata_path = os.path.join(self.config.get('paths.processed'), f"{ticker}_metadata.pkl")
+            # 1. Tải Metadata chuyên biệt
+            metadata_path = os.path.join(self.config.get('paths.processed'), f"{ticker}_metadata_t+{horizon}.pkl")
             if not os.path.exists(metadata_path):
-                logger.error(f"Metadata file not found: {metadata_path}. Please run 'python main.py features'.")
+                logger.error(f"Không tìm thấy metadata: {metadata_path}")
+                return False
+            metadata = joblib.load(metadata_path)
+            self.metadata_cache[model_key] = metadata
+            
+            # 2. Tải Model
+            model_path = os.path.join(self.config.get('paths.models'), f"{model_key}_best.pt")
+            if not os.path.exists(model_path):
+                logger.error(f"Không tìm thấy model: {model_path}")
+                return False
+
+            input_dim = len(metadata['feature_columns'])
+            
+            # Khởi tạo model (đã được đơn giản hóa)
+            if model_type == 'cnn_bilstm':
+                model = CNNBiLSTM(input_dim, self.config.get('models'))
+            elif model_type == 'transformer':
+                model = TransformerModel(input_dim, self.config.get('models'))
+            else:
+                logger.error(f"Model không xác định: {model_type}")
                 return False
             
-            self.metadata_cache[ticker] = joblib.load(metadata_path)
-            logger.info(f"Loaded metadata for {ticker}")
-            return True
-        except Exception as e:
-            logger.error(f"Failed to load metadata for {ticker}: {e}")
-            return False
-
-    def load_model(self, ticker: str, model_type: str) -> bool:
-        """Tải model đã huấn luyện, sử dụng metadata để đảm bảo tính nhất quán."""
-        model_key = f"{ticker}_{model_type}"
-        if model_key in self.models:
-            return True
-        try:
-            if not self._load_metadata(ticker):
-                return False
-            
-            metadata = self.metadata_cache[ticker]
-            feature_columns = metadata.get('feature_columns')
-            if not feature_columns:
-                logger.error(f"Feature columns not found in metadata for {ticker}.")
-                return False
-            
-            input_dim = len(feature_columns)
-            model_path = os.path.join(self.config.get('paths.models'), f"{ticker}_{model_type}_best.pt")
-            
-            model_config = self.config.get('models', {}).get(model_type, {})
-            shared_config = self.config.get('models', {}).get('shared', {})
-            full_config = {**shared_config, **model_config}
-            
-            model_class = {'cnn_bilstm': CNNBiLSTM, 'transformer': TransformerModel}.get(model_type)
-            if not model_class:
-                 raise ValueError(f"Unknown model type: {model_type}")
-
-            model = model_class(input_dim, self.config.get('models'))
-
             model.load_state_dict(torch.load(model_path, map_location=self.device))
             model.to(self.device)
             model.eval()
             
-            self.models[model_key] = model
-            logger.info(f"Successfully loaded model {model_key} with {input_dim} features.")
+            self.models_cache[model_key] = model
+            logger.info(f"Đã tải model và metadata cho {model_key}")
             return True
+            
         except Exception as e:
-            logger.error(f"Failed to load model {model_key}: {e}", exc_info=True)
+            logger.error(f"Lỗi khi tải model {model_key}: {e}", exc_info=True)
             return False
 
-    def get_latest_features(self, ticker: str) -> Optional[np.ndarray]:
-        """Lấy các đặc trưng gần nhất để dự báo."""
+    def get_latest_features(self, ticker: str, metadata: Dict) -> Optional[np.ndarray]:
+        """Lấy và chuẩn bị chuỗi đặc trưng cuối cùng."""
         try:
             timesteps = self.config.get('training.timesteps', 30)
-            metadata = self.metadata_cache.get(ticker)
-            if not metadata:
-                logger.error(f"Metadata not loaded for {ticker}.")
-                return None
-            
             feature_cols = metadata['feature_columns']
+            
+            # Lấy dữ liệu đã được scale TỔNG THỂ
             features_path = os.path.join(self.config.get('paths.processed'), f"{ticker}_features_scaled.csv")
+            if not os.path.exists(features_path):
+                 logger.error(f"Không tìm thấy file {features_path}")
+                 return None
+            
             df = pd.read_csv(features_path)
             
             if len(df) < timesteps:
-                logger.error(f"Not enough data for {ticker}: {len(df)} < {timesteps}")
+                logger.error(f"Không đủ dữ liệu cho {ticker}: {len(df)} < {timesteps}")
                 return None
             
+            # Lấy đúng các cột đặc trưng "vàng" (đã được scale)
             features = df[feature_cols].tail(timesteps).values
+            
+            # Reshape cho model: (1, timesteps, features)
             return features.reshape(1, timesteps, -1)
+            
         except Exception as e:
-            logger.error(f"Failed to get features for {ticker}: {e}")
+            logger.error(f"Lỗi khi lấy đặc trưng cho {ticker}: {e}")
             return None
-
-    def predict(self, ticker: str, model_type: str, horizon: int = 1) -> Optional[Dict[str, Any]]:
-        """Thực hiện dự báo cho một mã cổ phiếu."""
-        model_key = f"{ticker}_{model_type}"
+    
+    def predict(self, ticker: str, model_type: str, horizon: int) -> Optional[Dict[str, Any]]:
+        """Thực hiện dự đoán xu hướng."""
+        model_key = f"{ticker}_{model_type}_t+{horizon}"
         
-        if not self.load_model(ticker, model_type):
-            return None
+        # 1. Tải model và metadata nếu chưa có
+        if model_key not in self.models_cache:
+            if not self._load_model_and_metadata(ticker, model_type, horizon):
+                return None
         
-        features = self.get_latest_features(ticker)
+        model = self.models_cache[model_key]
+        metadata = self.metadata_cache[model_key]
+        
+        # 2. Lấy dữ liệu đặc trưng mới nhất
+        features = self.get_latest_features(ticker, metadata)
         if features is None:
             return None
-        
+            
         try:
-            model = self.models[model_key]
+            # 3. Dự đoán
             X = torch.tensor(features, dtype=torch.float32).to(self.device)
-            
             with torch.no_grad():
-                outputs = model(X)
+                outputs = model(X) # outputs là logits trực tiếp
             
-            results = {}
-            metadata = self.metadata_cache[ticker]
+            direction_logits = outputs.cpu().numpy()[0]
+            direction_probs = torch.softmax(torch.tensor(direction_logits), dim=0).numpy()
             
-            price_key = f'Target_Close_t+{horizon}'
-            if price_key in outputs and price_key in metadata['scalers']:
-                price_pred = outputs[price_key].cpu().numpy()[0, 0]
-                scaler = metadata['scalers'][price_key]
-                results['predicted_price'] = float(scaler.inverse_transform([[price_pred]])[0, 0])
+            direction_labels = ['Down', 'Up'] # Giả định 0=Down, 1=Up
+            predicted_direction = direction_labels[np.argmax(direction_probs)]
+            confidence = float(np.max(direction_probs))
             
-            direction_key = f'Target_Direction_t+{horizon}'
-            if direction_key in outputs:
-                direction_logits = outputs[direction_key].cpu().numpy()[0]
-                direction_probs = torch.softmax(torch.tensor(direction_logits), dim=0).numpy()
-                direction_labels = ['Down', 'Up'] 
-                results['predicted_direction'] = direction_labels[np.argmax(direction_probs)]
-                results['direction_confidence'] = float(np.max(direction_probs))
-                results['direction_probabilities'] = {
-                    label: float(prob) for label, prob in zip(direction_labels, direction_probs)
-                }
-            
-            # Lấy giá hiện tại
-            historical_data = self.get_historical_data(ticker, days=1)
-            if historical_data is not None and not historical_data.empty:
-                current_price = float(historical_data['Close'].iloc[-1])
-                results['current_price'] = current_price
-                if 'predicted_price' in results:
-                    results['price_change_pct'] = ((results['predicted_price'] - current_price) / current_price)
-
+            results = {
+                'predicted_direction': predicted_direction,
+                'direction_confidence': confidence,
+                'direction_probabilities': {
+                    'Down': float(direction_probs[0]),
+                    'Up': float(direction_probs[1])
+                },
+                'horizon': horizon,
+                'model_type': model_type,
+                'ticker': ticker
+            }
+            logger.info(f"Dự đoán thành công cho {model_key}")
             return results
             
         except Exception as e:
-            logger.error(f"Prediction failed for {model_key}: {e}", exc_info=True)
+            logger.error(f"Lỗi khi dự đoán {model_key}: {e}")
+            return None
+
+    def get_latest_fundamentals(self, ticker: str) -> Optional[pd.Series]:
+        """Lấy các chỉ số cơ bản mới nhất để hiển thị."""
+        try:
+            # Lấy bản ghi mới nhất
+            query = f"SELECT * FROM {ticker}_Fundamental ORDER BY time DESC LIMIT 1"
+            df = self.db.load_dataframe(f"{ticker}_Fundamental", query)
+            
+            if df is None or df.empty:
+                logger.warning(f"Không tìm thấy dữ liệu cơ bản cho {ticker}")
+                return None
+            
+            return df.iloc[0] # Trả về 1 Series
+            
+        except Exception as e:
+            logger.error(f"Lỗi khi lấy dữ liệu cơ bản cho {ticker}: {e}")
             return None
     
     def get_available_models(self, ticker: str) -> list:
-        """Lấy danh sách các model có sẵn cho một mã cổ phiếu."""
+        """Kiểm tra các model đã huấn luyện."""
         available = []
-        model_types = list(self.config.get('models', {}).keys())
-        model_types = [m for m in model_types if m != 'shared']
+        model_types = ['cnn_bilstm', 'transformer']
+        horizons = self.config.get('models.shared.forecast_horizons', [1, 3, 5, 30, 60, 90])
         
+        # Chỉ kiểm tra các model cho các horizon đã định nghĩa
         for model_type in model_types:
-            model_path = os.path.join(self.config.get('paths.models'), f"{ticker}_{model_type}_best.pt")
+            # Chỉ cần 1 model (vd t+1) tồn tại là đủ
+            # (Chúng ta giả định nếu t+1 được huấn luyện, các horizon khác cũng được huấn luyện)
+            model_path = os.path.join(self.config.get('paths.models'), f"{ticker}_{model_type}_t+{horizons[0]}_best.pt")
             if os.path.exists(model_path):
                 available.append(model_type)
-        return available
-    
+        
+        return list(set(available)) # Trả về các model type duy nhất
+
     def get_historical_data(self, ticker: str, days: int = 90) -> Optional[pd.DataFrame]:
-        """Lấy dữ liệu giá lịch sử để vẽ biểu đồ."""
+        # (Hàm này giữ nguyên như cũ)
         try:
             df = self.db.load_dataframe(f"{ticker}_OHLCV")
             if df is not None:

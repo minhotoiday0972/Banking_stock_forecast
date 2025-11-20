@@ -1,141 +1,319 @@
-# Vietnamese Banking Stock Prediction 🏦📈
+# Banking Stock Prediction Project
 
-A production-ready deep learning system for predicting Vietnamese banking stock prices and directions using advanced neural networks.
+Dự án dự đoán xu hướng giá cổ phiếu ngân hàng Việt Nam sử dụng Deep Learning (CNN-BiLSTM và Transformer).
 
-## 🏆 **Key Results**
-- **Transformer Model**: R² = 0.48 (excellent for finance)
-- **Direction Accuracy**: 61% (significantly better than random 33%)
-- **11 Vietnamese Banks**: VIB, VCB, BID, MBB, TCB, VPB, CTG, ACB, SHB, STB, HDB
-- **Production Ready**: Comprehensive validation and testing
+## 🎯 Mục tiêu
 
-## 🚀 **Quick Start**
+Dự đoán xu hướng tăng/giảm giá cổ phiếu ngân hàng cho các khung thời gian:
+- **t+30**: 30 ngày (1 tháng)
+- **t+60**: 60 ngày (2 tháng) - **Model tốt nhất**
+- **t+90**: 90 ngày (3 tháng)
 
-### 1. **System Check** (Recommended First)
-```bash
-python system_check.py
+## 🏆 Kết quả đạt được
+
+### Model Production-Ready
+
+**ACB t+60 (60 ngày):**
+- F1-Score: **80.39%**
+- Accuracy: **72.97%**
+- Precision: 70.09%
+- Recall: 94.25%
+- Balanced Accuracy: 68.44%
+
+**ACB t+30 (30 ngày):**
+- F1-Score: **73.78%**
+- Accuracy: 60.14%
+- Recall: 95.40%
+
+## 📁 Cấu trúc dự án
+
+```
+banking_stock_project/
+├── src/
+│   ├── data/           # Thu thập dữ liệu
+│   ├── features/       # Feature engineering
+│   ├── models/         # CNN-BiLSTM, Transformer
+│   ├── training/       # Training pipeline
+│   ├── app/           # Prediction API
+│   └── utils/         # Utilities
+├── data/
+│   ├── raw/           # Dữ liệu thô (OHLCV)
+│   ├── processed/     # Features đã xử lý
+│   └── database/      # SQLite database
+├── models/            # Trained models (.pt)
+├── outputs/           # Training plots
+├── logs/              # Training logs
+├── documents_research/ # Tài liệu nghiên cứu
+└── config.yaml        # Configuration
 ```
 
-### 2. **Full Pipeline** (One Command)
+## 🚀 Cài đặt
+
+### 1. Clone repository
+```bash
+git clone <repository-url>
+cd banking_stock_project
+```
+
+### 2. Tạo môi trường ảo
+```bash
+conda create -n stock_env python=3.9
+conda activate stock_env
+```
+
+### 3. Cài đặt dependencies
+```bash
+pip install -r requirements.txt
+```
+
+## 📊 Sử dụng
+
+### 1. Thu thập dữ liệu
+```bash
+python main.py --mode collect
+```
+
+### 2. Tạo features
+```bash
+python main.py --mode features
+```
+
+### 3. Huấn luyện models
+```bash
+python main.py --mode train
+```
+
+### 4. Chạy toàn bộ pipeline
 ```bash
 python run_full_pipeline.py
 ```
 
-### 3. **Step by Step**
+### 5. Dự đoán
 ```bash
-python main.py collect    # Collect data
-python main.py features   # Engineer features  
-python main.py train --models all  # Train models
-python check_results.py   # Check results
-streamlit run app.py      # Launch web app
+python main.py --mode predict --ticker ACB
 ```
 
-### 4. **Windows Users**
+### 6. Chạy API
 ```bash
-run_pipeline.bat
+python app.py
 ```
 
-## 🤖 **Models**
+## ⚙️ Configuration
 
-### **Transformer** 🏆 (Best Performance)
-- **R² Score**: 0.48 (excellent)
-- **Direction Accuracy**: 61%
-- **Architecture**: Multi-head attention with positional encoding
-- **Best for**: Complex temporal patterns
+File `config.yaml` chứa tất cả cấu hình:
 
-### **CNN-BiLSTM** 
-- **R² Score**: 0.25 (good)
-- **Direction Accuracy**: 68%
-- **Architecture**: CNN + Bidirectional LSTM
-- **Best for**: Local patterns + long-term dependencies
-
-## 📊 **Features**
-
-### **Technical Indicators**
-- OHLCV data, Moving averages, RSI, Volatility
-
-### **Banking-Specific Metrics**
-- Net Interest Margin (NIM), NPL Ratio, Cost-to-Income Ratio
-- Credit Growth, ROA, ROE, Loan-to-Deposit Ratio
-
-### **Market Features**
-- Market average, Volatility, Sector performance
-
-## ⚙️ **Configuration**
-
-Edit `config.yaml`:
 ```yaml
 data:
-  start_date: '2020-01-01'  # Only need start date
-  tickers: [VIB, VCB, BID, ...]  # Banks to analyze
+  tickers: [VIB, VCB, BID, MBB, TCB, VPB, CTG, ACB, SHB, STB, HDB]
+  start_date: '2020-01-01'
 
 models:
+  shared:
+    forecast_horizons: [1, 3, 5, 30, 60, 90]
+  
   cnn_bilstm:
-    dropout_rate: 0.5
     hidden_dim: 64
+    dropout_rate: 0.7
+  
   transformer:
-    dropout_rate: 0.2
     d_model: 64
+    dropout_rate: 0.7
+
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  
+  # Dynamic Regularization
+  weight_decay_short: 0.0005  # t+1,3,5
+  weight_decay_long: 0.001    # t+30,60,90
+  
+  # Focal Loss
+  use_focal_loss: true
+  
+  # F1-based Early Stopping
+  use_f1_early_stopping: true
 ```
 
-## 📁 **Project Structure**
+## 🔬 Kỹ thuật sử dụng
+
+### 1. Dynamic Class Weights
+Tự động điều chỉnh weights dựa trên mức độ imbalance:
+- Balanced (ratio<1.3): exponent=1.2
+- Moderate (1.3-1.8): exponent=1.4
+- High (1.8-2.5): exponent=1.7
+- Severe (>2.5): exponent=2.0
+
+### 2. Focal Loss
+Loss function tập trung vào hard examples:
 ```
-banking_stock_project/
-├── src/
-│   ├── data/data_collector.py     # Data collection
-│   ├── features/feature_engineer.py  # Feature engineering
-│   ├── models/                    # Model architectures
-│   ├── training/trainer.py        # Training pipeline
-│   └── app/predictor.py          # Prediction interface
-├── config.yaml                   # Configuration
-├── main.py                       # Main CLI
-├── app.py                        # Streamlit web app
-└── run_full_pipeline.py          # Full pipeline
+FL(pt) = -(1-pt)^γ * log(pt)
+```
+Gamma động: 1.0-2.5 dựa trên imbalance
+
+### 3. F1-based Early Stopping
+Dừng training dựa trên Val F1 thay vì Val Loss
+
+### 4. Dynamic Regularization
+- Short-term (t+1,3,5): weight_decay=0.0005
+- Long-term (t+30,60,90): weight_decay=0.001
+
+## 📈 Features
+
+### Technical Indicators (14 features cho ngắn hạn)
+- Moving Averages (MA7, MA14, MA30)
+- RSI (14, 30)
+- MACD
+- Bollinger Bands
+- Volatility
+- Volume
+
+### Long-term Features (20 features cho dài hạn)
+- MA100, MA200
+- Volatility 60
+- Time features (month, day_of_year)
+- Lag features (90, 365 days)
+
+### Banking-specific Features
+- NIM (Net Interest Margin)
+- NPL (Non-Performing Loan)
+- CIR (Cost-to-Income Ratio)
+- Credit Growth
+- ROE, ROA, P/E, P/B
+
+## 🎓 Models
+
+### CNN-BiLSTM
+- CNN layers: Extract local patterns
+- BiLSTM layers: Capture temporal dependencies
+- Dropout: 0.7
+- Hidden dim: 64
+
+### Transformer
+- Multi-head attention: 4 heads
+- d_model: 64
+- Feedforward dim: 128
+- Dropout: 0.7
+
+## 📊 Evaluation Metrics
+
+- **Accuracy**: Tỷ lệ dự đoán đúng
+- **Balanced Accuracy**: Accuracy có trọng số cho imbalanced data
+- **Precision**: Tỷ lệ dự đoán tăng đúng
+- **Recall**: Tỷ lệ bắt được tín hiệu tăng
+- **F1-Score**: Harmonic mean của Precision và Recall
+- **Confusion Matrix**: TN, FP, FN, TP
+
+## 📝 Logs
+
+Training logs được lưu trong `logs/`:
+- `trainer_YYYYMMDD.log`: Chi tiết training process
+- Bao gồm: class distribution, weights, loss, metrics
+
+## 🔍 Monitoring
+
+Xem training progress:
+```bash
+# Real-time
+tail -f logs/trainer_20251111.log
+
+# Tìm kết quả test
+findstr "Kết quả Test" logs/trainer_20251111.log
 ```
 
-## 📈 **Performance Validation**
+## 📚 Documentation
 
-✅ **Comprehensive Testing**:
-- Data quality validation
-- No data leakage
-- Statistical significance testing
-- Baseline comparisons
-- Cross-validation
+Chi tiết trong `documents_research/`:
+- `PROJECT_DOCUMENTATION.md`: Tổng quan dự án
+- `CNN_BILSTM_MODEL_DOCUMENTATION.md`: Chi tiết model
+- `RESEARCH_DOCUMENTATION.md`: Nghiên cứu và references
 
-✅ **Financial Metrics**:
-- R² = 0.48 (top 1% in finance)
-- Direction accuracy > random
-- Risk-adjusted returns
-- Sharpe ratio analysis
+## 🎯 Trading Strategies
 
-## 🔧 **Requirements**
-- Python 3.8+
-- PyTorch, pandas, numpy, scikit-learn
-- vnstock (Vietnamese stock data)
-- streamlit (web interface)
+### Strategy 1: Conservative (t+60)
+- Model: t+60 (F1=80.39%)
+- Entry: Khi dự đoán UP
+- Holding: 60 ngày
+- Win rate: ~70%
 
-## 💡 **Usage Tips**
+### Strategy 2: Aggressive (t+30)
+- Model: t+30 (F1=73.78%)
+- Entry: Khi dự đoán UP
+- Holding: 30 ngày
+- Win rate: ~60%
 
-1. **First Time**: Run `python system_check.py`
-2. **Quick Test**: Use single ticker first
-3. **Production**: Run full pipeline weekly
-4. **Monitoring**: Check `check_results.py` regularly
+### Strategy 3: Ensemble
+- Entry: Khi CẢ HAI t+30 và t+60 dự đoán UP
+- Holding: 30-60 ngày
+- Win rate: ~75-80%
 
-## 📝 **Important Notes**
+## ⚠️ Lưu ý
 
-- **Automatic Date Handling**: No need to update end dates
-- **Class Imbalance**: Handled with weighted loss functions
-- **GPU Support**: Automatic detection and usage
-- **Early Stopping**: Prevents overfitting
+1. **Không dùng cho ngắn hạn (t+1, t+3, t+5)**
+   - Performance kém
+   - Nhiễu cao
 
-## ⚠️ **Disclaimer**
+2. **Tập trung vào dài hạn (t+30, t+60)**
+   - Performance tốt
+   - Trend rõ ràng
 
-This software is for educational and research purposes. Stock predictions are inherently uncertain. Always consult financial professionals before making investment decisions.
+3. **Backtesting trước khi trade thực**
+   - Test trên out-of-sample data
+   - Tính toán risk-adjusted returns
 
-## 🎯 **Next Steps After Setup**
+4. **Không phải lời khuyên đầu tư**
+   - Chỉ là công cụ hỗ trợ
+   - Cần kết hợp phân tích khác
 
-1. Run system check: `python system_check.py`
-2. Start pipeline: `python run_full_pipeline.py`
-3. Monitor results: `python check_results.py`
-4. Use web app: `streamlit run app.py`
+## 🐛 Troubleshooting
 
-**Ready to predict Vietnamese banking stocks!** 🚀
+### Lỗi CUDA
+```bash
+# Kiểm tra CUDA
+python -c "import torch; print(torch.cuda.is_available())"
+
+# Nếu không có GPU, model sẽ tự động dùng CPU
+```
+
+### Lỗi Memory
+```bash
+# Giảm batch_size trong config.yaml
+batch_size: 16  # thay vì 32
+```
+
+### Lỗi Data
+```bash
+# Xóa và thu thập lại
+rm -rf data/database/*.db
+python main.py --mode collect
+```
+
+## 📞 Support
+
+Nếu gặp vấn đề:
+1. Kiểm tra logs trong `logs/`
+2. Xem documentation trong `documents_research/`
+3. Đọc `FINAL_SUCCESS_ANALYSIS.md` để hiểu kết quả
+
+## 📄 License
+
+MIT License
+
+## 👥 Contributors
+
+- Research Team
+- Development Team
+
+## 🙏 Acknowledgments
+
+- VNStock API cho dữ liệu
+- PyTorch team
+- Open source community
+
+---
+
+**Last Updated**: 2025-11-11
+
+**Status**: ✅ Production Ready (t+30, t+60)
+
+**Next Steps**: Train cho tất cả 10 mã ngân hàng

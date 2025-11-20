@@ -23,16 +23,13 @@ def run_command(command, description):
     print(f"Running: {command}")
     
     try:
-        result = subprocess.run(command, shell=True, capture_output=True, text=True)
+        result = subprocess.run(command, shell=True)
         
         if result.returncode == 0:
             print(f"SUCCESS: {description}")
-            if result.stdout:
-                print("Output:", result.stdout[-500:])  # Last 500 chars
             return True
         else:
             print(f"FAILED: {description}")
-            print("Error:", result.stderr)
             return False
             
     except Exception as e:

@@ -9,11 +9,12 @@ class CNNBiLSTM(BaseModel):
         super(CNNBiLSTM, self).__init__(input_dim, config)
         
         model_config = config.get('cnn_bilstm', {})
+        shared_config = config.get('shared', {})
+        
         self.hidden_dim = int(model_config.get('hidden_dim', 64))
         num_layers = int(model_config.get('num_layers', 2))
         kernel_size = int(model_config.get('kernel_size', 3))
-        
-        # SỬA ĐỔI: Lấy dropout 0.25 từ config mới
+        num_classes = int(shared_config.get('num_classes', 3))
         dropout = float(model_config.get('dropout_rate', 0.25)) 
 
         # 1. CNN Block
@@ -25,8 +26,6 @@ class CNNBiLSTM(BaseModel):
         )
         self.relu = nn.ReLU()
         self.pool = nn.MaxPool1d(kernel_size=2, stride=2)
-        
-        # SỬA ĐỔI: Dropout nhẹ sau CNN
         self.dropout_cnn = nn.Dropout(0.1) 
 
         # 2. BiLSTM Block
@@ -41,7 +40,7 @@ class CNNBiLSTM(BaseModel):
         
         # 3. Output Block
         self.dropout_fc = nn.Dropout(dropout)
-        self.output_head = nn.Linear(self.hidden_dim * 2, 2) # 2 classes: Up/Down
+        self.output_head = nn.Linear(self.hidden_dim * 2, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x: (batch, timesteps, features) -> Permute cho CNN: (batch, features, timesteps)

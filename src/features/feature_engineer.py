@@ -138,12 +138,34 @@ class FeatureEngineer:
         return df
 
     def create_targets(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Tạo TẤT CẢ các mục tiêu từ config. (Giữ nguyên)"""
+        """
+        Tạo TẤT CẢ các mục tiêu từ config.
+        SỬA ĐỔI: Hỗ trợ 3 lớp (Down, Neutral, Up) dựa trên ngưỡng.
+        Class 0: Down
+        Class 1: Neutral
+        Class 2: Up
+        """
         df = df.copy()
+        # Lấy ngưỡng từ config, nếu không có thì mặc định là 0.005 (0.5%)
+        threshold = self.config.get('features', {}).get('neutral_zone_threshold', 0.005)
+        
+        logger.info(f"Đang tạo nhãn 3 lớp với ngưỡng +/- {threshold:.3f}")
+
         for horizon in self.horizons:
             future_price = df['Close'].shift(-horizon)
             price_change = (future_price - df['Close']) / df['Close']
-            df[f'Target_Direction_t+{horizon}'] = np.where(price_change > 0, 1, 0)
+            
+            # Điều kiện cho 3 lớp
+            conditions = [
+                price_change > threshold,  # Lớp 2 (Up)
+                price_change < -threshold  # Lớp 0 (Down)
+            ]
+            # Giá trị tương ứng với điều kiện
+            choices = [2, 0]
+            
+            # Mặc định là lớp 1 (Neutral)
+            df[f'Target_Direction_t+{horizon}'] = np.select(conditions, choices, default=1)
+            
         return df
 
     def _clean_data(self, df: pd.DataFrame, all_feature_cols: List[str]) -> pd.DataFrame:

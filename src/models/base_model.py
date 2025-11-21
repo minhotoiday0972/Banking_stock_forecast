@@ -72,17 +72,20 @@ class ModelTrainer:
         Sử dụng công thức Balanced chuẩn của Scikit-learn.
         Weight = n_samples / (n_classes * n_samples_j)
         """
-        # Đếm số lượng mẫu mỗi lớp
-        class_counts = np.bincount(target_data.astype(int), minlength=2)
-        total_samples = class_counts.sum()
-        n_classes = 2
-        
-        self.logger.info(f"📊 Class Distribution: Class 0 (Down)={class_counts}, Class 1 (Up)={class_counts[1]}")
+        shared_config = self.config.get('shared', {})
+        n_classes = int(shared_config.get('num_classes', 3))
 
-        # Xử lý trường hợp thiếu dữ liệu
+        # Đếm số lượng mẫu mỗi lớp
+        class_counts = np.bincount(target_data.astype(int), minlength=n_classes)
+        total_samples = class_counts.sum()
+
+        class_dist_str = ", ".join([f"Class {i}={count}" for i, count in enumerate(class_counts)])
+        self.logger.info(f"📊 Class Distribution: {class_dist_str}")
+
+        # Xử lý trường hợp thiếu dữ liệu hoặc một lớp nào đó không có mẫu
         if total_samples == 0 or 0 in class_counts:
-             self.logger.warning("⚠️ Dữ liệu thiếu lớp! Gán trọng số mặc định [1.0, 1.0]")
-             return torch.ones(2, dtype=torch.float32).to(self.device)
+             self.logger.warning(f"⚠️  Dữ liệu bị thiếu hoặc có lớp không tồn tại! Gán trọng số mặc định cho {n_classes} lớp.")
+             return torch.ones(n_classes, dtype=torch.float32).to(self.device)
 
         # Công thức chuẩn
         weights = total_samples / (n_classes * class_counts)
@@ -90,7 +93,8 @@ class ModelTrainer:
         # Chuyển thành tensor
         weights_tensor = torch.tensor(weights, dtype=torch.float32).to(self.device)
         
-        self.logger.info(f"⚖️ Balanced Weights (Standard): Class 0={weights[0]:.4f}, Class 1={weights[1]:.4f}")
+        weights_dist_str = ", ".join([f"Class {i}={w:.4f}" for i, w in enumerate(weights)])
+        self.logger.info(f"⚖️  Balanced Weights (Standard): {weights_dist_str}")
         return weights_tensor
 
     def _calculate_loss(self, logits, targets, class_weights):
@@ -149,7 +153,7 @@ class ModelTrainer:
 
         avg_loss = total_loss / len(train_loader) if len(train_loader) > 0 else 0
         # Tính metrics huấn luyện
-        train_f1 = f1_score(all_targets, all_preds, average='binary', zero_division=0)
+        train_f1 = f1_score(all_targets, all_preds, average='weighted', zero_division=0)
         return avg_loss, train_f1
 
     def evaluate(self, val_loader, class_weights):
@@ -177,7 +181,7 @@ class ModelTrainer:
                 all_targets.extend(y_batch.cpu().numpy())
 
         avg_loss = total_loss / len(val_loader)
-        f1 = f1_score(all_targets, all_preds, average='binary', zero_division=0)
+        f1 = f1_score(all_targets, all_preds, average='weighted', zero_division=0)
         acc = accuracy_score(all_targets, all_preds)
         
         metrics = {

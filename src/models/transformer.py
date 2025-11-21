@@ -9,12 +9,14 @@ class TransformerModel(BaseModel):
     def __init__(self, input_dim: int, config: Dict):
         super(TransformerModel, self).__init__(input_dim, config)
         
+        shared_config = config.get('shared', {})
         model_config = config.get('transformer', {})
+        
         d_model = int(model_config.get('d_model', 64))
         nhead = int(model_config.get('nhead', 4))
         num_layers = int(model_config.get('num_layers', 2))
         dim_feedforward = int(model_config.get('dim_feedforward', 128))
-        # SỬA ĐỔI: Nhận giá trị 0.25 từ config mới
+        num_classes = int(shared_config.get('num_classes', 3))
         dropout = float(model_config.get('dropout_rate', 0.25))
 
         self.d_model = d_model
@@ -37,7 +39,7 @@ class TransformerModel(BaseModel):
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
         self.final_dropout = nn.Dropout(dropout)
-        self.output_head = nn.Linear(d_model, 2)
+        self.output_head = nn.Linear(d_model, num_classes)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # x shape: (batch, seq_len, features)

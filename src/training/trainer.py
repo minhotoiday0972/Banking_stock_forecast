@@ -50,9 +50,9 @@ class ModelTrainingPipeline:
         
         msg_acc = f"      - Accuracy: {acc:.2%}"
         msg_bal_acc = f"      - Balanced Accuracy: {bal_acc:.2%}"
-        msg_precision = f"      - Precision: {precision:.2%}"
-        msg_recall = f"      - Recall: {recall:.2%}"
-        msg_f1 = f"      - F1-Score: {f1:.2%}"
+        msg_precision = f"      - Precision (Weighted): {precision:.2%}"
+        msg_recall = f"      - Recall (Weighted): {recall:.2%}"
+        msg_f1 = f"      - F1-Score (Weighted): {f1:.2%}"
         
         log_message.extend([msg_acc, msg_bal_acc, msg_precision, msg_recall, msg_f1])
         print(msg_acc)
@@ -63,12 +63,9 @@ class ModelTrainingPipeline:
         
         # Confusion Matrix
         if 'confusion_matrix' in test_metrics:
-            tn = test_metrics.get('true_negatives', 0)
-            fp = test_metrics.get('false_positives', 0)
-            fn = test_metrics.get('false_negatives', 0)
-            tp = test_metrics.get('true_positives', 0)
-            
-            msg_cm = f"      - Confusion Matrix: TN={tn}, FP={fp}, FN={fn}, TP={tp}"
+            cm = test_metrics.get('confusion_matrix')
+            # Đối với đa lớp, chúng ta sẽ log ma trận đầy đủ
+            msg_cm = f"      - Confusion Matrix:\n{np.array(cm)}"
             log_message.append(msg_cm)
             print(msg_cm)
         
@@ -197,19 +194,14 @@ class ModelTrainingPipeline:
         
         # Tính các metrics
         cm = confusion_matrix(all_targets, all_preds)
-        tn, fp, fn, tp = cm.ravel() if cm.size == 4 else (0, 0, 0, 0)
         
         metrics = {
             'accuracy': accuracy_score(all_targets, all_preds),
             'balanced_accuracy': balanced_accuracy_score(all_targets, all_preds),
-            'precision': precision_score(all_targets, all_preds, zero_division=0),
-            'recall': recall_score(all_targets, all_preds, zero_division=0),
-            'f1': f1_score(all_targets, all_preds, zero_division=0),
-            'confusion_matrix': cm.tolist(),
-            'true_negatives': int(tn),
-            'false_positives': int(fp),
-            'false_negatives': int(fn),
-            'true_positives': int(tp)
+            'precision': precision_score(all_targets, all_preds, average='weighted', zero_division=0),
+            'recall': recall_score(all_targets, all_preds, average='weighted', zero_division=0),
+            'f1': f1_score(all_targets, all_preds, average='weighted', zero_division=0),
+            'confusion_matrix': cm.tolist()
         }
         
         return metrics

@@ -8,8 +8,13 @@ import logging
 import os
 import math
 import matplotlib.pyplot as plt
-from typing import Dict, Any, List, Tuple
-from sklearn.metrics import f1_score, accuracy_score
+from typing import Dict, Any, List, Tuple, Optional
+from sklearn.metrics import f1_score, accuracy_score, balanced_accuracy_score
+
+from ..utils.loss_functions import FocalLoss
+
+logger = logging.getLogger(__name__)
+
 
 class BaseModel(nn.Module):
     """
@@ -34,6 +39,7 @@ class BaseModel(nn.Module):
         """Tải trọng số mô hình."""
         self.load_state_dict(torch.load(path, map_location=self.device))
 
+
 class PositionalEncoding(nn.Module):
     """
     Cung cấp thông tin vị trí cho Transformer.
@@ -54,249 +60,113 @@ class PositionalEncoding(nn.Module):
         x = x + self.pe[:x.size(0)]
         return self.dropout(x)
 
+
 class ModelTrainer:
     """
-    Class quản lý quy trình huấn luyện, đánh giá và tối ưu hóa.
+    Class để đóng gói quy trình huấn luyện và đánh giá model Pytorch.
     """
-    def __init__(self, model: nn.Module, config: Dict, ticker: str = "Unknown", horizon: int = 1):
+    def __init__(self, model: BaseModel, config: Dict, ticker: str, horizon: int, class_weights: Optional[torch.Tensor] = None):
         self.model = model
-        self.config = config
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        self.model.to(self.device)
+        self.config = config.get('training', {})
         self.ticker = ticker
         self.horizon = horizon
-        self.logger = logging.getLogger("trainer")
-
-    def _calculate_class_weights(self, target_data: np.ndarray) -> torch.Tensor:
-        """
-        Sử dụng công thức Balanced chuẩn của Scikit-learn.
-        Weight = n_samples / (n_classes * n_samples_j)
-        """
-        shared_config = self.config.get('shared', {})
-        n_classes = int(shared_config.get('num_classes', 3))
-
-        # Đếm số lượng mẫu mỗi lớp
-        class_counts = np.bincount(target_data.astype(int), minlength=n_classes)
-        total_samples = class_counts.sum()
-
-        class_dist_str = ", ".join([f"Class {i}={count}" for i, count in enumerate(class_counts)])
-        self.logger.info(f"📊 Class Distribution: {class_dist_str}")
-
-        # Xử lý trường hợp thiếu dữ liệu hoặc một lớp nào đó không có mẫu
-        if total_samples == 0 or 0 in class_counts:
-             self.logger.warning(f"⚠️  Dữ liệu bị thiếu hoặc có lớp không tồn tại! Gán trọng số mặc định cho {n_classes} lớp.")
-             return torch.ones(n_classes, dtype=torch.float32).to(self.device)
-
-        # Công thức chuẩn
-        weights = total_samples / (n_classes * class_counts)
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.model.to(self.device)
+        self.class_weights = class_weights.to(self.device) if class_weights is not None else None
         
-        # Chuyển thành tensor
-        weights_tensor = torch.tensor(weights, dtype=torch.float32).to(self.device)
+        self.optimizer = optim.AdamW(
+            self.model.parameters(), 
+            lr=self.config.get('learning_rate', 0.001),
+            weight_decay=self.config.get('weight_decay_long', 0.001)
+        )
         
-        weights_dist_str = ", ".join([f"Class {i}={w:.4f}" for i, w in enumerate(weights)])
-        self.logger.info(f"⚖️  Balanced Weights (Standard): {weights_dist_str}")
-        return weights_tensor
-
-    def _calculate_loss(self, logits, targets, class_weights):
-        """
-        Tính toán hàm mất mát. Ưu tiên CrossEntropyLoss tiêu chuẩn.
-        """
-        targets = targets.long()
-        
-        # Lấy cấu hình focal loss (nếu có)
-        use_focal = bool(self.config.get('training', {}).get('use_focal_loss', False))
-        
-        if use_focal:
-            # Focal Loss Implementation
-            gamma = float(self.config.get('training', {}).get('focal_gamma', 2.0))
-            
-            # Tính Cross Entropy không reduce để áp dụng công thức Focal
-            ce_loss = nn.functional.cross_entropy(logits, targets, weight=class_weights, reduction='none')
-            pt = torch.exp(-ce_loss)
-            focal_loss = ((1 - pt) ** gamma * ce_loss).mean()
-            return focal_loss
+        if self.config.get('use_focal_loss', True):
+            alpha = self.class_weights if self.class_weights is not None else None
+            self.criterion = FocalLoss(alpha=alpha, gamma=self.config.get('focal_loss_gamma', 2))
         else:
-            # Standard Cross Entropy (Khuyên dùng để debug/ổn định)
-            criterion = nn.CrossEntropyLoss(weight=class_weights)
-            return criterion(logits, targets)
+            # Use class weights if provided and not using Focal Loss
+            if self.class_weights is not None:
+                self.criterion = nn.CrossEntropyLoss(weight=self.class_weights)
+            else:
+                self.criterion = nn.CrossEntropyLoss()
 
-    def train_epoch(self, train_loader, optimizer, class_weights):
-        """Huấn luyện 1 epoch."""
-        self.model.train()
-        total_loss = 0
-        all_preds = []   # <--- ĐÃ SỬA: Khởi tạo list rỗng
-        all_targets = [] # <--- ĐÃ SỬA: Khởi tạo list rỗng
-        
-        grad_clip = float(self.config.get('training', {}).get('gradient_clip_norm', 1.0))
+        self.scheduler = ReduceLROnPlateau(
+            self.optimizer, 
+            'max', 
+            patience=self.config.get('scheduler_patience', 10), 
+            factor=self.config.get('scheduler_factor', 0.1),
+            min_lr=float(self.config.get('scheduler_min_lr', 1e-6))
+        )
 
-        for X_batch, y_batch in train_loader:
-            X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
-            
-            optimizer.zero_grad()
-            outputs = self.model(X_batch)
-            
-            # Lấy logits từ output dictionary
-            logits = outputs
-            
-            loss = self._calculate_loss(logits, y_batch, class_weights)
-            loss.backward()
-            
-            # Gradient Clipping
-            torch.nn.utils.clip_grad_norm_(self.model.parameters(), grad_clip)
-            
-            optimizer.step()
-            total_loss += loss.item()
-            
-            preds = torch.argmax(logits, dim=1)
-            all_preds.extend(preds.cpu().numpy())
-            all_targets.extend(y_batch.cpu().numpy())
+        self.epochs = self.config.get('epochs', 100)
+        self.patience = self.config.get('early_stopping_patience', 20)
+        self.model_save_path = os.path.join(
+            config.get('paths', {}).get('models', 'models'),
+            f"{ticker}_{model.__class__.__name__.lower()}_t+{horizon}_best.pt"
+        )
 
-        avg_loss = total_loss / len(train_loader) if len(train_loader) > 0 else 0
-        # Tính metrics huấn luyện
-        train_f1 = f1_score(all_targets, all_preds, average='weighted', zero_division=0)
-        return avg_loss, train_f1
-
-    def evaluate(self, val_loader, class_weights):
-        """Đánh giá trên tập Validation/Test."""
+    def _evaluate(self, data_loader) -> Tuple[float, float, float]:
         self.model.eval()
+        all_preds, all_targets = [], []
         total_loss = 0
-        all_preds = []   # <--- ĐÃ SỬA
-        all_targets = [] # <--- ĐÃ SỬA
-
-        if len(val_loader) == 0:
-            return {'loss': 0, 'f1': 0, 'accuracy': 0, 'preds': [], 'targets': []}
-
         with torch.no_grad():
-            for X_batch, y_batch in val_loader:
+            for X_batch, y_batch in data_loader:
+                X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                outputs = self.model(X_batch)
+                loss = self.criterion(outputs, y_batch)
+                total_loss += loss.item()
+                all_preds.extend(torch.argmax(outputs, dim=1).cpu().numpy())
+                all_targets.extend(y_batch.cpu().numpy())
+        
+        avg_loss = total_loss / len(data_loader)
+        f1 = f1_score(all_targets, all_preds, average='weighted', zero_division=0)
+        bal_acc = balanced_accuracy_score(all_targets, all_preds)
+        return avg_loss, f1, bal_acc
+
+    def fit(self, train_loader, val_loader) -> float:
+        best_val_f1 = 0.0
+        epochs_no_improve = 0
+
+        logger.info(f"Starting training for {self.ticker} t+{self.horizon} on {self.device} for {self.epochs} epochs.")
+
+        for epoch in range(self.epochs):
+            self.model.train()
+            train_loss = 0
+            for X_batch, y_batch in train_loader:
                 X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
                 
+                self.optimizer.zero_grad()
                 outputs = self.model(X_batch)
-                logits = outputs
-                
-                loss = self._calculate_loss(logits, y_batch, class_weights)
-                total_loss += loss.item()
-                
-                preds = torch.argmax(logits, dim=1)
-                all_preds.extend(preds.cpu().numpy())
-                all_targets.extend(y_batch.cpu().numpy())
+                loss = self.criterion(outputs, y_batch)
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.config.get('gradient_clip_norm', 1.0))
+                self.optimizer.step()
+                train_loss += loss.item()
 
-        avg_loss = total_loss / len(val_loader)
-        f1 = f1_score(all_targets, all_preds, average='weighted', zero_division=0)
-        acc = accuracy_score(all_targets, all_preds)
-        
-        metrics = {
-            'loss': avg_loss,
-            'f1': f1,
-            'accuracy': acc,
-            'preds': all_preds,
-            'targets': all_targets
-        }
-        return metrics
-
-    def fit(self, train_loader, val_loader):
-        """
-        Vòng lặp huấn luyện chính.
-        """
-        train_cfg = self.config.get('training', {})
-        epochs = int(train_cfg.get('epochs', 100))
-        lr = float(train_cfg.get('learning_rate', 0.001))
-        patience = int(train_cfg.get('early_stopping_patience', 20))
-        
-        # Thiết lập Optimizer
-        optimizer = optim.Adam(
-            self.model.parameters(), 
-            lr=lr, 
-            weight_decay=float(train_cfg.get('weight_decay_short', 1e-5))
-        )
-
-        # Scheduler: Giảm LR nếu Val Loss không giảm
-        scheduler = ReduceLROnPlateau(
-            optimizer, 
-            mode='min', 
-            factor=float(train_cfg.get('scheduler_factor', 0.5)), 
-            patience=int(train_cfg.get('scheduler_patience', 5)),
-            min_lr=float(train_cfg.get('scheduler_min_lr', 1e-6)),
-            verbose=True
-        )
-
-        # Tính toán Class Weights một lần
-        all_train_targets = [] # <--- ĐÃ SỬA: Khởi tạo list rỗng
-        for _, y in train_loader:
-            all_train_targets.extend(y.numpy())
+            avg_train_loss = train_loss / len(train_loader)
+            val_loss, val_f1, val_bal_acc = self._evaluate(val_loader)
             
-        class_weights = self._calculate_class_weights(np.array(all_train_targets))
+            self.scheduler.step(val_f1)
 
-        best_val_loss = float('inf')
-        patience_counter = 0
-        history = {'train_loss': [], 'val_loss': [], 'val_f1': []}
-        
-        self.logger.info(f"🚀 Bắt đầu huấn luyện: {self.ticker} (LR={lr})")
-
-        for epoch in range(epochs):
-            # 1. Train
-            train_loss, train_f1 = self.train_epoch(train_loader, optimizer, class_weights)
+            logger.info(
+                f"Epoch {epoch+1}/{self.epochs} | Train Loss: {avg_train_loss:.4f} | "
+                f"Val Loss: {val_loss:.4f} | Val F1: {val_f1:.4f} | Val Bal Acc: {val_bal_acc:.4f}"
+            )
             
-            # 2. Validate
-            val_metrics = self.evaluate(val_loader, class_weights)
-            val_loss = val_metrics['loss']
-            val_f1 = val_metrics['f1']
-            
-            # Lưu lịch sử
-            history['train_loss'].append(train_loss)
-            history['val_loss'].append(val_loss)
-            history['val_f1'].append(val_f1)
-            
-            # 3. Step Scheduler
-            current_lr = optimizer.param_groups[0]['lr']
-            scheduler.step(val_loss)
-            
-            self.logger.info(f"Epoch {epoch+1}/{epochs} | Train Loss: {train_loss:.4f} | Val Loss: {val_loss:.4f} | Val F1: {val_f1:.4f} | LR: {current_lr:.6f}")
-
-            # 4. Early Stopping (Dựa trên Val Loss)
-            if val_loss < best_val_loss:
-                best_val_loss = val_loss
-                patience_counter = 0
-                # Lưu model tốt nhất
-                save_path = os.path.join(self.config.get('paths.models', 'models'), f"{self.ticker}_best.pt")
-                self.model.save(save_path)
+            # Early stopping logic
+            if val_f1 > best_val_f1:
+                best_val_f1 = val_f1
+                self.model.save(self.model_save_path)
+                epochs_no_improve = 0
+                logger.info(f"Validation F1 improved to {best_val_f1:.4f}. Saving best model.")
             else:
-                patience_counter += 1
-                if patience_counter >= patience:
-                    self.logger.info(f"🛑 Early stopping tại epoch {epoch+1}")
-                    break
-        
-        # Vẽ biểu đồ sau khi train xong
-        self.plot_history(history)
-        
-        # Load lại best model để đánh giá lần cuối
-        best_model_path = os.path.join(self.config.get('paths.models', 'models'), f"{self.ticker}_best.pt")
-        if os.path.exists(best_model_path):
-             self.model.load(best_model_path)
-             
-        return history
+                epochs_no_improve += 1
 
-    def plot_history(self, history):
-        """Vẽ biểu đồ Loss và F1."""
-        plt.figure(figsize=(12, 5))
+            if epochs_no_improve >= self.patience:
+                logger.info(f"Early stopping triggered after {self.patience} epochs with no improvement.")
+                break
         
-        # Biểu đồ Loss
-        plt.subplot(1, 2, 1)
-        plt.plot(history['train_loss'], label='Train Loss')
-        plt.plot(history['val_loss'], label='Val Loss')
-        plt.title(f'{self.ticker} - Loss History')
-        plt.xlabel('Epoch')
-        plt.ylabel('Loss')
-        plt.legend()
-        
-        # Biểu đồ F1
-        plt.subplot(1, 2, 2)
-        plt.plot(history['val_f1'], label='Val F1', color='orange')
-        plt.title(f'{self.ticker} - Val F1 Score')
-        plt.xlabel('Epoch')
-        plt.ylabel('F1 Score')
-        plt.legend()
-        
-        save_path = os.path.join(self.config.get('paths.outputs', 'outputs'), f"{self.ticker}_history.png")
-        plt.savefig(save_path)
-        plt.close()
-        self.logger.info(f"📉 Đã lưu biểu đồ tại: {save_path}")
+        # Load best model weights back before finishing
+        logger.info(f"Training finished. Loading best model with F1: {best_val_f1:.4f}")
+        self.model.load(self.model_save_path)
+        return best_val_f1

@@ -74,7 +74,7 @@ def main():
             with col1:
                 direction = prediction['predicted_direction']
                 confidence = prediction['direction_confidence']
-                direction_emoji = {'Up': '🔼', 'Down': '🔽'}.get(direction, '↔️')
+                direction_emoji = {'Up': '🔼', 'Down': '🔽', 'Neutral': '↔️'}.get(direction, '❓')
                 
                 st.metric(
                     f"Xu hướng Dự báo (t+{horizon} ngày)",
@@ -89,7 +89,9 @@ def main():
                     help=f"Mô hình này được huấn luyện chuyên biệt cho tầm nhìn t+{horizon} ngày."
                 )
             
+            # Hiển thị xác suất cho cả 3 lớp
             st.progress(prediction['direction_probabilities'].get('Up', 0), text=f"Xác suất Tăng (Up): {prediction['direction_probabilities'].get('Up', 0):.1%}")
+            st.progress(prediction['direction_probabilities'].get('Neutral', 0), text=f"Xác suất Đi ngang (Neutral): {prediction['direction_probabilities'].get('Neutral', 0):.1%}")
             st.progress(prediction['direction_probabilities'].get('Down', 0), text=f"Xác suất Giảm (Down): {prediction['direction_probabilities'].get('Down', 0):.1%}")
 
     # --- THÊM MỚI: Hiển thị Dữ liệu Cơ bản ---

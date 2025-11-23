@@ -21,6 +21,10 @@ class DataCollector:
         self.config = get_config()
         self.db = get_database()
         self.vnstock_obj = vnstock.Vnstock(source="TCBS")
+        
+        # Lấy các đường dẫn từ config
+        self.raw_dir = self.config.get('data.raw_dir', 'data/raw')
+        self.tickers = self.config.get('data.tickers', [])
 
     @retry(stop=stop_after_attempt(3), wait=wait_fixed(5))
     def fetch_ohlcv_data(
@@ -191,7 +195,7 @@ class DataCollector:
     ) -> Optional[pd.DataFrame]:
         """Fetch VN-Index data from CSV file"""
         try:
-            vnindex_file = os.path.join(self.config.raw_dir, "vnindex_data.csv")
+            vnindex_file = os.path.join(self.raw_dir, "vnindex_data.csv")
 
             if not os.path.exists(vnindex_file):
                 logger.error(
@@ -223,9 +227,9 @@ class DataCollector:
     ) -> Tuple[List[str], List[str]]:
         """Collect all data for given tickers"""
         if tickers is None:
-            tickers = self.config.tickers
+            tickers = self.tickers
         if start_date is None:
-            start_date = self.config.get("data.start_date")
+            start_date = self.config.get("data.start_date", "2010-01-01")
         if end_date is None:
             # Always use yesterday to ensure data availability
             end_date = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
@@ -240,8 +244,8 @@ class DataCollector:
         vnindex_data = self.fetch_vnindex_data(start_date, end_date)
         if vnindex_data is not None:
             # Save to CSV
-            vnindex_csv = os.path.join(self.config.raw_dir, "VNINDEX.csv")
-            os.makedirs(self.config.raw_dir, exist_ok=True)
+            vnindex_csv = os.path.join(self.raw_dir, "VNINDEX.csv")
+            os.makedirs(self.raw_dir, exist_ok=True)
             vnindex_data.to_csv(vnindex_csv, index=False)
 
             # Save to database
@@ -298,7 +302,7 @@ class DataCollector:
                 return False
 
             # Save OHLCV to CSV and database
-            ohlcv_csv = os.path.join(self.config.raw_dir, f"{ticker}_ohlcv.csv")
+            ohlcv_csv = os.path.join(self.raw_dir, f"{ticker}_ohlcv.csv")
             ohlcv_data.to_csv(ohlcv_csv, index=False)
 
             if not self.db.save_dataframe(ohlcv_data, f"{ticker}_OHLCV"):
@@ -319,7 +323,7 @@ class DataCollector:
 
             # Save fundamental to CSV and database
             fundamental_csv = os.path.join(
-                self.config.raw_dir, f"{ticker}_fundamental.csv"
+                self.raw_dir, f"{ticker}_fundamental.csv"
             )
             fundamental_data.to_csv(fundamental_csv, index=False)
 
@@ -347,7 +351,7 @@ class DataCollector:
                 combined_df = pd.concat(all_ohlcv, ignore_index=True)
 
                 # Save to CSV
-                combined_csv = os.path.join(self.config.raw_dir, "all_ohlcv.csv")
+                combined_csv = os.path.join(self.raw_dir, "all_ohlcv.csv")
                 combined_df.to_csv(combined_csv, index=False)
 
                 # Save to database

@@ -1,6 +1,6 @@
 # Makefile for Vietnamese Banking Stock Predictor
 
-.PHONY: help setup install install-dev clean test lint format run-app run-pipeline view-data
+.PHONY: help setup install install-dev clean test lint format run-app run-pipeline view-data status
 
 # Default target
 help:
@@ -23,10 +23,8 @@ help:
 	@echo "  engineer-features - Engineer features"
 	@echo "  train-models   - Train all models"
 	@echo "  view-data      - View database contents"
-	@echo "  evaluate-models   - Analyze training results"
-	@echo "  analyze-results   - Detailed results analysis"
-	@echo "  quality-check  - Check data quality"
-	@echo "  check-data        - Check collected banking data"
+	@echo "  status         - Check pipeline status"
+	@echo "  system-check   - Run system diagnostics"
 
 # Setup project
 setup:
@@ -90,14 +88,17 @@ run-pipeline:
 collect-data:
 	python main.py collect
 
-check-data:
-	python check_data.py
-
 engineer-features:
 	python main.py features
 
 train-models:
 	python main.py train --models all
+
+status:
+	python main.py status
+
+system-check:
+	python system_check.py
 
 # Data viewing
 view-data:
@@ -136,11 +137,8 @@ restore-data:
 	tar -xzf $$backup
 
 # Model evaluation
-evaluate-models:
-	python scripts/manual_analysis.py
-
-analyze-results:
-	python scripts/analyze_training_results.py
+analyze-features:
+	python scripts/analyze_quarterly_features.py
 
 # Update requirements
 freeze-requirements:

@@ -15,7 +15,7 @@ class DatabaseManager:
     def __init__(self, db_path: Optional[str] = None):
         config = get_config()
         if db_path is None:
-            db_dir = config.database_dir
+            db_dir = config.get('data.database_dir')
             os.makedirs(db_dir, exist_ok=True)
             db_path = os.path.join(db_dir, 'stock_data.db')
         

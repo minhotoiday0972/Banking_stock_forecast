@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import os
 import joblib
+import ta # Thêm import
 from datetime import datetime, timedelta
 from typing import List, Dict
 from sklearn.preprocessing import MinMaxScaler
@@ -21,7 +22,8 @@ class FeatureEngineer:
         self.config = get_config()
         self.db = get_database()
         self.horizons = self.config.get('models.shared.forecast_horizons', [1, 3, 5, 30, 60, 90])
-        self.top_n_features = self.config.get('features.feature_selection.top_n_features', 20)
+        # Tăng số lượng features được chọn để cải thiện hiệu suất
+        self.top_n_features = self.config.get('features.feature_selection.top_n_features', 30)
 
     def calculate_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -139,33 +141,36 @@ class FeatureEngineer:
 
     def create_targets(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Tạo TẤT CẢ các mục tiêu từ config.
-        SỬA ĐỔI: Hỗ trợ 3 lớp (Down, Neutral, Up) dựa trên ngưỡng.
-        Class 0: Down
-        Class 1: Neutral
-        Class 2: Up
+        # Sửa đổi: Chỉ hỗ trợ 2 lớp (Down, Up) dựa trên biến động giá.
+        # Class 0: Down (Giá giảm hoặc không đổi)
+        # Class 1: Up (Giá tăng)
         """
         df = df.copy()
-        # Lấy ngưỡng từ config, nếu không có thì mặc định là 0.005 (0.5%)
-        threshold = self.config.get('features', {}).get('neutral_zone_threshold', 0.005)
         
-        logger.info(f"Đang tạo nhãn 3 lớp với ngưỡng +/- {threshold:.3f}")
+        # Không cần dùng ngưỡng động nữa cho việc tạo nhãn 2 lớp
+        # logger.info("Đang tạo nhãn 2 lớp (Giảm/Tăng) với ngưỡng động theo horizon (loại bỏ lớp Neutral)...")
+        
+        logger.info("Đang tạo nhãn 2 lớp (Giảm/Tăng) dựa trên biến động giá (ngưỡng 0%)...")
 
         for horizon in self.horizons:
             future_price = df['Close'].shift(-horizon)
             price_change = (future_price - df['Close']) / df['Close']
             
-            # Điều kiện cho 3 lớp
+            # Điều kiện cho 2 lớp (Up=1 nếu >0, Down=0 nếu <=0)
             conditions = [
-                price_change > threshold,  # Lớp 2 (Up)
-                price_change < -threshold  # Lớp 0 (Down)
+                price_change > 0  # Lớp 1 (Up)
             ]
-            # Giá trị tương ứng với điều kiện
-            choices = [2, 0]
+            choices = [1]
             
-            # Mặc định là lớp 1 (Neutral)
-            df[f'Target_Direction_t+{horizon}'] = np.select(conditions, choices, default=1)
+            # Gán nhãn. Nếu không thỏa mãn conditions (tức là price_change <= 0), gán default=0 (Down)
+            df[f'Target_Direction_t+{horizon}'] = np.select(conditions, choices, default=0)
             
+            # Không còn các mẫu Neutral để loại bỏ
+            
+            # In phân bổ lớp để kiểm tra (chỉ các hàng không phải NaN)
+            class_distribution = df[f'Target_Direction_t+{horizon}'].dropna().value_counts().to_dict()
+            logger.debug(f"    Phân bổ lớp cho t+{horizon}: {class_distribution}")
+
         return df
 
     def _clean_data(self, df: pd.DataFrame, all_feature_cols: List[str]) -> pd.DataFrame:
@@ -241,7 +246,7 @@ class FeatureEngineer:
         os.makedirs(processed_dir, exist_ok=True)
         
         # 1. Tải Dữ liệu Thị trường (VNINDEX)
-        vnindex_path = os.path.join(self.config.get('paths.raw', 'data/raw'), "VNINDEX.csv")
+        vnindex_path = os.path.join(self.config.get('data.raw_dir', 'data/raw'), "VNINDEX.csv")
         market_df = None
         if os.path.exists(vnindex_path):
             market_df = pd.read_csv(vnindex_path, parse_dates=['time'])

@@ -73,19 +73,15 @@ def run_weekly_full_pipeline():
 
 def setup_schedule():
     """Setup the schedule"""
-    # Daily quick update at 7 AM (after market close in Vietnam)
-    schedule.every().day.at("07:00").do(run_daily_pipeline)
+    # Daily quick update at 7 PM (after market close in Vietnam - 3:30 PM + buffer)
+    schedule.every().day.at("19:00").do(run_daily_pipeline)
     
     # Weekly full retrain on Sunday at 2 AM
     schedule.every().sunday.at("02:00").do(run_weekly_full_pipeline)
     
-    # Optional: Update data every 4 hours during market hours
-    schedule.every(4).hours.do(lambda: subprocess.run(["python", "main.py", "collect"]))
-    
     logging.info("📅 Schedule setup complete:")
-    logging.info("   - Daily quick pipeline: 07:00")
+    logging.info("   - Daily quick pipeline: 19:00 (7 PM)")
     logging.info("   - Weekly full pipeline: Sunday 02:00")
-    logging.info("   - Data updates: Every 4 hours")
 
 def main():
     """Main scheduler function"""

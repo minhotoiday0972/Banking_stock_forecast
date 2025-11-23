@@ -139,8 +139,10 @@ class StockPredictor:
             direction_logits = outputs.cpu().numpy()[0]
             direction_probs = torch.softmax(torch.tensor(direction_logits), dim=0).numpy()
             
-            direction_labels = ['Down', 'Up'] # Giả định 0=Down, 1=Up
-            predicted_direction = direction_labels[np.argmax(direction_probs)]
+            # Hỗ trợ 2 lớp: 0=Down, 1=Up
+            direction_labels = ['Down', 'Up']
+            predicted_class = int(np.argmax(direction_probs))
+            predicted_direction = direction_labels[predicted_class]
             confidence = float(np.max(direction_probs))
             
             results = {

@@ -18,7 +18,7 @@ from src.features.feature_engineer import FeatureEngineer
 from src.training.trainer import ModelTrainingPipeline
 # --- XÓA: Import cho Nhánh 2 ---
 
-logger = get_logger("main")
+logger = get_logger("main", log_filename="main_training.log")
 
 def run_data_collection():
     """Chạy pipeline thu thập dữ liệu"""

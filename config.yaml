@@ -65,7 +65,16 @@ features:
   market:
     - "Market_Avg_Close"
     - "Market_Volatility"
-  neutral_zone_threshold: 0.005
+  dynamic_neutral_thresholds:
+    short_term:
+      horizons: [1, 3, 5]
+      threshold: 0.005 # 0.5%
+    mid_term:
+      horizons: [30]
+      threshold: 0.05  # 5%
+    long_term:
+      horizons: [60, 90]
+      threshold: 0.1   # 10%
 
 training:
   train_split: 0.8
@@ -90,6 +99,8 @@ training:
   gradient_clip_norm: 1.0
   
   use_focal_loss: true       
+  use_manual_class_weights: false
+  focal_loss_gamma: 1
   
   loss_weights:
     classification: 1.0
@@ -97,7 +108,7 @@ training:
 
 models:
   shared:
-    num_classes: 3
+    num_classes: 2
     forecast_horizons: [1, 3, 5, 30, 60, 90]
     sequence_length: 30 
   
@@ -105,17 +116,31 @@ models:
     hidden_dim: 64      
     num_layers: 2
     kernel_size: 3
-    dropout_rate: 0.7
+    dropout_rate: 0.3
   
   transformer:
     d_model: 64         
     nhead: 4            
     num_layers: 2       
     dim_feedforward: 128
-    dropout_rate: 0.7   
+    dropout_rate: 0.3   
+    
+
+
+models_to_train:
+  dl_models:
+    - "cnn_bilstm"
+    - "transformer"
+  baseline_models:
+    - "naive"
     
 paths:
   models: "models/"
   processed: "data/processed/"
   database: "data/database/"
   outputs: "outputs/"
+  temp: "temp_data/"
+
+mlflow:
+  artifact_paths:
+    plots: "plots"

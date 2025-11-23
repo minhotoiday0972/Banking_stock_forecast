@@ -1,319 +1,175 @@
-# Banking Stock Prediction Project
+# Dự đoán Xu hướng Cổ phiếu Ngân hàng
 
-Dự án dự đoán xu hướng giá cổ phiếu ngân hàng Việt Nam sử dụng Deep Learning (CNN-BiLSTM và Transformer).
+Dự án này sử dụng các mô hình Deep Learning (CNN-BiLSTM và Transformer) để dự đoán xu hướng giá (Tăng, Giảm, Đi ngang) của các cổ phiếu ngành ngân hàng Việt Nam theo nhiều khung thời gian khác nhau.
 
-## 🎯 Mục tiêu
+## 🎯 Mục tiêu Dự án
 
-Dự đoán xu hướng tăng/giảm giá cổ phiếu ngân hàng cho các khung thời gian:
-- **t+30**: 30 ngày (1 tháng)
-- **t+60**: 60 ngày (2 tháng) - **Model tốt nhất**
-- **t+90**: 90 ngày (3 tháng)
+Mục tiêu chính là dự đoán xu hướng giá của các cổ phiếu ngân hàng cho các khung thời gian trong tương lai:
+- **Ngắn hạn**: t+1, t+3, t+5
+- **Trung hạn**: t+30 (1 tháng), t+60 (2 tháng)
+- **Dài hạn**: t+90 (3 tháng)
 
-## 🏆 Kết quả đạt được
+## 📁 Cấu trúc Thư mục
 
-### Model Production-Ready
-
-**ACB t+60 (60 ngày):**
-- F1-Score: **80.39%**
-- Accuracy: **72.97%**
-- Precision: 70.09%
-- Recall: 94.25%
-- Balanced Accuracy: 68.44%
-
-**ACB t+30 (30 ngày):**
-- F1-Score: **73.78%**
-- Accuracy: 60.14%
-- Recall: 95.40%
-
-## 📁 Cấu trúc dự án
+Dự án được tổ chức như sau:
 
 ```
 banking_stock_project/
 ├── src/
-│   ├── data/           # Thu thập dữ liệu
-│   ├── features/       # Feature engineering
-│   ├── models/         # CNN-BiLSTM, Transformer
-│   ├── training/       # Training pipeline
-│   ├── app/           # Prediction API
-│   └── utils/         # Utilities
+│   ├── app/           # Ứng dụng dự đoán bằng Streamlit
+│   ├── data/          # Các script để thu thập dữ liệu
+│   ├── features/      # Các script để xử lý đặc trưng (feature engineering)
+│   ├── models/        # Kiến trúc các model (CNN-BiLSTM, Transformer)
+│   ├── training/      # Pipeline huấn luyện model
+│   └── utils/         # Các script tiện ích (config, logger, ...)
 ├── data/
-│   ├── raw/           # Dữ liệu thô (OHLCV)
-│   ├── processed/     # Features đã xử lý
-│   └── database/      # SQLite database
-├── models/            # Trained models (.pt)
-├── outputs/           # Training plots
-├── logs/              # Training logs
-├── documents_research/ # Tài liệu nghiên cứu
-└── config.yaml        # Configuration
+│   ├── raw/           # Dữ liệu thô (OHLCV và tài chính cơ bản)
+│   ├── processed/     # Dữ liệu đặc trưng đã được scale và metadata
+│   └── database/      # Cơ sở dữ liệu SQLite để lưu trữ dữ liệu thô
+├── models/            # Các file model đã được huấn luyện (.pt)
+├── outputs/           # Các file kết quả (ví dụ: biểu đồ training)
+├── logs/              # Log của ứng dụng và quá trình huấn luyện
+├── mlruns/            # Thư mục chứa kết quả theo dõi của MLflow
+├── .gitignore         # File cấu hình Git ignore
+├── app.py             # File chính của ứng dụng Streamlit
+├── config.yaml        # File cấu hình trung tâm cho toàn bộ dự án
+├── main.py            # Script chính để chạy các pipeline (CLI)
+├── README.md          # File này
+└── requirements.txt   # Các thư viện Python cần thiết
 ```
 
-## 🚀 Cài đặt
+## 🚀 Cài đặt Môi trường
 
-### 1. Clone repository
+### 1. Clone Repository
 ```bash
-git clone <repository-url>
+git clone <your-repository-url>
 cd banking_stock_project
 ```
 
-### 2. Tạo môi trường ảo
+### 2. Tạo Môi trường Ảo
+Rất khuyến khích sử dụng môi trường ảo (như conda hoặc venv) để quản lý các thư viện.
+
+**Sử dụng conda:**
 ```bash
 conda create -n stock_env python=3.9
 conda activate stock_env
 ```
 
-### 3. Cài đặt dependencies
+**Sử dụng venv:**
+```bash
+python -m venv stock_env
+source stock_env/bin/activate  # Trên Windows, dùng: stock_env\Scripts\activate
+```
+
+### 3. Cài đặt Thư viện
+Cài đặt tất cả các gói Python cần thiết bằng pip.
 ```bash
 pip install -r requirements.txt
 ```
 
-## 📊 Sử dụng
+## 📊 Hướng dẫn Toàn bộ Quy trình
 
-### 1. Thu thập dữ liệu
+Dự án này được quản lý thông qua một giao diện dòng lệnh (CLI) trung tâm trong file `main.py`. Quy trình đầy đủ từ A-Z bao gồm 4 bước chính.
+
+### Bước 1: Thu thập Dữ liệu
+Lệnh này sẽ thu thập dữ liệu thô (OHLCV và các chỉ số tài chính cơ bản) từ nguồn dữ liệu và lưu vào cơ sở dữ liệu cục bộ (`data/database/stock_data.db`).
 ```bash
-python main.py --mode collect
+python main.py collect
 ```
+- **Đầu vào**: Danh sách các mã cổ phiếu (`tickers`) và ngày bắt đầu (`start_date`) trong `config.yaml`.
+- **Đầu ra**: File `stock_data.db` chứa dữ liệu thô.
 
-### 2. Tạo features
+### Bước 2: Xử lý và Tạo Đặc trưng (Feature Engineering)
+Xử lý dữ liệu thô, tính toán các đặc trưng kỹ thuật và tài chính, áp dụng scaling, và lưu dữ liệu đã xử lý cùng với metadata cần thiết cho việc huấn luyện.
 ```bash
-python main.py --mode features
-```
+python main.py features
 
-### 3. Huấn luyện models
+# Bạn cũng có thể chạy cho các mã cụ thể
+python main.py features --tickers ACB VCB
+```
+- **Đầu vào**: Dữ liệu từ `stock_data.db`.
+- **Đầu ra**: Các file CSV và a.pkl trong thư mục `data/processed/`.
+
+### Bước 3: Huấn luyện Model
+Chạy pipeline huấn luyện cho các model được chỉ định trong `config.yaml`. Một model riêng biệt sẽ được huấn luyện cho mỗi mã cổ phiếu và mỗi khung thời gian dự báo.
 ```bash
-python main.py --mode train
-```
+python main.py train
 
-### 4. Chạy toàn bộ pipeline
+# Bạn cũng có thể chỉ định model hoặc mã cổ phiếu để huấn luyện
+python main.py train --models transformer --tickers TCB
+```
+- **Đầu vào**: Dữ liệu đã xử lý từ `data/processed/`.
+- **Đầu ra**: Các model đã huấn luyện được lưu trong `models/` và kết quả được ghi lại bởi MLflow.
+
+### Chạy Toàn bộ Pipeline (All-in-One)
+Để chạy tuần tự tất cả các bước (thu thập, xử lý đặc trưng, huấn luyện), hãy sử dụng lệnh `full`.
 ```bash
-python run_full_pipeline.py
+python main.py full
 ```
 
-### 5. Dự đoán
+### Kiểm tra Trạng thái Pipeline
+Để xem các bước nào đã hoàn thành và cần chạy bước nào tiếp theo, sử dụng lệnh `status`.
 ```bash
-python main.py --mode predict --ticker ACB
+python main.py status
 ```
 
-### 6. Chạy API
+## 📈 Theo dõi Thí nghiệm với MLflow
+
+Dự án tích hợp MLflow để theo dõi và quản lý các lần huấn luyện model.
+
+### Chức năng chính:
+- **Ghi lại Tham số**: Tự động ghi lại tất cả các tham số từ `config.yaml` cho mỗi lần chạy (VD: learning rate, dropout, số lớp, ...).
+- **Ghi lại Chỉ số**: Ghi lại các chỉ số hiệu suất (metrics) trên tập validation và test (VD: F1-score, accuracy, precision, recall).
+- **Lưu trữ Model**: Lưu lại model đã huấn luyện như một "artifact" để có thể tải lại sau này.
+- **Lưu trữ Biểu đồ**: Ghi lại các biểu đồ như confusion matrix.
+
+### Cách sử dụng:
+1.  **Chạy Huấn luyện**: Khi bạn chạy lệnh `python main.py train` hoặc `python main.py full`, MLflow sẽ tự động ghi lại mọi thứ vào thư mục `mlruns`.
+2.  **Khởi chạy Giao diện MLflow**: Để xem kết quả, mở một terminal mới và chạy lệnh sau từ thư mục gốc của dự án:
+    ```bash
+    mlflow ui
+    ```
+3.  **Xem Kết quả**: Mở trình duyệt và truy cập vào **http://localhost:5000**. Tại đây bạn có thể so sánh hiệu suất giữa các lần chạy, xem tham số đã dùng và các biểu đồ chi tiết.
+
+## ⚙️ Cấu hình Dự án (`config.yaml`)
+
+Tất cả các tham số của dự án được điều khiển từ file `config.yaml`.
+
+- **`data`**: Chỉ định các mã cổ phiếu, khoảng thời gian, và cài đặt API.
+- **`features`**: Định nghĩa các chỉ báo kỹ thuật, tài chính cơ bản và đặc thù ngành ngân hàng sẽ được sử dụng.
+- **`training`**: Kiểm soát các siêu tham số như learning rate, số epochs, kích thước batch, và tỷ lệ phân chia dữ liệu.
+- **`models`**: Cấu hình kiến trúc riêng của từng model (VD: hidden dims, dropout).
+- **`models_to_train`**: **Quan trọng: Định nghĩa các model nào sẽ được chạy trong pipeline.**
+  ```yaml
+  models_to_train:
+    dl_models:
+      - "cnn_bilstm"
+      - "transformer"
+    baseline_models:
+      - "naive"
+      - "logistic_regression"
+  ```
+- **`paths`**: Thiết lập các đường dẫn thư mục cho dữ liệu, model và log.
+
+## 🖥️ Chạy Ứng dụng Dự đoán
+
+Sau khi các model đã được huấn luyện, bạn có thể chạy ứng dụng Streamlit tương tác để xem dự đoán.
+
 ```bash
-python app.py
+python main.py app
 ```
+Lệnh này sẽ khởi chạy server Streamlit. Bạn có thể truy cập ứng dụng trong trình duyệt tại **http://localhost:8501**.
 
-## ⚙️ Configuration
+## 🔬 Các Kỹ thuật và Công nghệ Chính
 
-File `config.yaml` chứa tất cả cấu hình:
+- **Dynamic Class Weights & Focal Loss**: Tự động xử lý vấn đề mất cân bằng lớp trong biến mục tiêu.
+- **F1-based Early Stopping**: Sử dụng F1-score trên tập validation để dừng sớm, giúp model có độ ổn định và hiệu suất tốt hơn trong bài toán phân loại mất cân bằng.
+- **Dynamic Regularization**: Áp dụng các giá trị `weight_decay` khác nhau cho các model ngắn hạn và dài hạn.
+- **Tích hợp MLflow**: Để theo dõi thí nghiệm, ghi lại tham số, chỉ số và model.
+- **Giao diện Streamlit**: Để dự đoán và phân tích một cách tương tác.
 
-```yaml
-data:
-  tickers: [VIB, VCB, BID, MBB, TCB, VPB, CTG, ACB, SHB, STB, HDB]
-  start_date: '2020-01-01'
+## ⚠️ Lưu ý Quan trọng
 
-models:
-  shared:
-    forecast_horizons: [1, 3, 5, 30, 60, 90]
-  
-  cnn_bilstm:
-    hidden_dim: 64
-    dropout_rate: 0.7
-  
-  transformer:
-    d_model: 64
-    dropout_rate: 0.7
-
-training:
-  batch_size: 32
-  epochs: 100
-  learning_rate: 0.001
-  
-  # Dynamic Regularization
-  weight_decay_short: 0.0005  # t+1,3,5
-  weight_decay_long: 0.001    # t+30,60,90
-  
-  # Focal Loss
-  use_focal_loss: true
-  
-  # F1-based Early Stopping
-  use_f1_early_stopping: true
-```
-
-## 🔬 Kỹ thuật sử dụng
-
-### 1. Dynamic Class Weights
-Tự động điều chỉnh weights dựa trên mức độ imbalance:
-- Balanced (ratio<1.3): exponent=1.2
-- Moderate (1.3-1.8): exponent=1.4
-- High (1.8-2.5): exponent=1.7
-- Severe (>2.5): exponent=2.0
-
-### 2. Focal Loss
-Loss function tập trung vào hard examples:
-```
-FL(pt) = -(1-pt)^γ * log(pt)
-```
-Gamma động: 1.0-2.5 dựa trên imbalance
-
-### 3. F1-based Early Stopping
-Dừng training dựa trên Val F1 thay vì Val Loss
-
-### 4. Dynamic Regularization
-- Short-term (t+1,3,5): weight_decay=0.0005
-- Long-term (t+30,60,90): weight_decay=0.001
-
-## 📈 Features
-
-### Technical Indicators (14 features cho ngắn hạn)
-- Moving Averages (MA7, MA14, MA30)
-- RSI (14, 30)
-- MACD
-- Bollinger Bands
-- Volatility
-- Volume
-
-### Long-term Features (20 features cho dài hạn)
-- MA100, MA200
-- Volatility 60
-- Time features (month, day_of_year)
-- Lag features (90, 365 days)
-
-### Banking-specific Features
-- NIM (Net Interest Margin)
-- NPL (Non-Performing Loan)
-- CIR (Cost-to-Income Ratio)
-- Credit Growth
-- ROE, ROA, P/E, P/B
-
-## 🎓 Models
-
-### CNN-BiLSTM
-- CNN layers: Extract local patterns
-- BiLSTM layers: Capture temporal dependencies
-- Dropout: 0.7
-- Hidden dim: 64
-
-### Transformer
-- Multi-head attention: 4 heads
-- d_model: 64
-- Feedforward dim: 128
-- Dropout: 0.7
-
-## 📊 Evaluation Metrics
-
-- **Accuracy**: Tỷ lệ dự đoán đúng
-- **Balanced Accuracy**: Accuracy có trọng số cho imbalanced data
-- **Precision**: Tỷ lệ dự đoán tăng đúng
-- **Recall**: Tỷ lệ bắt được tín hiệu tăng
-- **F1-Score**: Harmonic mean của Precision và Recall
-- **Confusion Matrix**: TN, FP, FN, TP
-
-## 📝 Logs
-
-Training logs được lưu trong `logs/`:
-- `trainer_YYYYMMDD.log`: Chi tiết training process
-- Bao gồm: class distribution, weights, loss, metrics
-
-## 🔍 Monitoring
-
-Xem training progress:
-```bash
-# Real-time
-tail -f logs/trainer_20251111.log
-
-# Tìm kết quả test
-findstr "Kết quả Test" logs/trainer_20251111.log
-```
-
-## 📚 Documentation
-
-Chi tiết trong `documents_research/`:
-- `PROJECT_DOCUMENTATION.md`: Tổng quan dự án
-- `CNN_BILSTM_MODEL_DOCUMENTATION.md`: Chi tiết model
-- `RESEARCH_DOCUMENTATION.md`: Nghiên cứu và references
-
-## 🎯 Trading Strategies
-
-### Strategy 1: Conservative (t+60)
-- Model: t+60 (F1=80.39%)
-- Entry: Khi dự đoán UP
-- Holding: 60 ngày
-- Win rate: ~70%
-
-### Strategy 2: Aggressive (t+30)
-- Model: t+30 (F1=73.78%)
-- Entry: Khi dự đoán UP
-- Holding: 30 ngày
-- Win rate: ~60%
-
-### Strategy 3: Ensemble
-- Entry: Khi CẢ HAI t+30 và t+60 dự đoán UP
-- Holding: 30-60 ngày
-- Win rate: ~75-80%
-
-## ⚠️ Lưu ý
-
-1. **Không dùng cho ngắn hạn (t+1, t+3, t+5)**
-   - Performance kém
-   - Nhiễu cao
-
-2. **Tập trung vào dài hạn (t+30, t+60)**
-   - Performance tốt
-   - Trend rõ ràng
-
-3. **Backtesting trước khi trade thực**
-   - Test trên out-of-sample data
-   - Tính toán risk-adjusted returns
-
-4. **Không phải lời khuyên đầu tư**
-   - Chỉ là công cụ hỗ trợ
-   - Cần kết hợp phân tích khác
-
-## 🐛 Troubleshooting
-
-### Lỗi CUDA
-```bash
-# Kiểm tra CUDA
-python -c "import torch; print(torch.cuda.is_available())"
-
-# Nếu không có GPU, model sẽ tự động dùng CPU
-```
-
-### Lỗi Memory
-```bash
-# Giảm batch_size trong config.yaml
-batch_size: 16  # thay vì 32
-```
-
-### Lỗi Data
-```bash
-# Xóa và thu thập lại
-rm -rf data/database/*.db
-python main.py --mode collect
-```
-
-## 📞 Support
-
-Nếu gặp vấn đề:
-1. Kiểm tra logs trong `logs/`
-2. Xem documentation trong `documents_research/`
-3. Đọc `FINAL_SUCCESS_ANALYSIS.md` để hiểu kết quả
-
-## 📄 License
-
-MIT License
-
-## 👥 Contributors
-
-- Research Team
-- Development Team
-
-## 🙏 Acknowledgments
-
-- VNStock API cho dữ liệu
-- PyTorch team
-- Open source community
-
----
-
-**Last Updated**: 2025-11-11
-
-**Status**: ✅ Production Ready (t+30, t+60)
-
-**Next Steps**: Train cho tất cả 10 mã ngân hàng
+- **Hiệu suất Model**: Các khung thời gian dài hạn (t+30, t+60, t+90) thường cho hiệu suất tốt và ổn định hơn so với các khung thời gian ngắn hạn.
+- **Backtesting**: Kết quả từ model này cần được kiểm tra lại (backtest) một cách nghiêm ngặt trước khi áp dụng vào bất kỳ chiến lược giao dịch thực tế nào.
+- **Miễn trừ Trách nhiệm**: Đây là một dự án nghiên cứu và không phải là lời khuyên đầu tư tài chính.

@@ -115,9 +115,11 @@ class ModelTrainingPipeline:
             log_message.append(msg_cm); print(msg_cm)
         self.logger.info("\n".join(log_message))
 
-    # ... (các hàm _load_data_for_horizon, _calculate_sklearn_metrics, _prepare_baseline_data, _create_dataloaders, _calculate_dl_test_metrics giữ nguyên)
     def _load_data_for_horizon(self, ticker: str, horizon: int) -> Optional[Dict]:
-        """Tải dữ liệu và metadata cho một ticker và horizon cụ thể."""
+        """
+        Tải dữ liệu và metadata. Sửa đổi để KHÔNG loại bỏ các hàng có target là NaN,
+        nhằm giữ tính liên tục của chuỗi cho việc tạo sequence.
+        """
         try:
             processed_dir = self.config.get('paths.processed', 'data/processed')
             metadata_path = os.path.join(processed_dir, f"{ticker}_metadata_t+{horizon}.pkl")
@@ -135,12 +137,14 @@ class ModelTrainingPipeline:
                 self.logger.error(f"Không tìm thấy cột target: {target_col}")
                 return None
             
-            df_clean = df.dropna(subset=[target_col] + metadata['feature_columns'])
+            # CHỈ loại bỏ NaN từ các cột đặc trưng, giữ lại NaN trong cột target
+            df_clean = df.dropna(subset=metadata['feature_columns']).reset_index(drop=True)
+            
             if len(df_clean) < 100:
-                self.logger.error(f"Không đủ dữ liệu sau khi làm sạch: {len(df_clean)} mẫu")
+                self.logger.error(f"Không đủ dữ liệu sau khi làm sạch features: {len(df_clean)} mẫu")
                 return None
             
-            self.logger.info(f"Đã tải {len(df_clean)} mẫu cho {ticker} t+{horizon}")
+            self.logger.info(f"Đã tải {len(df_clean)} mẫu cho {ticker} t+{horizon} (trước khi lọc nhiễu)")
             return {
                 'df': df_clean,
                 'feature_cols': metadata['feature_columns'],
@@ -148,26 +152,45 @@ class ModelTrainingPipeline:
                 'scaler': metadata['scaler']
             }
         except Exception as e:
-            self.logger.error(f"Lỗi khi tải dữ liệu cho {ticker} t+{horizon}: {e}")
+            self.logger.error(f"Lỗi khi tải dữ liệu cho {ticker} t+{horizon}: {e}", exc_info=True)
             return None
 
     def _calculate_sklearn_metrics(self, y_true, y_pred) -> Dict:
-        """Tính toán metrics cho các mô hình scikit-learn."""
-        cm = confusion_matrix(y_true, y_pred)
+        """
+        Tính toán metrics cho các mô hình scikit-learn.
+        SỬA ĐỔI: Thêm `labels=[0, 1]` để đảm bảo rằng cả hai lớp luôn được
+        tính đến, ngay cả khi một lớp không có trong `y_true` hoặc `y_pred` của một batch,
+        giúp tránh các cảnh báo và lỗi hình dạng (shape errors).
+        """
+        # Ensure labels are specified to handle cases where a class is missing in a batch
+        labels = [0, 1]
+        
+        cm = confusion_matrix(y_true, y_pred, labels=labels)
         return {
             'accuracy': accuracy_score(y_true, y_pred),
             'balanced_accuracy': balanced_accuracy_score(y_true, y_pred),
-            'precision': precision_score(y_true, y_pred, average='weighted', zero_division=0),
-            'recall': recall_score(y_true, y_pred, average='weighted', zero_division=0),
-            'f1': f1_score(y_true, y_pred, average='weighted', zero_division=0),
+            'precision': precision_score(y_true, y_pred, labels=labels, average='weighted', zero_division=0),
+            'recall': recall_score(y_true, y_pred, labels=labels, average='weighted', zero_division=0),
+            'f1': f1_score(y_true, y_pred, labels=labels, average='weighted', zero_division=0),
             'confusion_matrix': cm.tolist()
         }
 
     def _prepare_baseline_data(self, df: pd.DataFrame, feature_cols: List[str], target_col: str) -> Optional[Dict]:
-        """Chuẩn bị dữ liệu phẳng (không tuần tự) cho các mô hình baseline."""
+        """
+        Chuẩn bị dữ liệu phẳng cho baseline, loại bỏ các mẫu nhiễu (target=NaN).
+        """
         try:
-            X = df[feature_cols].values
-            y = df[target_col].values
+            # **LOGIC LỌC NHIỄU**
+            df_filtered = df.dropna(subset=[target_col])
+            
+            if len(df_filtered) < 100:
+                self.logger.error(f"Không đủ dữ liệu cho baseline model sau khi lọc nhiễu: {len(df_filtered)} mẫu.")
+                return None
+            
+            self.logger.info(f"Chuẩn bị {len(df_filtered)} mẫu cho baseline model (đã lọc nhiễu).")
+
+            X = df_filtered[feature_cols].values
+            y = df_filtered[target_col].values
             
             train_split = self.config.get('training.train_split', 0.7)
             val_split = self.config.get('training.val_split', 0.15)
@@ -185,55 +208,63 @@ class ModelTrainingPipeline:
                 "X_test": X[train_size+val_size:], "y_test": y[train_size+val_size:]
             }
         except Exception as e:
-            self.logger.error(f"Lỗi khi chuẩn bị dữ liệu baseline: {e}")
+            self.logger.error(f"Lỗi khi chuẩn bị dữ liệu baseline: {e}", exc_info=True)
             return None
 
     def _create_dataloaders(self, df: pd.DataFrame, feature_cols: List[str], target_col: str) -> Optional[Dict]:
-        """Tạo DataLoaders cho các mô hình học sâu."""
+        """
+        Tạo DataLoaders cho mô hình học sâu, với logic loại bỏ mẫu nhiễu (Sample Rejection).
+        """
         try:
             sequence_length = self.config.get('models.shared.sequence_length', 30)
-            X_df, y_df = df[feature_cols].values, df[target_col].values
             
+            X_data = df[feature_cols].values
+            y_data = df[target_col].values
+
             X_seq, y_seq = [], []
-            for i in range(len(X_df) - sequence_length):
-                X_seq.append(X_df[i:i+sequence_length])
-                y_seq.append(y_df[i+sequence_length])
             
-            X_seq, y_seq = np.array(X_seq), np.array(y_seq)
+            # Duyệt qua các điểm dữ liệu để tạo chuỗi
+            for i in range(len(X_data) - sequence_length):
+                target_for_sequence = y_data[i + sequence_length]
+                
+                # **LOGIC LỌC NHIỄU (SAMPLE REJECTION)**
+                if not np.isnan(target_for_sequence):
+                    X_seq.append(X_data[i:i+sequence_length])
+                    y_seq.append(target_for_sequence)
+
             if len(X_seq) < 100:
-                self.logger.error(f"Không đủ sequences: {len(X_seq)}"); return None
+                self.logger.error(f"Không đủ chuỗi hợp lệ sau khi lọc nhiễu: {len(X_seq)} chuỗi. Cần ít nhất 100.")
+                return None
+            
+            self.logger.info(f"Đã tạo {len(X_seq)} chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.")
+
+            X_seq_np, y_seq_np = np.array(X_seq), np.array(y_seq)
             
             train_split = self.config.get('training.train_split', 0.7)
             val_split = self.config.get('training.val_split', 0.15)
-            train_size = int(len(X_seq) * train_split)
-            val_size = int(len(X_seq) * val_split)
+            train_size = int(len(X_seq_np) * train_split)
+            val_size = int(len(X_seq_np) * val_split)
             
-            X_train, y_train = torch.FloatTensor(X_seq[:train_size]), torch.LongTensor(y_seq[:train_size])
-            X_val, y_val = torch.FloatTensor(X_seq[train_size:train_size+val_size]), torch.LongTensor(y_seq[train_size:train_size+val_size])
-            X_test, y_test = torch.FloatTensor(X_seq[train_size+val_size:]), torch.LongTensor(y_seq[train_size+val_size:])
+            X_train, y_train = torch.FloatTensor(X_seq_np[:train_size]), torch.LongTensor(y_seq_np[:train_size])
+            X_val, y_val = torch.FloatTensor(X_seq_np[train_size:train_size+val_size]), torch.LongTensor(y_seq_np[train_size:train_size+val_size])
+            X_test, y_test = torch.FloatTensor(X_seq_np[train_size+val_size:]), torch.LongTensor(y_seq_np[train_size+val_size:])
 
-            # Calculate class weights for imbalanced datasets
-            # Assuming 2 classes (0 and 1) based on the feature_engineer's create_targets
+            # Tính toán trọng số lớp
             class_counts = torch.bincount(y_train)
-            # Handle potential case where a class might be missing in y_train
             if len(class_counts) < 2: 
-                # This should ideally not happen for binary classification in a sufficiently large dataset
-                # but as a fallback, create a tensor with 1s if only one class is present
                 class_weights = torch.ones(2, dtype=torch.float32).detach()
-                self.logger.warning(f"Only one class found in training data. Class weights set to ones.")
+                self.logger.warning(f"Chỉ có 1 lớp được tìm thấy trong dữ liệu training. Đặt trọng số lớp là [1,1].")
             else:
                 total_samples = class_counts.sum().float()
-                # Inverse of class frequency: total_samples / (num_classes * class_count)
-                # Or simply: total_samples / class_count (normalized later by CrossEntropyLoss)
                 class_weights = (total_samples / (len(class_counts) * class_counts.float())).detach()
             
-            self.logger.info(f"Class counts in training data: {class_counts.tolist()}")
-            self.logger.info(f"Calculated class weights: {class_weights.tolist()}")
+            self.logger.info(f"Số lượng lớp trong dữ liệu training: {class_counts.tolist()}")
+            self.logger.info(f"Trọng số lớp được tính toán: {class_weights.tolist()}")
 
             batch_size = self.config.get('training.batch_size', 32)
             train_ds, val_ds, test_ds = TensorDataset(X_train, y_train), TensorDataset(X_val, y_val), TensorDataset(X_test, y_test)
 
-            self.logger.info(f"DataLoaders created: Train={len(train_ds)}, Val={len(val_ds)}, Test={len(test_ds)}")
+            self.logger.info(f"DataLoaders đã được tạo: Train={len(train_ds)}, Val={len(val_ds)}, Test={len(test_ds)}")
             return {
                 'train_loader': DataLoader(train_ds, batch_size=batch_size, shuffle=False),
                 'val_loader': DataLoader(val_ds, batch_size=batch_size, shuffle=False),
@@ -242,7 +273,7 @@ class ModelTrainingPipeline:
                 'class_weights': class_weights
             }
         except Exception as e:
-            self.logger.error(f"Lỗi khi tạo DataLoaders: {e}"); return None
+            self.logger.error(f"Lỗi khi tạo DataLoaders: {e}", exc_info=True); return None
 
     def _calculate_dl_test_metrics(self, test_loader, model, device) -> Dict:
         """Tính toán metrics trên tập test cho mô hình học sâu."""

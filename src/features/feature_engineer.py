@@ -1,5 +1,5 @@
 # src/features/feature_engineer.py
-# (PHIÊN BẢN ĐÃ SỬA LỖI RÒ RỈ DỮ LIỆU)
+# (PHIÊN BẢN ĐÃ SỬA LỖI RÒ RỈ DỮ LIỆU VÀ THÊM LỌC NHIỄU)
 
 import pandas as pd
 import numpy as np
@@ -8,7 +8,7 @@ import joblib
 import ta # Thêm import
 from datetime import datetime, timedelta
 from typing import List, Dict
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import RobustScaler
 from sklearn.ensemble import RandomForestClassifier
 
 from ..utils.config import get_config
@@ -22,8 +22,13 @@ class FeatureEngineer:
         self.config = get_config()
         self.db = get_database()
         self.horizons = self.config.get('models.shared.forecast_horizons', [1, 3, 5, 30, 60, 90])
-        # Tăng số lượng features được chọn để cải thiện hiệu suất
         self.top_n_features = self.config.get('features.feature_selection.top_n_features', 30)
+        
+        # Adaptive Thresholds for Noise Filtering
+        threshold_config = self.config.get('features.dynamic_neutral_thresholds', {})
+        self.short_term_thresh = threshold_config.get('short_term', {}).get('threshold', 0.005)
+        self.mid_term_thresh = threshold_config.get('mid_term', {}).get('threshold', 0.05)
+        self.long_term_thresh = threshold_config.get('long_term', {}).get('threshold', 0.1)
 
     def calculate_technical_indicators(self, df: pd.DataFrame) -> pd.DataFrame:
         """
@@ -114,8 +119,16 @@ class FeatureEngineer:
                 df[ratio.replace(' (%)', '_MA4')] = df[ratio].rolling(window=4).mean()
         
         if 'NIM (%)' in df.columns and 'CIR (%)' in df.columns:
-            df['NIM_CIR_Ratio'] = df['NIM (%)'] / df['CIR (%)']
+            df['NIM_CIR_Ratio'] = df['NIM (%)'] / df['CIR (%)'].replace(0, np.nan)
             
+        # === BỔ SUNG MỚI: ĐẶC TRƯNG HYBRID ===
+        if 'BVPS' in df.columns and 'Close' in df.columns:
+            df['PB_Daily'] = df['Close'] / df['BVPS'].replace(0, np.nan)
+        
+        if 'ROA' in df.columns and 'Close' in df.columns:
+            df['Earnings_Yield_Proxy'] = df['ROA'] / df['Close'].replace(0, np.nan)
+        # === KẾT THÚC BỔ SUNG ===
+
         if fundamental_data is not None and 'NPL (%)' in fundamental_data.columns:
             # Đảm bảo 'time' là index cho resample
             try:
@@ -128,48 +141,71 @@ class FeatureEngineer:
             # Đưa 'time' trở lại làm cột để merge_asof
             fundamental_data = fundamental_data.reset_index()
             
-            # === SỬA LỖI RÒ RỈ 1 ===
-            # Đổi direction='forward' (nhìn về tương lai) 
-            # thành 'backward' (nhìn về quá khứ).
             df = pd.merge_asof(df.sort_values('time'), 
                               quarterly_npl[['NPL_Trend']].reset_index(), 
                               on='time', 
-                              direction='backward') # <- ĐÃ SỬA
-            # === KẾT THÚC SỬA ===
+                              direction='backward')
             
         return df
 
     def create_targets(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        # Sửa đổi: Chỉ hỗ trợ 2 lớp (Down, Up) dựa trên biến động giá.
-        # Class 0: Down (Giá giảm hoặc không đổi)
-        # Class 1: Up (Giá tăng)
+        # Sửa đổi: Tạo nhãn với "Asymmetric Volatility-Based Thresholding" với hệ số cân bằng hơn.
+        # Ngưỡng Bất đối xứng để giải quyết vấn đề thiên lệch lớp (class imbalance),
+        # làm cho việc phân loại 'Up' khó hơn và 'Down' dễ hơn một cách tinh tế.
         """
         df = df.copy()
         
-        # Không cần dùng ngưỡng động nữa cho việc tạo nhãn 2 lớp
-        # logger.info("Đang tạo nhãn 2 lớp (Giảm/Tăng) với ngưỡng động theo horizon (loại bỏ lớp Neutral)...")
+        # Lấy ticker để logging
+        ticker = df['Ticker'].iloc[0] if 'Ticker' in df.columns and not df.empty else 'UNKNOWN'
         
-        logger.info("Đang tạo nhãn 2 lớp (Giảm/Tăng) dựa trên biến động giá (ngưỡng 0%)...")
+        logger.info(f"Đang tạo nhãn cho {ticker} với 'Asymmetric Volatility-Based Thresholding' (Balanced)...")
 
+        # 1. Tính toán Historical Volatility
+        returns = df['Close'].pct_change()
+        daily_vol = returns.std()
+        
+        # 2. Hệ số nhạy cảm Bất đối xứng (Cân bằng hơn)
+        k_up = 0.55
+        k_down = 0.45
+        
         for horizon in self.horizons:
+            # 3. Tính toán Ngưỡng Bất đối xứng
+            horizon_vol = daily_vol * np.sqrt(horizon)
+            
+            threshold_up = max(k_up * horizon_vol, 0.005)
+            threshold_down = max(k_down * horizon_vol, 0.005)
+            
+            # 4. Logging
+            logger.info(f"{ticker} t+{horizon} thresholds: Up > {threshold_up:.2%}, Down < -{threshold_down:.2%}")
+
+            # 5. Áp dụng logic gán nhãn
             future_price = df['Close'].shift(-horizon)
             price_change = (future_price - df['Close']) / df['Close']
             
-            # Điều kiện cho 2 lớp (Up=1 nếu >0, Down=0 nếu <=0)
             conditions = [
-                price_change > 0  # Lớp 1 (Up)
+                price_change > threshold_up,    # Lớp 1 (Up)
+                price_change < -threshold_down  # Lớp 0 (Down)
             ]
-            choices = [1]
+            choices = [1, 0]
             
-            # Gán nhãn. Nếu không thỏa mãn conditions (tức là price_change <= 0), gán default=0 (Down)
-            df[f'Target_Direction_t+{horizon}'] = np.select(conditions, choices, default=0)
+            target_col = f'Target_Direction_t+{horizon}'
+            df[target_col] = np.select(conditions, choices, default=np.nan)
             
-            # Không còn các mẫu Neutral để loại bỏ
+            # Logging phân bổ lớp
+            valid_samples = df[target_col].notna().sum()
+            total_possible = len(df.dropna(subset=['Close'])) - horizon
             
-            # In phân bổ lớp để kiểm tra (chỉ các hàng không phải NaN)
-            class_distribution = df[f'Target_Direction_t+{horizon}'].dropna().value_counts().to_dict()
-            logger.debug(f"    Phân bổ lớp cho t+{horizon}: {class_distribution}")
+            if total_possible > 0:
+                logger.debug(
+                    f"    - Horizon t+{horizon}: "
+                    f"Số mẫu hợp lệ: {valid_samples}/{total_possible} "
+                    f"({valid_samples / total_possible:.2%} còn lại)."
+                )
+                class_distribution = df[target_col].dropna().value_counts(normalize=True).to_dict()
+                logger.debug(f"      Phân bổ lớp (Up/Down): { {k: f'{v:.2%}' for k, v in class_distribution.items()} }")
+            else:
+                logger.warning(f"    - Horizon t+{horizon}: Không có mẫu nào để tính toán target.")
 
         return df
 
@@ -235,7 +271,8 @@ class FeatureEngineer:
     def process_all_tickers(self, tickers: List[str] = None):
         """
         HÀM QUAN TRỌNG NHẤT
-        Đã sửa 2 lỗi rò rỉ dữ liệu (merge và scaler).
+        - SỬA LỖI: Đổi `MinMaxScaler` -> `RobustScaler` để xử lý ngoại lệ tốt hơn.
+        - THÊM: Bổ sung đặc trưng hybrid và cập nhật logic tạo nhãn/lọc nhiễu.
         """
         if tickers is None:
             tickers = self.config.get('data.tickers', [])
@@ -271,14 +308,10 @@ class FeatureEngineer:
                     fundamental_data['time'] = pd.to_datetime(fundamental_data['time'])
                     fundamental_data = fundamental_data.sort_values('time').drop_duplicates(subset='time', keep='last')
                     
-                    # === SỬA LỖI RÒ RỈ 2 ===
-                    # Đổi direction='forward' (nhìn về tương lai) 
-                    # thành 'backward' (nhìn về quá khứ).
                     logger.info(f"Đang merge_asof dữ liệu cơ bản cho {ticker} (direction='backward')...")
                     df = pd.merge_asof(ohlcv_data, fundamental_data, 
                                       on='time', 
-                                      direction='backward') # <- ĐÃ SỬA
-                    # === KẾT THÚC SỬA ===
+                                      direction='backward')
                 else:
                     df = ohlcv_data
                     logger.warning(f"No fundamental data found for {ticker}")
@@ -294,7 +327,7 @@ class FeatureEngineer:
                 if fundamental_data is not None and not fundamental_data.empty:
                     df = self.calculate_banking_features(df, fundamental_data)
                 
-                # 4. Tạo TẤT CẢ các mục tiêu
+                # 4. Tạo TẤT CẢ các mục tiêu (với logic lọc nhiễu)
                 df = self.create_targets(df)
                 
                 # 5. Xác định các "Vũ trụ con" (Sub-Universes)
@@ -315,9 +348,11 @@ class FeatureEngineer:
                     'NPL_Diff', 'NIM_Diff', 'CIR_Diff', 'Credit_Growth_Diff', 'NPL_Trend'
                 ]
                 
+                HYBRID_FEATURES = ['PB_Daily', 'Earnings_Yield_Proxy']
+
                 SHORT_TERM_UNIVERSE = [
                     col for col in all_available_features 
-                    if col in SHORT_TERM_TECHNICAL or col in FUNDAMENTAL_DIFFS
+                    if col in SHORT_TERM_TECHNICAL or col in FUNDAMENTAL_DIFFS or col in HYBRID_FEATURES
                 ]
                 
                 LONG_TERM_UNIVERSE = all_available_features
@@ -331,12 +366,7 @@ class FeatureEngineer:
                 
                 df = self._clean_data(df, all_available_features)
                 
-                # === SỬA LỖI RÒ RỈ 3 (SCALER) ===
-                # Chúng ta sẽ fit scaler CHỈ trên 80% dữ liệu đầu
-                # (để mô phỏng tập train) và transform cho toàn bộ.
-                
                 # Tính toán tập "train proxy" để fit scaler
-                # Lấy 80% dữ liệu đầu (sau khi đã clean data)
                 train_proxy_size = int(len(df) * 0.8)
                 df_train_proxy = df.iloc[:train_proxy_size]
                 
@@ -344,8 +374,7 @@ class FeatureEngineer:
                     logger.error(f"Không đủ dữ liệu (Proxy={len(df_train_proxy)}) để fit scaler cho {ticker}, bỏ qua.")
                     continue
                 logger.info(f"Đang fit scaler dựa trên {len(df_train_proxy)} mẫu (80% dữ liệu đầu).")
-                # -----------------------------------
-
+                
                 # 7. Lặp qua từng Horizon để tạo Metadata riêng biệt
                 all_scalers = {} 
                 
@@ -368,11 +397,10 @@ class FeatureEngineer:
                          logger.warning(f"Không tìm thấy golden features cho {ticker} t+{h}. Bỏ qua horizon này.")
                          continue
                     
-                    # 7b. Tạo và Fit Scaler (ĐÃ SỬA)
-                    scaler = MinMaxScaler()
-                    # Fit CHỈ trên 80% dữ liệu (train_proxy)
-                    scaler.fit(df_train_proxy[golden_features_h]) # <- ĐÃ SỬA
-                    all_scalers[h] = scaler # Lưu scaler cho horizon này
+                    # 7b. Tạo và Fit Scaler (SỬA ĐỔI: Dùng RobustScaler)
+                    scaler = RobustScaler()
+                    scaler.fit(df_train_proxy[golden_features_h])
+                    all_scalers[h] = scaler
                     
                     # 7c. Lưu Metadata riêng
                     metadata = {
@@ -382,24 +410,22 @@ class FeatureEngineer:
                     metadata_path = os.path.join(processed_dir, f"{ticker}_metadata_t+{h}.pkl")
                     joblib.dump(metadata, metadata_path)
                 
-                # 8. Chuẩn hóa và Lưu 1 file dữ liệu lớn (ĐÃ SỬA)
-                main_scaler = MinMaxScaler()
-                # Fit CHỈ trên 80% dữ liệu (train_proxy)
+                # 8. Chuẩn hóa và Lưu 1 file dữ liệu lớn (SỬA ĐỔI: Dùng RobustScaler)
+                main_scaler = RobustScaler()
                 logger.info(f"Fit Main Scaler trên {len(df_train_proxy)} mẫu (proxy)...")
-                main_scaler.fit(df_train_proxy[all_available_features]) # <- ĐÃ SỬA
+                main_scaler.fit(df_train_proxy[all_available_features])
                 
                 # Transform trên TOÀN BỘ 100% dữ liệu
                 logger.info(f"Transform Main Scaler trên {len(df)} mẫu (toàn bộ)...")
-                df[all_available_features] = main_scaler.transform(df[all_available_features]) # <- ĐÃ SỬA
+                df[all_available_features] = main_scaler.transform(df[all_available_features])
                 
                 features_path = os.path.join(processed_dir, f"{ticker}_features_scaled.csv")
                 df.to_csv(features_path, index=False)
                 
                 main_scaler_path = os.path.join(processed_dir, f"{ticker}_main_scaler.pkl")
                 joblib.dump(main_scaler, main_scaler_path)
-                # === KẾT THÚC SỬA LỖI 3 ===
 
-                logger.info(f"Đã xử lý và lưu dữ liệu/metadata (an toàn) cho {ticker}")
+                logger.info(f"Đã xử lý và lưu dữ liệu/metadata (an toàn, lọc nhiễu) cho {ticker}")
                 results[ticker] = True
             except Exception as e:
                 logger.error(f"Lỗi khi xử lý {ticker}: {e}", exc_info=True)

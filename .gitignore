@@ -143,8 +143,8 @@ outputs/*.png
 outputs/*.jpg
 outputs/*.npy
 outputs/*.txt
-logs/*.log
-*.log
+# logs/*.log
+# *.log
 
 # MLflow
 mlruns/

@@ -139,7 +139,7 @@ models_to_train:
     - "cnn_bilstm"
     - "transformer"
   baseline_models:
-    - "naive"
+    []
     
 paths:
   models: "models/"

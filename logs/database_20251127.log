@@ -1,0 +1,76 @@
+2025-11-27 14:52:40,967 - database - INFO - Dropped table: VCB_OHLCV
+2025-11-27 14:52:40,974 - database - INFO - Dropped table: VCB_Fundamental
+2025-11-27 14:52:40,984 - database - INFO - Dropped table: BID_OHLCV
+2025-11-27 14:52:40,989 - database - INFO - Dropped table: BID_Fundamental
+2025-11-27 14:52:40,996 - database - INFO - Dropped table: CTG_OHLCV
+2025-11-27 14:52:41,003 - database - INFO - Dropped table: CTG_Fundamental
+2025-11-27 14:52:41,009 - database - INFO - Dropped table: TCB_OHLCV
+2025-11-27 14:52:41,016 - database - INFO - Dropped table: TCB_Fundamental
+2025-11-27 14:52:41,022 - database - INFO - Dropped table: MBB_OHLCV
+2025-11-27 14:52:41,028 - database - INFO - Dropped table: MBB_Fundamental
+2025-11-27 14:52:41,034 - database - INFO - Dropped table: VPB_OHLCV
+2025-11-27 14:52:41,040 - database - INFO - Dropped table: VPB_Fundamental
+2025-11-27 14:52:41,046 - database - INFO - Dropped table: ACB_OHLCV
+2025-11-27 14:52:41,052 - database - INFO - Dropped table: ACB_Fundamental
+2025-11-27 14:52:41,057 - database - INFO - Dropped table: HDB_OHLCV
+2025-11-27 14:52:41,064 - database - INFO - Dropped table: HDB_Fundamental
+2025-11-27 14:52:41,067 - database - INFO - Dropped table: VNINDEX
+2025-11-27 14:52:41,073 - database - INFO - Dropped table: All_OHLCV
+2025-11-27 14:52:45,248 - database - INFO - Saved 4000 rows to table: VCB_OHLCV
+2025-11-27 14:53:05,550 - database - INFO - Saved 65 rows to table: VCB_Fundamental
+2025-11-27 14:53:39,492 - database - INFO - Saved 2981 rows to table: BID_OHLCV
+2025-11-27 14:53:59,797 - database - INFO - Saved 52 rows to table: BID_Fundamental
+2025-11-27 14:54:34,092 - database - INFO - Saved 4000 rows to table: CTG_OHLCV
+2025-11-27 14:54:54,412 - database - INFO - Saved 63 rows to table: CTG_Fundamental
+2025-11-27 14:55:29,073 - database - INFO - Saved 1899 rows to table: TCB_OHLCV
+2025-11-27 14:55:49,495 - database - INFO - Saved 49 rows to table: TCB_Fundamental
+2025-11-27 14:56:23,813 - database - INFO - Saved 3544 rows to table: MBB_OHLCV
+2025-11-27 14:56:44,118 - database - INFO - Saved 54 rows to table: MBB_Fundamental
+2025-11-27 14:57:18,015 - database - INFO - Saved 2096 rows to table: VPB_OHLCV
+2025-11-27 14:57:38,464 - database - INFO - Saved 50 rows to table: VPB_Fundamental
+2025-11-27 14:58:13,215 - database - INFO - Saved 4000 rows to table: ACB_OHLCV
+2025-11-27 14:58:33,506 - database - INFO - Saved 72 rows to table: ACB_Fundamental
+2025-11-27 14:59:07,388 - database - INFO - Saved 1997 rows to table: HDB_OHLCV
+2025-11-27 14:59:27,758 - database - INFO - Saved 35 rows to table: HDB_Fundamental
+2025-11-27 14:59:27,777 - database - INFO - Loaded 4000 rows from table: VCB_OHLCV
+2025-11-27 14:59:27,785 - database - INFO - Loaded 2981 rows from table: BID_OHLCV
+2025-11-27 14:59:27,797 - database - INFO - Loaded 4000 rows from table: CTG_OHLCV
+2025-11-27 14:59:27,806 - database - INFO - Loaded 1899 rows from table: TCB_OHLCV
+2025-11-27 14:59:27,816 - database - INFO - Loaded 3544 rows from table: MBB_OHLCV
+2025-11-27 14:59:27,824 - database - INFO - Loaded 2096 rows from table: VPB_OHLCV
+2025-11-27 14:59:27,835 - database - INFO - Loaded 4000 rows from table: ACB_OHLCV
+2025-11-27 14:59:27,844 - database - INFO - Loaded 1997 rows from table: HDB_OHLCV
+2025-11-27 14:59:27,983 - database - INFO - Saved 24517 rows to table: All_OHLCV
+2025-11-27 14:59:28,015 - database - INFO - Loaded 4000 rows from table: VCB_OHLCV
+2025-11-27 14:59:28,057 - database - INFO - Loaded 65 rows from table: VCB_Fundamental
+2025-11-27 14:59:29,947 - database - INFO - Loaded 2981 rows from table: BID_OHLCV
+2025-11-27 14:59:29,960 - database - INFO - Loaded 52 rows from table: BID_Fundamental
+2025-11-27 14:59:31,471 - database - INFO - Loaded 4000 rows from table: CTG_OHLCV
+2025-11-27 14:59:31,489 - database - INFO - Loaded 63 rows from table: CTG_Fundamental
+2025-11-27 14:59:33,193 - database - INFO - Loaded 1899 rows from table: TCB_OHLCV
+2025-11-27 14:59:33,203 - database - INFO - Loaded 49 rows from table: TCB_Fundamental
+2025-11-27 14:59:35,375 - database - INFO - Loaded 3544 rows from table: MBB_OHLCV
+2025-11-27 14:59:35,386 - database - INFO - Loaded 54 rows from table: MBB_Fundamental
+2025-11-27 14:59:37,001 - database - INFO - Loaded 2096 rows from table: VPB_OHLCV
+2025-11-27 14:59:37,011 - database - INFO - Loaded 50 rows from table: VPB_Fundamental
+2025-11-27 14:59:38,447 - database - INFO - Loaded 4000 rows from table: ACB_OHLCV
+2025-11-27 14:59:38,459 - database - INFO - Loaded 72 rows from table: ACB_Fundamental
+2025-11-27 14:59:40,099 - database - INFO - Loaded 1997 rows from table: HDB_OHLCV
+2025-11-27 14:59:40,108 - database - INFO - Loaded 35 rows from table: HDB_Fundamental
+2025-11-27 16:07:10,873 - database - INFO - Loaded 65 rows from table: VCB_Fundamental
+2025-11-27 16:23:44,450 - database - INFO - Loaded 4000 rows from table: VCB_OHLCV
+2025-11-27 16:23:44,480 - database - INFO - Loaded 65 rows from table: VCB_Fundamental
+2025-11-27 16:23:45,954 - database - INFO - Loaded 2981 rows from table: BID_OHLCV
+2025-11-27 16:23:45,963 - database - INFO - Loaded 52 rows from table: BID_Fundamental
+2025-11-27 16:23:47,248 - database - INFO - Loaded 4000 rows from table: CTG_OHLCV
+2025-11-27 16:23:47,258 - database - INFO - Loaded 63 rows from table: CTG_Fundamental
+2025-11-27 16:23:48,649 - database - INFO - Loaded 1899 rows from table: TCB_OHLCV
+2025-11-27 16:23:48,658 - database - INFO - Loaded 49 rows from table: TCB_Fundamental
+2025-11-27 16:23:49,788 - database - INFO - Loaded 3544 rows from table: MBB_OHLCV
+2025-11-27 16:23:49,799 - database - INFO - Loaded 54 rows from table: MBB_Fundamental
+2025-11-27 16:23:51,285 - database - INFO - Loaded 2096 rows from table: VPB_OHLCV
+2025-11-27 16:23:51,294 - database - INFO - Loaded 50 rows from table: VPB_Fundamental
+2025-11-27 16:23:52,438 - database - INFO - Loaded 4000 rows from table: ACB_OHLCV
+2025-11-27 16:23:52,448 - database - INFO - Loaded 72 rows from table: ACB_Fundamental
+2025-11-27 16:23:53,808 - database - INFO - Loaded 1997 rows from table: HDB_OHLCV
+2025-11-27 16:23:53,815 - database - INFO - Loaded 35 rows from table: HDB_Fundamental

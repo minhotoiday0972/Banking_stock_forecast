@@ -6,7 +6,6 @@ Models package for stock prediction.
 from .base_model import BaseModel, PositionalEncoding, ModelTrainer
 from .cnn_bilstm import CNNBiLSTM
 from .transformer import TransformerModel
-from .baselines import get_baseline_model
 
 __all__ = [
     'BaseModel',
@@ -14,5 +13,4 @@ __all__ = [
     'ModelTrainer',
     'CNNBiLSTM',
     'TransformerModel',
-    'get_baseline_model'
 ]

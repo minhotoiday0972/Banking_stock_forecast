@@ -1,0 +1,1538 @@
+2025-11-27 16:24:20,377 - trainer - INFO - Models to train: ['cnn_bilstm', 'transformer']
+2025-11-27 16:24:20,455 - trainer - INFO - MLflow is enabled. Experiment: 'Banking Stock Prediction'
+2025-11-27 16:24:20,456 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+1 =====
+2025-11-27 16:24:21,024 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:24:21,030 - trainer - INFO - Đã tạo 1938 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:24:21,070 - trainer - INFO - Số lượng lớp trong dữ liệu training: [812, 738]
+2025-11-27 16:24:21,070 - trainer - INFO - Trọng số lớp được tính toán: [0.9544335007667542, 1.0501354932785034]
+2025-11-27 16:24:21,071 - trainer - INFO - DataLoaders đã được tạo: Train=1550, Val=193, Test=195
+2025-11-27 16:24:36,078 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 55.38%
+      - Balanced Accuracy: 50.52%
+      - Precision (Weighted): 52.16%
+      - Recall (Weighted): 55.38%
+      - F1-Score (Weighted): 45.80%
+      - Confusion Matrix:
+[[100   9]
+ [ 78   8]]
+2025-11-27 16:24:47,604 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+3 =====
+2025-11-27 16:24:47,756 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:24:47,762 - trainer - INFO - Đã tạo 2047 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:24:47,765 - trainer - INFO - Số lượng lớp trong dữ liệu training: [824, 813]
+2025-11-27 16:24:47,765 - trainer - INFO - Trọng số lớp được tính toán: [0.9933252334594727, 1.0067651271820068]
+2025-11-27 16:24:47,765 - trainer - INFO - DataLoaders đã được tạo: Train=1637, Val=204, Test=206
+2025-11-27 16:24:59,848 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 48.54%
+      - Balanced Accuracy: 49.42%
+      - Precision (Weighted): 49.97%
+      - Recall (Weighted): 48.54%
+      - F1-Score (Weighted): 48.34%
+      - Confusion Matrix:
+[[47 67]
+ [39 53]]
+2025-11-27 16:25:10,589 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+5 =====
+2025-11-27 16:25:10,785 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:25:10,791 - trainer - INFO - Đã tạo 2074 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:25:10,795 - trainer - INFO - Số lượng lớp trong dữ liệu training: [818, 841]
+2025-11-27 16:25:10,795 - trainer - INFO - Trọng số lớp được tính toán: [1.0140587091445923, 0.9863258004188538]
+2025-11-27 16:25:10,796 - trainer - INFO - DataLoaders đã được tạo: Train=1659, Val=207, Test=208
+2025-11-27 16:25:24,504 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 43.27%
+      - Balanced Accuracy: 42.93%
+      - Precision (Weighted): 42.84%
+      - Recall (Weighted): 43.27%
+      - F1-Score (Weighted): 42.86%
+      - Confusion Matrix:
+[[56 52]
+ [66 34]]
+2025-11-27 16:25:34,140 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+30 =====
+2025-11-27 16:25:34,348 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:25:34,354 - trainer - INFO - Đã tạo 2230 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:25:34,362 - trainer - INFO - Số lượng lớp trong dữ liệu training: [759, 1025]
+2025-11-27 16:25:34,363 - trainer - INFO - Trọng số lớp được tính toán: [1.175230622291565, 0.8702439069747925]
+2025-11-27 16:25:34,363 - trainer - INFO - DataLoaders đã được tạo: Train=1784, Val=223, Test=223
+2025-11-27 16:25:47,097 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 55.16%
+      - Balanced Accuracy: 50.96%
+      - Precision (Weighted): 52.41%
+      - Recall (Weighted): 55.16%
+      - F1-Score (Weighted): 48.86%
+      - Confusion Matrix:
+[[ 16  82]
+ [ 18 107]]
+2025-11-27 16:25:57,155 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+60 =====
+2025-11-27 16:25:57,356 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:25:57,364 - trainer - INFO - Đã tạo 2208 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:25:57,372 - trainer - INFO - Số lượng lớp trong dữ liệu training: [695, 1071]
+2025-11-27 16:25:57,372 - trainer - INFO - Trọng số lớp được tính toán: [1.2705036401748657, 0.8244631290435791]
+2025-11-27 16:25:57,372 - trainer - INFO - DataLoaders đã được tạo: Train=1766, Val=220, Test=222
+2025-11-27 16:26:13,402 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 76.58%
+      - Balanced Accuracy: 73.01%
+      - Precision (Weighted): 78.56%
+      - Recall (Weighted): 76.58%
+      - F1-Score (Weighted): 75.15%
+      - Confusion Matrix:
+[[ 48  44]
+ [  8 122]]
+2025-11-27 16:26:24,840 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_cnn_bilstm_t+90 =====
+2025-11-27 16:26:25,086 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:26:25,092 - trainer - INFO - Đã tạo 2061 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:26:25,100 - trainer - INFO - Số lượng lớp trong dữ liệu training: [558, 1090]
+2025-11-27 16:26:25,101 - trainer - INFO - Trọng số lớp được tính toán: [1.4767024517059326, 0.7559633255004883]
+2025-11-27 16:26:25,101 - trainer - INFO - DataLoaders đã được tạo: Train=1648, Val=206, Test=207
+2025-11-27 16:26:43,007 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 74.40%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 55.35%
+      - Recall (Weighted): 74.40%
+      - F1-Score (Weighted): 63.47%
+      - Confusion Matrix:
+[[  0  53]
+ [  0 154]]
+2025-11-27 16:26:53,375 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+1 =====
+2025-11-27 16:26:53,583 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:26:53,589 - trainer - INFO - Đã tạo 1938 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:26:53,592 - trainer - INFO - Số lượng lớp trong dữ liệu training: [812, 738]
+2025-11-27 16:26:53,594 - trainer - INFO - Trọng số lớp được tính toán: [0.9544335007667542, 1.0501354932785034]
+2025-11-27 16:26:53,594 - trainer - INFO - DataLoaders đã được tạo: Train=1550, Val=193, Test=195
+2025-11-27 16:27:37,926 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 50.77%
+      - Balanced Accuracy: 50.93%
+      - Precision (Weighted): 51.62%
+      - Recall (Weighted): 50.77%
+      - F1-Score (Weighted): 50.93%
+      - Confusion Matrix:
+[[54 55]
+ [41 45]]
+2025-11-27 16:27:48,097 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+3 =====
+2025-11-27 16:27:48,295 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:27:48,301 - trainer - INFO - Đã tạo 2047 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:27:48,306 - trainer - INFO - Số lượng lớp trong dữ liệu training: [824, 813]
+2025-11-27 16:27:48,307 - trainer - INFO - Trọng số lớp được tính toán: [0.9933252334594727, 1.0067651271820068]
+2025-11-27 16:27:48,307 - trainer - INFO - DataLoaders đã được tạo: Train=1637, Val=204, Test=206
+2025-11-27 16:28:07,730 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 53.88%
+      - Balanced Accuracy: 53.61%
+      - Precision (Weighted): 54.13%
+      - Recall (Weighted): 53.88%
+      - F1-Score (Weighted): 53.98%
+      - Confusion Matrix:
+[[64 50]
+ [45 47]]
+2025-11-27 16:28:18,525 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+5 =====
+2025-11-27 16:28:18,761 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:28:18,768 - trainer - INFO - Đã tạo 2074 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:28:18,774 - trainer - INFO - Số lượng lớp trong dữ liệu training: [818, 841]
+2025-11-27 16:28:18,775 - trainer - INFO - Trọng số lớp được tính toán: [1.0140587091445923, 0.9863258004188538]
+2025-11-27 16:28:18,775 - trainer - INFO - DataLoaders đã được tạo: Train=1659, Val=207, Test=208
+2025-11-27 16:28:50,370 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 55.29%
+      - Balanced Accuracy: 55.69%
+      - Precision (Weighted): 56.04%
+      - Recall (Weighted): 55.29%
+      - F1-Score (Weighted): 54.85%
+      - Confusion Matrix:
+[[49 59]
+ [34 66]]
+2025-11-27 16:29:00,120 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+30 =====
+2025-11-27 16:29:00,313 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:29:00,319 - trainer - INFO - Đã tạo 2230 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:29:00,327 - trainer - INFO - Số lượng lớp trong dữ liệu training: [759, 1025]
+2025-11-27 16:29:00,328 - trainer - INFO - Trọng số lớp được tính toán: [1.175230622291565, 0.8702439069747925]
+2025-11-27 16:29:00,328 - trainer - INFO - DataLoaders đã được tạo: Train=1784, Val=223, Test=223
+2025-11-27 16:29:23,664 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 65.47%
+      - Balanced Accuracy: 62.92%
+      - Precision (Weighted): 65.87%
+      - Recall (Weighted): 65.47%
+      - F1-Score (Weighted): 63.68%
+      - Confusion Matrix:
+[[ 41  57]
+ [ 20 105]]
+2025-11-27 16:29:34,272 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+60 =====
+2025-11-27 16:29:34,479 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:29:34,485 - trainer - INFO - Đã tạo 2208 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:29:34,493 - trainer - INFO - Số lượng lớp trong dữ liệu training: [695, 1071]
+2025-11-27 16:29:34,494 - trainer - INFO - Trọng số lớp được tính toán: [1.2705036401748657, 0.8244631290435791]
+2025-11-27 16:29:34,494 - trainer - INFO - DataLoaders đã được tạo: Train=1766, Val=220, Test=222
+2025-11-27 16:29:55,715 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 82.88%
+      - Balanced Accuracy: 79.67%
+      - Precision (Weighted): 85.72%
+      - Recall (Weighted): 82.88%
+      - F1-Score (Weighted): 81.93%
+      - Confusion Matrix:
+[[ 56  36]
+ [  2 128]]
+2025-11-27 16:30:05,452 - trainer - INFO - ===== STARTING PIPELINE FOR: VCB_transformer_t+90 =====
+2025-11-27 16:30:05,642 - trainer - INFO - Đã tải 4000 mẫu cho VCB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:30:05,649 - trainer - INFO - Đã tạo 2061 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:30:05,657 - trainer - INFO - Số lượng lớp trong dữ liệu training: [558, 1090]
+2025-11-27 16:30:05,657 - trainer - INFO - Trọng số lớp được tính toán: [1.4767024517059326, 0.7559633255004883]
+2025-11-27 16:30:05,657 - trainer - INFO - DataLoaders đã được tạo: Train=1648, Val=206, Test=207
+2025-11-27 16:30:26,411 - trainer - INFO - 
+--- Kết quả Test cho VCB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 74.40%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 55.35%
+      - Recall (Weighted): 74.40%
+      - F1-Score (Weighted): 63.47%
+      - Confusion Matrix:
+[[  0  53]
+ [  0 154]]
+2025-11-27 16:30:36,724 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+1 =====
+2025-11-27 16:30:36,947 - trainer - INFO - Đã tải 2981 mẫu cho BID t+1 (trước khi lọc nhiễu)
+2025-11-27 16:30:36,951 - trainer - INFO - Đã tạo 1404 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:30:36,955 - trainer - INFO - Số lượng lớp trong dữ liệu training: [569, 554]
+2025-11-27 16:30:36,956 - trainer - INFO - Trọng số lớp được tính toán: [0.9868189692497253, 1.013537883758545]
+2025-11-27 16:30:36,956 - trainer - INFO - DataLoaders đã được tạo: Train=1123, Val=140, Test=141
+2025-11-27 16:30:55,266 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 48.94%
+      - Balanced Accuracy: 48.91%
+      - Precision (Weighted): 48.94%
+      - Recall (Weighted): 48.94%
+      - F1-Score (Weighted): 48.94%
+      - Confusion Matrix:
+[[36 36]
+ [36 33]]
+2025-11-27 16:31:05,211 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+3 =====
+2025-11-27 16:31:05,402 - trainer - INFO - Đã tải 2981 mẫu cho BID t+3 (trước khi lọc nhiễu)
+2025-11-27 16:31:05,408 - trainer - INFO - Đã tạo 1475 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:31:05,411 - trainer - INFO - Số lượng lớp trong dữ liệu training: [594, 586]
+2025-11-27 16:31:05,411 - trainer - INFO - Trọng số lớp được tính toán: [0.9932659864425659, 1.0068259239196777]
+2025-11-27 16:31:05,411 - trainer - INFO - DataLoaders đã được tạo: Train=1180, Val=147, Test=148
+2025-11-27 16:31:14,752 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 61.49%
+      - Balanced Accuracy: 51.17%
+      - Precision (Weighted): 63.45%
+      - Recall (Weighted): 61.49%
+      - F1-Score (Weighted): 48.63%
+      - Confusion Matrix:
+[[89  1]
+ [56  2]]
+2025-11-27 16:31:24,916 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+5 =====
+2025-11-27 16:31:25,118 - trainer - INFO - Đã tải 2981 mẫu cho BID t+5 (trước khi lọc nhiễu)
+2025-11-27 16:31:25,123 - trainer - INFO - Đã tạo 1474 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:31:25,125 - trainer - INFO - Số lượng lớp trong dữ liệu training: [597, 582]
+2025-11-27 16:31:25,126 - trainer - INFO - Trọng số lớp được tính toán: [0.9874371886253357, 1.012886643409729]
+2025-11-27 16:31:25,126 - trainer - INFO - DataLoaders đã được tạo: Train=1179, Val=147, Test=148
+2025-11-27 16:31:55,251 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 59.46%
+      - Balanced Accuracy: 49.66%
+      - Precision (Weighted): 51.70%
+      - Recall (Weighted): 59.46%
+      - F1-Score (Weighted): 49.84%
+      - Confusion Matrix:
+[[84  7]
+ [53  4]]
+2025-11-27 16:32:04,624 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+30 =====
+2025-11-27 16:32:04,805 - trainer - INFO - Đã tải 2981 mẫu cho BID t+30 (trước khi lọc nhiễu)
+2025-11-27 16:32:04,810 - trainer - INFO - Đã tạo 1647 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:32:04,816 - trainer - INFO - Số lượng lớp trong dữ liệu training: [574, 743]
+2025-11-27 16:32:04,816 - trainer - INFO - Trọng số lớp được tính toán: [1.1472125053405762, 0.8862718939781189]
+2025-11-27 16:32:04,817 - trainer - INFO - DataLoaders đã được tạo: Train=1317, Val=164, Test=166
+2025-11-27 16:32:21,347 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 66.27%
+      - Balanced Accuracy: 61.04%
+      - Precision (Weighted): 65.30%
+      - Recall (Weighted): 66.27%
+      - F1-Score (Weighted): 63.97%
+      - Confusion Matrix:
+[[86 15]
+ [41 24]]
+2025-11-27 16:32:32,256 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+60 =====
+2025-11-27 16:32:32,469 - trainer - INFO - Đã tải 2981 mẫu cho BID t+60 (trước khi lọc nhiễu)
+2025-11-27 16:32:32,475 - trainer - INFO - Đã tạo 1612 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:32:32,482 - trainer - INFO - Số lượng lớp trong dữ liệu training: [483, 806]
+2025-11-27 16:32:32,483 - trainer - INFO - Trọng số lớp được tính toán: [1.3343685865402222, 0.7996277809143066]
+2025-11-27 16:32:32,484 - trainer - INFO - DataLoaders đã được tạo: Train=1289, Val=161, Test=162
+2025-11-27 16:32:43,606 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 88.89%
+      - Balanced Accuracy: 87.02%
+      - Precision (Weighted): 89.23%
+      - Recall (Weighted): 88.89%
+      - F1-Score (Weighted): 88.69%
+      - Confusion Matrix:
+[[94  4]
+ [14 50]]
+2025-11-27 16:32:54,148 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_cnn_bilstm_t+90 =====
+2025-11-27 16:32:54,364 - trainer - INFO - Đã tải 2981 mẫu cho BID t+90 (trước khi lọc nhiễu)
+2025-11-27 16:32:54,369 - trainer - INFO - Đã tạo 1491 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:32:54,374 - trainer - INFO - Số lượng lớp trong dữ liệu training: [372, 820]
+2025-11-27 16:32:54,375 - trainer - INFO - Trọng số lớp được tính toán: [1.602150559425354, 0.7268292903900146]
+2025-11-27 16:32:54,375 - trainer - INFO - DataLoaders đã được tạo: Train=1192, Val=149, Test=150
+2025-11-27 16:33:04,418 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 44.00%
+      - Balanced Accuracy: 53.33%
+      - Precision (Weighted): 76.67%
+      - Recall (Weighted): 44.00%
+      - F1-Score (Weighted): 31.03%
+      - Confusion Matrix:
+[[60  0]
+ [84  6]]
+2025-11-27 16:33:14,519 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+1 =====
+2025-11-27 16:33:14,704 - trainer - INFO - Đã tải 2981 mẫu cho BID t+1 (trước khi lọc nhiễu)
+2025-11-27 16:33:14,710 - trainer - INFO - Đã tạo 1404 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:33:14,712 - trainer - INFO - Số lượng lớp trong dữ liệu training: [569, 554]
+2025-11-27 16:33:14,713 - trainer - INFO - Trọng số lớp được tính toán: [0.9868189692497253, 1.013537883758545]
+2025-11-27 16:33:14,713 - trainer - INFO - DataLoaders đã được tạo: Train=1123, Val=140, Test=141
+2025-11-27 16:33:46,743 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 56.74%
+      - Balanced Accuracy: 56.82%
+      - Precision (Weighted): 56.90%
+      - Recall (Weighted): 56.74%
+      - F1-Score (Weighted): 56.68%
+      - Confusion Matrix:
+[[38 34]
+ [27 42]]
+2025-11-27 16:33:56,763 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+3 =====
+2025-11-27 16:33:56,966 - trainer - INFO - Đã tải 2981 mẫu cho BID t+3 (trước khi lọc nhiễu)
+2025-11-27 16:33:56,971 - trainer - INFO - Đã tạo 1475 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:33:56,978 - trainer - INFO - Số lượng lớp trong dữ liệu training: [594, 586]
+2025-11-27 16:33:56,978 - trainer - INFO - Trọng số lớp được tính toán: [0.9932659864425659, 1.0068259239196777]
+2025-11-27 16:33:56,978 - trainer - INFO - DataLoaders đã được tạo: Train=1180, Val=147, Test=148
+2025-11-27 16:34:16,171 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 60.81%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 36.98%
+      - Recall (Weighted): 60.81%
+      - F1-Score (Weighted): 45.99%
+      - Confusion Matrix:
+[[90  0]
+ [58  0]]
+2025-11-27 16:34:26,465 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+5 =====
+2025-11-27 16:34:26,682 - trainer - INFO - Đã tải 2981 mẫu cho BID t+5 (trước khi lọc nhiễu)
+2025-11-27 16:34:26,687 - trainer - INFO - Đã tạo 1474 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:34:26,690 - trainer - INFO - Số lượng lớp trong dữ liệu training: [597, 582]
+2025-11-27 16:34:26,690 - trainer - INFO - Trọng số lớp được tính toán: [0.9874371886253357, 1.012886643409729]
+2025-11-27 16:34:26,690 - trainer - INFO - DataLoaders đã được tạo: Train=1179, Val=147, Test=148
+2025-11-27 16:34:46,399 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 69.59%
+      - Balanced Accuracy: 61.84%
+      - Precision (Weighted): 72.60%
+      - Recall (Weighted): 69.59%
+      - F1-Score (Weighted): 64.86%
+      - Confusion Matrix:
+[[87  4]
+ [41 16]]
+2025-11-27 16:34:56,833 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+30 =====
+2025-11-27 16:34:57,025 - trainer - INFO - Đã tải 2981 mẫu cho BID t+30 (trước khi lọc nhiễu)
+2025-11-27 16:34:57,030 - trainer - INFO - Đã tạo 1647 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:34:57,037 - trainer - INFO - Số lượng lớp trong dữ liệu training: [574, 743]
+2025-11-27 16:34:57,037 - trainer - INFO - Trọng số lớp được tính toán: [1.1472125053405762, 0.8862718939781189]
+2025-11-27 16:34:57,038 - trainer - INFO - DataLoaders đã được tạo: Train=1317, Val=164, Test=166
+2025-11-27 16:35:24,554 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 76.51%
+      - Balanced Accuracy: 70.55%
+      - Precision (Weighted): 80.84%
+      - Recall (Weighted): 76.51%
+      - F1-Score (Weighted): 73.91%
+      - Confusion Matrix:
+[[99  2]
+ [37 28]]
+2025-11-27 16:35:34,845 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+60 =====
+2025-11-27 16:35:35,057 - trainer - INFO - Đã tải 2981 mẫu cho BID t+60 (trước khi lọc nhiễu)
+2025-11-27 16:35:35,062 - trainer - INFO - Đã tạo 1612 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:35:35,069 - trainer - INFO - Số lượng lớp trong dữ liệu training: [483, 806]
+2025-11-27 16:35:35,069 - trainer - INFO - Trọng số lớp được tính toán: [1.3343685865402222, 0.7996277809143066]
+2025-11-27 16:35:35,069 - trainer - INFO - DataLoaders đã được tạo: Train=1289, Val=161, Test=162
+2025-11-27 16:36:20,068 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 52.47%
+      - Balanced Accuracy: 56.11%
+      - Precision (Weighted): 59.15%
+      - Recall (Weighted): 52.47%
+      - F1-Score (Weighted): 51.77%
+      - Confusion Matrix:
+[[38 60]
+ [17 47]]
+2025-11-27 16:36:30,210 - trainer - INFO - ===== STARTING PIPELINE FOR: BID_transformer_t+90 =====
+2025-11-27 16:36:30,404 - trainer - INFO - Đã tải 2981 mẫu cho BID t+90 (trước khi lọc nhiễu)
+2025-11-27 16:36:30,408 - trainer - INFO - Đã tạo 1491 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:36:30,414 - trainer - INFO - Số lượng lớp trong dữ liệu training: [372, 820]
+2025-11-27 16:36:30,415 - trainer - INFO - Trọng số lớp được tính toán: [1.602150559425354, 0.7268292903900146]
+2025-11-27 16:36:30,415 - trainer - INFO - DataLoaders đã được tạo: Train=1192, Val=149, Test=150
+2025-11-27 16:36:53,073 - trainer - INFO - 
+--- Kết quả Test cho BID - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 45.33%
+      - Balanced Accuracy: 54.44%
+      - Precision (Weighted): 76.90%
+      - Recall (Weighted): 45.33%
+      - F1-Score (Weighted): 33.56%
+      - Confusion Matrix:
+[[60  0]
+ [82  8]]
+2025-11-27 16:37:02,186 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+1 =====
+2025-11-27 16:37:02,396 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+1 (trước khi lọc nhiễu)
+2025-11-27 16:37:02,401 - trainer - INFO - Đã tạo 1920 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:37:02,405 - trainer - INFO - Số lượng lớp trong dữ liệu training: [825, 711]
+2025-11-27 16:37:02,406 - trainer - INFO - Trọng số lớp được tính toán: [0.9309090971946716, 1.0801687240600586]
+2025-11-27 16:37:02,406 - trainer - INFO - DataLoaders đã được tạo: Train=1536, Val=192, Test=192
+2025-11-27 16:37:13,278 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 48.96%
+      - Balanced Accuracy: 48.96%
+      - Precision (Weighted): 48.95%
+      - Recall (Weighted): 48.96%
+      - F1-Score (Weighted): 48.82%
+      - Confusion Matrix:
+[[42 54]
+ [44 52]]
+2025-11-27 16:37:23,891 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+3 =====
+2025-11-27 16:37:24,111 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+3 (trước khi lọc nhiễu)
+2025-11-27 16:37:24,117 - trainer - INFO - Đã tạo 2047 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:37:24,124 - trainer - INFO - Số lượng lớp trong dữ liệu training: [847, 790]
+2025-11-27 16:37:24,124 - trainer - INFO - Trọng số lớp được tính toán: [0.9663518071174622, 1.0360759496688843]
+2025-11-27 16:37:24,125 - trainer - INFO - DataLoaders đã được tạo: Train=1637, Val=204, Test=206
+2025-11-27 16:37:45,508 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 50.49%
+      - Balanced Accuracy: 53.07%
+      - Precision (Weighted): 55.98%
+      - Recall (Weighted): 50.49%
+      - F1-Score (Weighted): 44.67%
+      - Confusion Matrix:
+[[82 13]
+ [89 22]]
+2025-11-27 16:37:55,788 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+5 =====
+2025-11-27 16:37:55,978 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+5 (trước khi lọc nhiễu)
+2025-11-27 16:37:55,986 - trainer - INFO - Đã tạo 2055 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:37:55,990 - trainer - INFO - Số lượng lớp trong dữ liệu training: [852, 792]
+2025-11-27 16:37:55,991 - trainer - INFO - Trọng số lớp được tính toán: [0.9647887349128723, 1.0378787517547607]
+2025-11-27 16:37:55,991 - trainer - INFO - DataLoaders đã được tạo: Train=1644, Val=205, Test=206
+2025-11-27 16:38:11,974 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 43.20%
+      - Balanced Accuracy: 45.66%
+      - Precision (Weighted): 45.97%
+      - Recall (Weighted): 43.20%
+      - F1-Score (Weighted): 41.76%
+      - Confusion Matrix:
+[[55 33]
+ [84 34]]
+2025-11-27 16:38:21,214 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+30 =====
+2025-11-27 16:38:21,419 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+30 (trước khi lọc nhiễu)
+2025-11-27 16:38:21,428 - trainer - INFO - Đã tạo 2230 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:38:21,437 - trainer - INFO - Số lượng lớp trong dữ liệu training: [853, 931]
+2025-11-27 16:38:21,438 - trainer - INFO - Trọng số lớp được tính toán: [1.0457209348678589, 0.9581095576286316]
+2025-11-27 16:38:21,438 - trainer - INFO - DataLoaders đã được tạo: Train=1784, Val=223, Test=223
+2025-11-27 16:38:56,407 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 78.03%
+      - Balanced Accuracy: 65.97%
+      - Precision (Weighted): 83.41%
+      - Recall (Weighted): 78.03%
+      - F1-Score (Weighted): 73.89%
+      - Confusion Matrix:
+[[ 23  49]
+ [  0 151]]
+2025-11-27 16:39:05,484 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+60 =====
+2025-11-27 16:39:05,688 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+60 (trước khi lọc nhiễu)
+2025-11-27 16:39:05,693 - trainer - INFO - Đã tạo 2125 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:39:05,704 - trainer - INFO - Số lượng lớp trong dữ liệu training: [768, 932]
+2025-11-27 16:39:05,704 - trainer - INFO - Trọng số lớp được tính toán: [1.1067708730697632, 0.9120171666145325]
+2025-11-27 16:39:05,705 - trainer - INFO - DataLoaders đã được tạo: Train=1700, Val=212, Test=213
+2025-11-27 16:39:20,256 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 93.90%
+      - Balanced Accuracy: 80.30%
+      - Precision (Weighted): 94.31%
+      - Recall (Weighted): 93.90%
+      - F1-Score (Weighted): 93.25%
+      - Confusion Matrix:
+[[ 20  13]
+ [  0 180]]
+2025-11-27 16:39:29,912 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_cnn_bilstm_t+90 =====
+2025-11-27 16:39:30,108 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+90 (trước khi lọc nhiễu)
+2025-11-27 16:39:30,115 - trainer - INFO - Đã tạo 2070 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:39:30,124 - trainer - INFO - Số lượng lớp trong dữ liệu training: [688, 968]
+2025-11-27 16:39:30,124 - trainer - INFO - Trọng số lớp được tính toán: [1.2034883499145508, 0.85537189245224]
+2025-11-27 16:39:30,125 - trainer - INFO - DataLoaders đã được tạo: Train=1656, Val=207, Test=207
+2025-11-27 16:39:44,813 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 88.89%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 79.01%
+      - Recall (Weighted): 88.89%
+      - F1-Score (Weighted): 83.66%
+      - Confusion Matrix:
+[[  0  23]
+ [  0 184]]
+2025-11-27 16:39:54,231 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+1 =====
+2025-11-27 16:39:54,422 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+1 (trước khi lọc nhiễu)
+2025-11-27 16:39:54,428 - trainer - INFO - Đã tạo 1920 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:39:54,432 - trainer - INFO - Số lượng lớp trong dữ liệu training: [825, 711]
+2025-11-27 16:39:54,432 - trainer - INFO - Trọng số lớp được tính toán: [0.9309090971946716, 1.0801687240600586]
+2025-11-27 16:39:54,432 - trainer - INFO - DataLoaders đã được tạo: Train=1536, Val=192, Test=192
+2025-11-27 16:40:21,595 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 48.96%
+      - Balanced Accuracy: 48.96%
+      - Precision (Weighted): 48.90%
+      - Recall (Weighted): 48.96%
+      - F1-Score (Weighted): 48.28%
+      - Confusion Matrix:
+[[58 38]
+ [60 36]]
+2025-11-27 16:40:30,769 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+3 =====
+2025-11-27 16:40:30,956 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+3 (trước khi lọc nhiễu)
+2025-11-27 16:40:30,962 - trainer - INFO - Đã tạo 2047 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:40:30,967 - trainer - INFO - Số lượng lớp trong dữ liệu training: [847, 790]
+2025-11-27 16:40:30,967 - trainer - INFO - Trọng số lớp được tính toán: [0.9663518071174622, 1.0360759496688843]
+2025-11-27 16:40:30,967 - trainer - INFO - DataLoaders đã được tạo: Train=1637, Val=204, Test=206
+2025-11-27 16:41:05,835 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 47.57%
+      - Balanced Accuracy: 49.30%
+      - Precision (Weighted): 49.41%
+      - Recall (Weighted): 47.57%
+      - F1-Score (Weighted): 44.95%
+      - Confusion Matrix:
+[[68 27]
+ [81 30]]
+2025-11-27 16:41:15,490 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+5 =====
+2025-11-27 16:41:15,686 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+5 (trước khi lọc nhiễu)
+2025-11-27 16:41:15,693 - trainer - INFO - Đã tạo 2055 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:41:15,697 - trainer - INFO - Số lượng lớp trong dữ liệu training: [852, 792]
+2025-11-27 16:41:15,697 - trainer - INFO - Trọng số lớp được tính toán: [0.9647887349128723, 1.0378787517547607]
+2025-11-27 16:41:15,698 - trainer - INFO - DataLoaders đã được tạo: Train=1644, Val=205, Test=206
+2025-11-27 16:41:32,825 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 40.29%
+      - Balanced Accuracy: 46.00%
+      - Precision (Weighted): 39.14%
+      - Recall (Weighted): 40.29%
+      - F1-Score (Weighted): 30.07%
+      - Confusion Matrix:
+[[ 75  13]
+ [110   8]]
+2025-11-27 16:41:42,355 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+30 =====
+2025-11-27 16:41:42,552 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+30 (trước khi lọc nhiễu)
+2025-11-27 16:41:42,558 - trainer - INFO - Đã tạo 2230 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:41:42,568 - trainer - INFO - Số lượng lớp trong dữ liệu training: [853, 931]
+2025-11-27 16:41:42,569 - trainer - INFO - Trọng số lớp được tính toán: [1.0457209348678589, 0.9581095576286316]
+2025-11-27 16:41:42,569 - trainer - INFO - DataLoaders đã được tạo: Train=1784, Val=223, Test=223
+2025-11-27 16:42:04,387 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 68.16%
+      - Balanced Accuracy: 50.69%
+      - Precision (Weighted): 78.34%
+      - Recall (Weighted): 68.16%
+      - F1-Score (Weighted): 55.71%
+      - Confusion Matrix:
+[[  1  71]
+ [  0 151]]
+2025-11-27 16:42:13,464 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+60 =====
+2025-11-27 16:42:13,650 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+60 (trước khi lọc nhiễu)
+2025-11-27 16:42:13,657 - trainer - INFO - Đã tạo 2125 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:42:13,667 - trainer - INFO - Số lượng lớp trong dữ liệu training: [768, 932]
+2025-11-27 16:42:13,668 - trainer - INFO - Trọng số lớp được tính toán: [1.1067708730697632, 0.9120171666145325]
+2025-11-27 16:42:13,668 - trainer - INFO - DataLoaders đã được tạo: Train=1700, Val=212, Test=213
+2025-11-27 16:42:31,127 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 84.51%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 71.41%
+      - Recall (Weighted): 84.51%
+      - F1-Score (Weighted): 77.41%
+      - Confusion Matrix:
+[[  0  33]
+ [  0 180]]
+2025-11-27 16:42:40,421 - trainer - INFO - ===== STARTING PIPELINE FOR: CTG_transformer_t+90 =====
+2025-11-27 16:42:40,608 - trainer - INFO - Đã tải 4000 mẫu cho CTG t+90 (trước khi lọc nhiễu)
+2025-11-27 16:42:40,615 - trainer - INFO - Đã tạo 2070 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:42:40,623 - trainer - INFO - Số lượng lớp trong dữ liệu training: [688, 968]
+2025-11-27 16:42:40,624 - trainer - INFO - Trọng số lớp được tính toán: [1.2034883499145508, 0.85537189245224]
+2025-11-27 16:42:40,624 - trainer - INFO - DataLoaders đã được tạo: Train=1656, Val=207, Test=207
+2025-11-27 16:43:04,401 - trainer - INFO - 
+--- Kết quả Test cho CTG - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 96.14%
+      - Balanced Accuracy: 82.61%
+      - Precision (Weighted): 96.30%
+      - Recall (Weighted): 96.14%
+      - F1-Score (Weighted): 95.77%
+      - Confusion Matrix:
+[[ 15   8]
+ [  0 184]]
+2025-11-27 16:43:14,231 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+1 =====
+2025-11-27 16:43:14,445 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:43:14,448 - trainer - INFO - Đã tạo 855 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:43:14,450 - trainer - INFO - Số lượng lớp trong dữ liệu training: [339, 345]
+2025-11-27 16:43:14,450 - trainer - INFO - Trọng số lớp được tính toán: [1.0088495016098022, 0.991304337978363]
+2025-11-27 16:43:14,450 - trainer - INFO - DataLoaders đã được tạo: Train=684, Val=85, Test=86
+2025-11-27 16:43:21,246 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 46.51%
+      - Balanced Accuracy: 44.78%
+      - Precision (Weighted): 43.66%
+      - Recall (Weighted): 46.51%
+      - F1-Score (Weighted): 43.12%
+      - Confusion Matrix:
+[[32 14]
+ [32  8]]
+2025-11-27 16:43:30,981 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+3 =====
+2025-11-27 16:43:31,151 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:43:31,155 - trainer - INFO - Đã tạo 997 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:43:31,156 - trainer - INFO - Số lượng lớp trong dữ liệu training: [397, 400]
+2025-11-27 16:43:31,157 - trainer - INFO - Trọng số lớp được tính toán: [1.003778338432312, 0.9962499737739563]
+2025-11-27 16:43:31,157 - trainer - INFO - DataLoaders đã được tạo: Train=797, Val=99, Test=101
+2025-11-27 16:43:38,847 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 51.49%
+      - Balanced Accuracy: 56.56%
+      - Precision (Weighted): 63.68%
+      - Recall (Weighted): 51.49%
+      - F1-Score (Weighted): 46.06%
+      - Confusion Matrix:
+[[39  4]
+ [45 13]]
+2025-11-27 16:43:48,364 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+5 =====
+2025-11-27 16:43:48,541 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:43:48,545 - trainer - INFO - Đã tạo 1023 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:43:48,547 - trainer - INFO - Số lượng lớp trong dữ liệu training: [400, 418]
+2025-11-27 16:43:48,547 - trainer - INFO - Trọng số lớp được tính toán: [1.0225000381469727, 0.9784688949584961]
+2025-11-27 16:43:48,547 - trainer - INFO - DataLoaders đã được tạo: Train=818, Val=102, Test=103
+2025-11-27 16:43:57,470 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 55.34%
+      - Balanced Accuracy: 49.15%
+      - Precision (Weighted): 49.71%
+      - Recall (Weighted): 55.34%
+      - F1-Score (Weighted): 47.84%
+      - Confusion Matrix:
+[[ 5 38]
+ [ 8 52]]
+2025-11-27 16:44:06,756 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+30 =====
+2025-11-27 16:44:06,952 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:44:06,956 - trainer - INFO - Đã tạo 1048 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:44:06,960 - trainer - INFO - Số lượng lớp trong dữ liệu training: [364, 474]
+2025-11-27 16:44:06,961 - trainer - INFO - Trọng số lớp được tính toán: [1.1510988473892212, 0.8839662671089172]
+2025-11-27 16:44:06,961 - trainer - INFO - DataLoaders đã được tạo: Train=838, Val=104, Test=106
+2025-11-27 16:44:14,499 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 100.00%
+      - Balanced Accuracy: 100.00%
+      - Precision (Weighted): 100.00%
+      - Recall (Weighted): 100.00%
+      - F1-Score (Weighted): 100.00%
+      - Confusion Matrix:
+[[21  0]
+ [ 0 85]]
+2025-11-27 16:44:23,585 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+60 =====
+2025-11-27 16:44:23,748 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:44:23,751 - trainer - INFO - Đã tạo 1068 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:44:23,755 - trainer - INFO - Số lượng lớp trong dữ liệu training: [367, 487]
+2025-11-27 16:44:23,756 - trainer - INFO - Trọng số lớp được tính toán: [1.1634877920150757, 0.8767967224121094]
+2025-11-27 16:44:23,756 - trainer - INFO - DataLoaders đã được tạo: Train=854, Val=106, Test=108
+2025-11-27 16:44:31,063 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 87.04%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 75.75%
+      - Recall (Weighted): 87.04%
+      - F1-Score (Weighted): 81.00%
+      - Confusion Matrix:
+[[ 0 14]
+ [ 0 94]]
+2025-11-27 16:44:40,225 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_cnn_bilstm_t+90 =====
+2025-11-27 16:44:40,398 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:44:40,401 - trainer - INFO - Đã tạo 1060 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:44:40,406 - trainer - INFO - Số lượng lớp trong dữ liệu training: [383, 465]
+2025-11-27 16:44:40,406 - trainer - INFO - Trọng số lớp được tính toán: [1.107049584388733, 0.9118279814720154]
+2025-11-27 16:44:40,407 - trainer - INFO - DataLoaders đã được tạo: Train=848, Val=106, Test=106
+2025-11-27 16:44:48,510 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 62.26%
+      - Balanced Accuracy: 62.26%
+      - Precision (Weighted): 100.00%
+      - Recall (Weighted): 62.26%
+      - F1-Score (Weighted): 76.74%
+      - Confusion Matrix:
+[[ 0  0]
+ [40 66]]
+2025-11-27 16:44:58,027 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+1 =====
+2025-11-27 16:44:58,204 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:44:58,209 - trainer - INFO - Đã tạo 855 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:44:58,211 - trainer - INFO - Số lượng lớp trong dữ liệu training: [339, 345]
+2025-11-27 16:44:58,212 - trainer - INFO - Trọng số lớp được tính toán: [1.0088495016098022, 0.991304337978363]
+2025-11-27 16:44:58,212 - trainer - INFO - DataLoaders đã được tạo: Train=684, Val=85, Test=86
+2025-11-27 16:45:06,844 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 53.49%
+      - Balanced Accuracy: 52.45%
+      - Precision (Weighted): 52.87%
+      - Recall (Weighted): 53.49%
+      - F1-Score (Weighted): 52.45%
+      - Confusion Matrix:
+[[31 15]
+ [25 15]]
+2025-11-27 16:45:16,552 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+3 =====
+2025-11-27 16:45:16,728 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:45:16,731 - trainer - INFO - Đã tạo 997 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:45:16,733 - trainer - INFO - Số lượng lớp trong dữ liệu training: [397, 400]
+2025-11-27 16:45:16,733 - trainer - INFO - Trọng số lớp được tính toán: [1.003778338432312, 0.9962499737739563]
+2025-11-27 16:45:16,734 - trainer - INFO - DataLoaders đã được tạo: Train=797, Val=99, Test=101
+2025-11-27 16:45:31,710 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 45.54%
+      - Balanced Accuracy: 51.98%
+      - Precision (Weighted): 59.59%
+      - Recall (Weighted): 45.54%
+      - F1-Score (Weighted): 34.32%
+      - Confusion Matrix:
+[[41  2]
+ [53  5]]
+2025-11-27 16:45:41,252 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+5 =====
+2025-11-27 16:45:41,424 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:45:41,428 - trainer - INFO - Đã tạo 1023 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:45:41,432 - trainer - INFO - Số lượng lớp trong dữ liệu training: [400, 418]
+2025-11-27 16:45:41,433 - trainer - INFO - Trọng số lớp được tính toán: [1.0225000381469727, 0.9784688949584961]
+2025-11-27 16:45:41,433 - trainer - INFO - DataLoaders đã được tạo: Train=818, Val=102, Test=103
+2025-11-27 16:45:54,095 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 47.57%
+      - Balanced Accuracy: 50.39%
+      - Precision (Weighted): 51.81%
+      - Recall (Weighted): 47.57%
+      - F1-Score (Weighted): 46.41%
+      - Confusion Matrix:
+[[29 14]
+ [40 20]]
+2025-11-27 16:46:11,332 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+30 =====
+2025-11-27 16:46:11,504 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:46:11,507 - trainer - INFO - Đã tạo 1048 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:46:11,512 - trainer - INFO - Số lượng lớp trong dữ liệu training: [364, 474]
+2025-11-27 16:46:11,512 - trainer - INFO - Trọng số lớp được tính toán: [1.1510988473892212, 0.8839662671089172]
+2025-11-27 16:46:11,512 - trainer - INFO - DataLoaders đã được tạo: Train=838, Val=104, Test=106
+2025-11-27 16:46:20,810 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 59.43%
+      - Balanced Accuracy: 40.64%
+      - Precision (Weighted): 62.67%
+      - Recall (Weighted): 59.43%
+      - F1-Score (Weighted): 60.98%
+      - Confusion Matrix:
+[[ 2 19]
+ [24 61]]
+2025-11-27 16:46:30,293 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+60 =====
+2025-11-27 16:46:30,459 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:46:30,463 - trainer - INFO - Đã tạo 1068 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:46:30,468 - trainer - INFO - Số lượng lớp trong dữ liệu training: [367, 487]
+2025-11-27 16:46:30,468 - trainer - INFO - Trọng số lớp được tính toán: [1.1634877920150757, 0.8767967224121094]
+2025-11-27 16:46:30,469 - trainer - INFO - DataLoaders đã được tạo: Train=854, Val=106, Test=108
+2025-11-27 16:46:40,203 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 12.96%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 1.68%
+      - Recall (Weighted): 12.96%
+      - F1-Score (Weighted): 2.98%
+      - Confusion Matrix:
+[[14  0]
+ [94  0]]
+2025-11-27 16:46:50,190 - trainer - INFO - ===== STARTING PIPELINE FOR: TCB_transformer_t+90 =====
+2025-11-27 16:46:50,369 - trainer - INFO - Đã tải 1899 mẫu cho TCB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:46:50,373 - trainer - INFO - Đã tạo 1060 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:46:50,377 - trainer - INFO - Số lượng lớp trong dữ liệu training: [383, 465]
+2025-11-27 16:46:50,377 - trainer - INFO - Trọng số lớp được tính toán: [1.107049584388733, 0.9118279814720154]
+2025-11-27 16:46:50,378 - trainer - INFO - DataLoaders đã được tạo: Train=848, Val=106, Test=106
+2025-11-27 16:47:01,055 - trainer - INFO - 
+--- Kết quả Test cho TCB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 10.38%
+      - Balanced Accuracy: 10.38%
+      - Precision (Weighted): 100.00%
+      - Recall (Weighted): 10.38%
+      - F1-Score (Weighted): 18.80%
+      - Confusion Matrix:
+[[ 0  0]
+ [95 11]]
+2025-11-27 16:47:10,684 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+1 =====
+2025-11-27 16:47:10,915 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:47:10,921 - trainer - INFO - Đã tạo 1639 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:47:10,924 - trainer - INFO - Số lượng lớp trong dữ liệu training: [666, 645]
+2025-11-27 16:47:10,924 - trainer - INFO - Trọng số lớp được tính toán: [0.9842342138290405, 1.0162791013717651]
+2025-11-27 16:47:10,925 - trainer - INFO - DataLoaders đã được tạo: Train=1311, Val=163, Test=165
+2025-11-27 16:47:32,191 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 52.12%
+      - Balanced Accuracy: 52.25%
+      - Precision (Weighted): 52.31%
+      - Recall (Weighted): 52.12%
+      - F1-Score (Weighted): 51.89%
+      - Confusion Matrix:
+[[48 33]
+ [46 38]]
+2025-11-27 16:47:42,181 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+3 =====
+2025-11-27 16:47:42,369 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:47:42,375 - trainer - INFO - Đã tạo 1695 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:47:42,379 - trainer - INFO - Số lượng lớp trong dữ liệu training: [651, 705]
+2025-11-27 16:47:42,380 - trainer - INFO - Trọng số lớp được tính toán: [1.04147469997406, 0.9617021083831787]
+2025-11-27 16:47:42,380 - trainer - INFO - DataLoaders đã được tạo: Train=1356, Val=169, Test=170
+2025-11-27 16:47:58,965 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 59.41%
+      - Balanced Accuracy: 61.34%
+      - Precision (Weighted): 66.51%
+      - Recall (Weighted): 59.41%
+      - F1-Score (Weighted): 56.46%
+      - Confusion Matrix:
+[[70  9]
+ [60 31]]
+2025-11-27 16:48:08,247 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+5 =====
+2025-11-27 16:48:08,464 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:48:08,470 - trainer - INFO - Đã tạo 1693 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:48:08,475 - trainer - INFO - Số lượng lớp trong dữ liệu training: [622, 732]
+2025-11-27 16:48:08,475 - trainer - INFO - Trọng số lớp được tính toán: [1.0884244441986084, 0.9248633980751038]
+2025-11-27 16:48:08,475 - trainer - INFO - DataLoaders đã được tạo: Train=1354, Val=169, Test=170
+2025-11-27 16:48:23,831 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 52.94%
+      - Balanced Accuracy: 56.91%
+      - Precision (Weighted): 63.67%
+      - Recall (Weighted): 52.94%
+      - F1-Score (Weighted): 47.61%
+      - Confusion Matrix:
+[[68  7]
+ [73 22]]
+2025-11-27 16:48:32,890 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+30 =====
+2025-11-27 16:48:33,090 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:48:33,096 - trainer - INFO - Đã tạo 1835 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:48:33,104 - trainer - INFO - Số lượng lớp trong dữ liệu training: [551, 917]
+2025-11-27 16:48:33,104 - trainer - INFO - Trọng số lớp được tính toán: [1.3321233987808228, 0.8004361987113953]
+2025-11-27 16:48:33,105 - trainer - INFO - DataLoaders đã được tạo: Train=1468, Val=183, Test=184
+2025-11-27 16:48:49,014 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 62.50%
+      - Balanced Accuracy: 66.58%
+      - Precision (Weighted): 71.63%
+      - Recall (Weighted): 62.50%
+      - F1-Score (Weighted): 63.61%
+      - Confusion Matrix:
+[[46 13]
+ [56 69]]
+2025-11-27 16:48:58,299 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+60 =====
+2025-11-27 16:48:58,481 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:48:58,486 - trainer - INFO - Đã tạo 1844 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:48:58,493 - trainer - INFO - Số lượng lớp trong dữ liệu training: [537, 938]
+2025-11-27 16:48:58,494 - trainer - INFO - Trọng số lớp được tính toán: [1.3733705282211304, 0.7862473130226135]
+2025-11-27 16:48:58,494 - trainer - INFO - DataLoaders đã được tạo: Train=1475, Val=184, Test=185
+2025-11-27 16:49:10,012 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 37.30%
+      - Balanced Accuracy: 65.48%
+      - Precision (Weighted): 91.99%
+      - Recall (Weighted): 37.30%
+      - F1-Score (Weighted): 45.01%
+      - Confusion Matrix:
+[[ 17   0]
+ [116  52]]
+2025-11-27 16:49:19,796 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_cnn_bilstm_t+90 =====
+2025-11-27 16:49:19,987 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:49:19,994 - trainer - INFO - Đã tạo 1835 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:49:20,000 - trainer - INFO - Số lượng lớp trong dữ liệu training: [497, 971]
+2025-11-27 16:49:20,001 - trainer - INFO - Trọng số lớp được tính toán: [1.4768611192703247, 0.7559217214584351]
+2025-11-27 16:49:20,001 - trainer - INFO - DataLoaders đã được tạo: Train=1468, Val=183, Test=184
+2025-11-27 16:49:36,138 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 36.41%
+      - Balanced Accuracy: 36.41%
+      - Precision (Weighted): 100.00%
+      - Recall (Weighted): 36.41%
+      - F1-Score (Weighted): 53.39%
+      - Confusion Matrix:
+[[  0   0]
+ [117  67]]
+2025-11-27 16:49:45,166 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+1 =====
+2025-11-27 16:49:45,367 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:49:45,374 - trainer - INFO - Đã tạo 1639 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:49:45,378 - trainer - INFO - Số lượng lớp trong dữ liệu training: [666, 645]
+2025-11-27 16:49:45,379 - trainer - INFO - Trọng số lớp được tính toán: [0.9842342138290405, 1.0162791013717651]
+2025-11-27 16:49:45,379 - trainer - INFO - DataLoaders đã được tạo: Train=1311, Val=163, Test=165
+2025-11-27 16:50:10,427 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 55.76%
+      - Balanced Accuracy: 55.82%
+      - Precision (Weighted): 55.87%
+      - Recall (Weighted): 55.76%
+      - F1-Score (Weighted): 55.71%
+      - Confusion Matrix:
+[[48 33]
+ [40 44]]
+2025-11-27 16:50:19,826 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+3 =====
+2025-11-27 16:50:20,028 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:50:20,034 - trainer - INFO - Đã tạo 1695 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:50:20,038 - trainer - INFO - Số lượng lớp trong dữ liệu training: [651, 705]
+2025-11-27 16:50:20,038 - trainer - INFO - Trọng số lớp được tính toán: [1.04147469997406, 0.9617021083831787]
+2025-11-27 16:50:20,038 - trainer - INFO - DataLoaders đã được tạo: Train=1356, Val=169, Test=170
+2025-11-27 16:50:35,879 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 59.41%
+      - Balanced Accuracy: 58.17%
+      - Precision (Weighted): 59.38%
+      - Recall (Weighted): 59.41%
+      - F1-Score (Weighted): 58.05%
+      - Confusion Matrix:
+[[32 47]
+ [22 69]]
+2025-11-27 16:50:45,757 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+5 =====
+2025-11-27 16:50:45,976 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:50:45,981 - trainer - INFO - Đã tạo 1693 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:50:45,986 - trainer - INFO - Số lượng lớp trong dữ liệu training: [622, 732]
+2025-11-27 16:50:45,987 - trainer - INFO - Trọng số lớp được tính toán: [1.0884244441986084, 0.9248633980751038]
+2025-11-27 16:50:45,987 - trainer - INFO - DataLoaders đã được tạo: Train=1354, Val=169, Test=170
+2025-11-27 16:51:07,669 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 45.88%
+      - Balanced Accuracy: 50.88%
+      - Precision (Weighted): 54.06%
+      - Recall (Weighted): 45.88%
+      - F1-Score (Weighted): 34.90%
+      - Confusion Matrix:
+[[70  5]
+ [87  8]]
+2025-11-27 16:51:17,719 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+30 =====
+2025-11-27 16:51:17,932 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:51:17,938 - trainer - INFO - Đã tạo 1835 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:51:17,947 - trainer - INFO - Số lượng lớp trong dữ liệu training: [551, 917]
+2025-11-27 16:51:17,947 - trainer - INFO - Trọng số lớp được tính toán: [1.3321233987808228, 0.8004361987113953]
+2025-11-27 16:51:17,947 - trainer - INFO - DataLoaders đã được tạo: Train=1468, Val=183, Test=184
+2025-11-27 16:51:40,745 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 63.59%
+      - Balanced Accuracy: 66.94%
+      - Precision (Weighted): 71.60%
+      - Recall (Weighted): 63.59%
+      - F1-Score (Weighted): 64.74%
+      - Confusion Matrix:
+[[45 14]
+ [53 72]]
+2025-11-27 16:51:51,675 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+60 =====
+2025-11-27 16:51:51,887 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:51:51,891 - trainer - INFO - Đã tạo 1844 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:51:51,900 - trainer - INFO - Số lượng lớp trong dữ liệu training: [537, 938]
+2025-11-27 16:51:51,901 - trainer - INFO - Trọng số lớp được tính toán: [1.3733705282211304, 0.7862473130226135]
+2025-11-27 16:51:51,901 - trainer - INFO - DataLoaders đã được tạo: Train=1475, Val=184, Test=185
+2025-11-27 16:52:08,487 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 90.81%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 82.47%
+      - Recall (Weighted): 90.81%
+      - F1-Score (Weighted): 86.44%
+      - Confusion Matrix:
+[[  0  17]
+ [  0 168]]
+2025-11-27 16:52:18,563 - trainer - INFO - ===== STARTING PIPELINE FOR: MBB_transformer_t+90 =====
+2025-11-27 16:52:18,803 - trainer - INFO - Đã tải 3544 mẫu cho MBB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:52:18,813 - trainer - INFO - Đã tạo 1835 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:52:18,824 - trainer - INFO - Số lượng lớp trong dữ liệu training: [497, 971]
+2025-11-27 16:52:18,825 - trainer - INFO - Trọng số lớp được tính toán: [1.4768611192703247, 0.7559217214584351]
+2025-11-27 16:52:18,832 - trainer - INFO - DataLoaders đã được tạo: Train=1468, Val=183, Test=184
+2025-11-27 16:52:34,936 - trainer - INFO - 
+--- Kết quả Test cho MBB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 0.00%
+      - Balanced Accuracy: 0.00%
+      - Precision (Weighted): 0.00%
+      - Recall (Weighted): 0.00%
+      - F1-Score (Weighted): 0.00%
+      - Confusion Matrix:
+[[  0   0]
+ [184   0]]
+2025-11-27 16:52:44,674 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+1 =====
+2025-11-27 16:52:44,916 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:52:44,920 - trainer - INFO - Đã tạo 977 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:52:44,922 - trainer - INFO - Số lượng lớp trong dữ liệu training: [405, 376]
+2025-11-27 16:52:44,922 - trainer - INFO - Trọng số lớp được tính toán: [0.9641975164413452, 1.038563847541809]
+2025-11-27 16:52:44,922 - trainer - INFO - DataLoaders đã được tạo: Train=781, Val=97, Test=99
+2025-11-27 16:53:02,977 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 51.52%
+      - Balanced Accuracy: 52.72%
+      - Precision (Weighted): 53.72%
+      - Recall (Weighted): 51.52%
+      - F1-Score (Weighted): 48.69%
+      - Confusion Matrix:
+[[36 11]
+ [37 15]]
+2025-11-27 16:53:10,968 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+3 =====
+2025-11-27 16:53:11,128 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:53:11,131 - trainer - INFO - Đã tạo 1056 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:53:11,134 - trainer - INFO - Số lượng lớp trong dữ liệu training: [410, 434]
+2025-11-27 16:53:11,134 - trainer - INFO - Trọng số lớp được tính toán: [1.0292682647705078, 0.9723502397537231]
+2025-11-27 16:53:11,134 - trainer - INFO - DataLoaders đã được tạo: Train=844, Val=105, Test=107
+2025-11-27 16:53:17,368 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 51.40%
+      - Balanced Accuracy: 46.94%
+      - Precision (Weighted): 49.13%
+      - Recall (Weighted): 51.40%
+      - F1-Score (Weighted): 49.85%
+      - Confusion Matrix:
+[[11 31]
+ [21 44]]
+2025-11-27 16:53:24,471 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+5 =====
+2025-11-27 16:53:24,607 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:53:24,610 - trainer - INFO - Đã tạo 1092 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:53:24,611 - trainer - INFO - Số lượng lớp trong dữ liệu training: [412, 461]
+2025-11-27 16:53:24,612 - trainer - INFO - Trọng số lớp được tính toán: [1.059466004371643, 0.9468546509742737]
+2025-11-27 16:53:24,612 - trainer - INFO - DataLoaders đã được tạo: Train=873, Val=109, Test=110
+2025-11-27 16:53:30,841 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 46.36%
+      - Balanced Accuracy: 47.06%
+      - Precision (Weighted): 49.95%
+      - Recall (Weighted): 46.36%
+      - F1-Score (Weighted): 47.05%
+      - Confusion Matrix:
+[[21 21]
+ [38 30]]
+2025-11-27 16:53:37,834 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+30 =====
+2025-11-27 16:53:37,987 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:53:37,990 - trainer - INFO - Đã tạo 1167 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:53:37,994 - trainer - INFO - Số lượng lớp trong dữ liệu training: [430, 503]
+2025-11-27 16:53:37,995 - trainer - INFO - Trọng số lớp được tính toán: [1.084883689880371, 0.9274353981018066]
+2025-11-27 16:53:37,995 - trainer - INFO - DataLoaders đã được tạo: Train=933, Val=116, Test=118
+2025-11-27 16:53:42,871 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 35.59%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 12.67%
+      - Recall (Weighted): 35.59%
+      - F1-Score (Weighted): 18.69%
+      - Confusion Matrix:
+[[42  0]
+ [76  0]]
+2025-11-27 16:53:49,888 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+60 =====
+2025-11-27 16:53:50,057 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:53:50,060 - trainer - INFO - Đã tạo 1059 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:53:50,064 - trainer - INFO - Số lượng lớp trong dữ liệu training: [401, 446]
+2025-11-27 16:53:50,064 - trainer - INFO - Trọng số lớp được tính toán: [1.0561096668243408, 0.9495515823364258]
+2025-11-27 16:53:50,064 - trainer - INFO - DataLoaders đã được tạo: Train=847, Val=105, Test=107
+2025-11-27 16:53:56,505 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 77.57%
+      - Balanced Accuracy: 69.93%
+      - Precision (Weighted): 79.04%
+      - Recall (Weighted): 77.57%
+      - F1-Score (Weighted): 78.19%
+      - Confusion Matrix:
+[[13 10]
+ [14 70]]
+2025-11-27 16:54:03,533 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_cnn_bilstm_t+90 =====
+2025-11-27 16:54:03,676 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:54:03,678 - trainer - INFO - Đã tạo 977 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:54:03,681 - trainer - INFO - Số lượng lớp trong dữ liệu training: [376, 405]
+2025-11-27 16:54:03,681 - trainer - INFO - Trọng số lớp được tính toán: [1.038563847541809, 0.9641975164413452]
+2025-11-27 16:54:03,681 - trainer - INFO - DataLoaders đã được tạo: Train=781, Val=97, Test=99
+2025-11-27 16:54:08,547 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 72.73%
+      - Balanced Accuracy: 85.94%
+      - Precision (Weighted): 97.27%
+      - Recall (Weighted): 72.73%
+      - F1-Score (Weighted): 81.65%
+      - Confusion Matrix:
+[[ 3  0]
+ [27 69]]
+2025-11-27 16:54:15,445 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+1 =====
+2025-11-27 16:54:15,574 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:54:15,577 - trainer - INFO - Đã tạo 977 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:54:15,578 - trainer - INFO - Số lượng lớp trong dữ liệu training: [405, 376]
+2025-11-27 16:54:15,578 - trainer - INFO - Trọng số lớp được tính toán: [0.9641975164413452, 1.038563847541809]
+2025-11-27 16:54:15,579 - trainer - INFO - DataLoaders đã được tạo: Train=781, Val=97, Test=99
+2025-11-27 16:54:25,536 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 56.57%
+      - Balanced Accuracy: 58.24%
+      - Precision (Weighted): 65.06%
+      - Recall (Weighted): 56.57%
+      - F1-Score (Weighted): 51.44%
+      - Confusion Matrix:
+[[43  4]
+ [39 13]]
+2025-11-27 16:54:32,409 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+3 =====
+2025-11-27 16:54:32,553 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:54:32,556 - trainer - INFO - Đã tạo 1056 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:54:32,558 - trainer - INFO - Số lượng lớp trong dữ liệu training: [410, 434]
+2025-11-27 16:54:32,558 - trainer - INFO - Trọng số lớp được tính toán: [1.0292682647705078, 0.9723502397537231]
+2025-11-27 16:54:32,558 - trainer - INFO - DataLoaders đã được tạo: Train=844, Val=105, Test=107
+2025-11-27 16:54:40,795 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 39.25%
+      - Balanced Accuracy: 49.58%
+      - Precision (Weighted): 45.70%
+      - Recall (Weighted): 39.25%
+      - F1-Score (Weighted): 23.71%
+      - Confusion Matrix:
+[[41  1]
+ [64  1]]
+2025-11-27 16:54:47,814 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+5 =====
+2025-11-27 16:54:47,946 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:54:47,948 - trainer - INFO - Đã tạo 1092 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:54:47,950 - trainer - INFO - Số lượng lớp trong dữ liệu training: [412, 461]
+2025-11-27 16:54:47,950 - trainer - INFO - Trọng số lớp được tính toán: [1.059466004371643, 0.9468546509742737]
+2025-11-27 16:54:47,950 - trainer - INFO - DataLoaders đã được tạo: Train=873, Val=109, Test=110
+2025-11-27 16:55:01,159 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 40.91%
+      - Balanced Accuracy: 39.01%
+      - Precision (Weighted): 42.56%
+      - Recall (Weighted): 40.91%
+      - F1-Score (Weighted): 41.58%
+      - Confusion Matrix:
+[[13 29]
+ [36 32]]
+2025-11-27 16:55:08,224 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+30 =====
+2025-11-27 16:55:08,367 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:55:08,370 - trainer - INFO - Đã tạo 1167 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:55:08,373 - trainer - INFO - Số lượng lớp trong dữ liệu training: [430, 503]
+2025-11-27 16:55:08,374 - trainer - INFO - Trọng số lớp được tính toán: [1.084883689880371, 0.9274353981018066]
+2025-11-27 16:55:08,374 - trainer - INFO - DataLoaders đã được tạo: Train=933, Val=116, Test=118
+2025-11-27 16:55:15,687 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 46.61%
+      - Balanced Accuracy: 53.23%
+      - Precision (Weighted): 58.29%
+      - Recall (Weighted): 46.61%
+      - F1-Score (Weighted): 45.12%
+      - Confusion Matrix:
+[[32 10]
+ [53 23]]
+2025-11-27 16:55:22,682 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+60 =====
+2025-11-27 16:55:22,813 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:55:22,817 - trainer - INFO - Đã tạo 1059 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:55:22,819 - trainer - INFO - Số lượng lớp trong dữ liệu training: [401, 446]
+2025-11-27 16:55:22,819 - trainer - INFO - Trọng số lớp được tính toán: [1.0561096668243408, 0.9495515823364258]
+2025-11-27 16:55:22,820 - trainer - INFO - DataLoaders đã được tạo: Train=847, Val=105, Test=107
+2025-11-27 16:55:32,413 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 36.45%
+      - Balanced Accuracy: 43.74%
+      - Precision (Weighted): 60.63%
+      - Recall (Weighted): 36.45%
+      - F1-Score (Weighted): 39.96%
+      - Confusion Matrix:
+[[13 10]
+ [58 26]]
+2025-11-27 16:55:39,371 - trainer - INFO - ===== STARTING PIPELINE FOR: VPB_transformer_t+90 =====
+2025-11-27 16:55:39,514 - trainer - INFO - Đã tải 2096 mẫu cho VPB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:55:39,517 - trainer - INFO - Đã tạo 977 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:55:39,520 - trainer - INFO - Số lượng lớp trong dữ liệu training: [376, 405]
+2025-11-27 16:55:39,520 - trainer - INFO - Trọng số lớp được tính toán: [1.038563847541809, 0.9641975164413452]
+2025-11-27 16:55:39,520 - trainer - INFO - DataLoaders đã được tạo: Train=781, Val=97, Test=99
+2025-11-27 16:55:47,887 - trainer - INFO - 
+--- Kết quả Test cho VPB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 96.97%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 94.03%
+      - Recall (Weighted): 96.97%
+      - F1-Score (Weighted): 95.48%
+      - Confusion Matrix:
+[[ 0  3]
+ [ 0 96]]
+2025-11-27 16:55:54,793 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+1 =====
+2025-11-27 16:55:54,994 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:55:54,999 - trainer - INFO - Đã tạo 1733 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:55:55,003 - trainer - INFO - Số lượng lớp trong dữ liệu training: [735, 651]
+2025-11-27 16:55:55,004 - trainer - INFO - Trọng số lớp được tính toán: [0.9428571462631226, 1.0645161867141724]
+2025-11-27 16:55:55,004 - trainer - INFO - DataLoaders đã được tạo: Train=1386, Val=173, Test=174
+2025-11-27 16:56:05,358 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 44.83%
+      - Balanced Accuracy: 45.49%
+      - Precision (Weighted): 43.20%
+      - Recall (Weighted): 44.83%
+      - F1-Score (Weighted): 39.90%
+      - Confusion Matrix:
+[[63 22]
+ [74 15]]
+2025-11-27 16:56:13,358 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+3 =====
+2025-11-27 16:56:13,519 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:56:13,529 - trainer - INFO - Đã tạo 1764 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:56:13,534 - trainer - INFO - Số lượng lớp trong dữ liệu training: [687, 724]
+2025-11-27 16:56:13,534 - trainer - INFO - Trọng số lớp được tính toán: [1.0269286632537842, 0.97444748878479]
+2025-11-27 16:56:13,536 - trainer - INFO - DataLoaders đã được tạo: Train=1411, Val=176, Test=177
+2025-11-27 16:56:23,776 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 45.20%
+      - Balanced Accuracy: 46.78%
+      - Precision (Weighted): 45.70%
+      - Recall (Weighted): 45.20%
+      - F1-Score (Weighted): 41.44%
+      - Confusion Matrix:
+[[60 23]
+ [74 20]]
+2025-11-27 16:56:31,771 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+5 =====
+2025-11-27 16:56:31,938 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:56:31,943 - trainer - INFO - Đã tạo 1787 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:56:31,944 - trainer - INFO - Số lượng lớp trong dữ liệu training: [700, 729]
+2025-11-27 16:56:31,946 - trainer - INFO - Trọng số lớp được tính toán: [1.020714282989502, 0.9801097512245178]
+2025-11-27 16:56:31,946 - trainer - INFO - DataLoaders đã được tạo: Train=1429, Val=178, Test=180
+2025-11-27 16:56:46,407 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 42.22%
+      - Balanced Accuracy: 43.44%
+      - Precision (Weighted): 44.00%
+      - Recall (Weighted): 42.22%
+      - F1-Score (Weighted): 41.90%
+      - Confusion Matrix:
+[[41 37]
+ [67 35]]
+2025-11-27 16:56:54,317 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+30 =====
+2025-11-27 16:56:54,474 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:56:54,479 - trainer - INFO - Đã tạo 2038 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:56:54,486 - trainer - INFO - Số lượng lớp trong dữ liệu training: [698, 932]
+2025-11-27 16:56:54,486 - trainer - INFO - Trọng số lớp được tính toán: [1.1676217317581177, 0.8744634985923767]
+2025-11-27 16:56:54,486 - trainer - INFO - DataLoaders đã được tạo: Train=1630, Val=203, Test=205
+2025-11-27 16:57:06,780 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 27.80%
+      - Balanced Accuracy: 50.67%
+      - Precision (Weighted): 80.44%
+      - Recall (Weighted): 27.80%
+      - F1-Score (Weighted): 13.36%
+      - Confusion Matrix:
+[[ 55   0]
+ [148   2]]
+2025-11-27 16:57:14,652 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+60 =====
+2025-11-27 16:57:14,803 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:57:14,809 - trainer - INFO - Đã tạo 2002 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:57:14,815 - trainer - INFO - Số lượng lớp trong dữ liệu training: [643, 958]
+2025-11-27 16:57:14,816 - trainer - INFO - Trọng số lớp được tính toán: [1.2449455261230469, 0.8355950117111206]
+2025-11-27 16:57:14,816 - trainer - INFO - DataLoaders đã được tạo: Train=1601, Val=200, Test=201
+2025-11-27 16:57:24,070 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 89.55%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 80.20%
+      - Recall (Weighted): 89.55%
+      - F1-Score (Weighted): 84.62%
+      - Confusion Matrix:
+[[  0  21]
+ [  0 180]]
+2025-11-27 16:57:31,875 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_cnn_bilstm_t+90 =====
+2025-11-27 16:57:32,043 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:57:32,048 - trainer - INFO - Đã tạo 1901 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:57:32,054 - trainer - INFO - Số lượng lớp trong dữ liệu training: [556, 964]
+2025-11-27 16:57:32,054 - trainer - INFO - Trọng số lớp được tính toán: [1.3669065237045288, 0.7883817553520203]
+2025-11-27 16:57:32,055 - trainer - INFO - DataLoaders đã được tạo: Train=1520, Val=190, Test=191
+2025-11-27 16:57:40,314 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 60.21%
+      - Balanced Accuracy: 79.79%
+      - Precision (Weighted): 98.49%
+      - Recall (Weighted): 60.21%
+      - F1-Score (Weighted): 73.61%
+      - Confusion Matrix:
+[[  3   0]
+ [ 76 112]]
+2025-11-27 16:57:48,469 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+1 =====
+2025-11-27 16:57:48,630 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+1 (trước khi lọc nhiễu)
+2025-11-27 16:57:48,635 - trainer - INFO - Đã tạo 1733 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:57:48,637 - trainer - INFO - Số lượng lớp trong dữ liệu training: [735, 651]
+2025-11-27 16:57:48,637 - trainer - INFO - Trọng số lớp được tính toán: [0.9428571462631226, 1.0645161867141724]
+2025-11-27 16:57:48,638 - trainer - INFO - DataLoaders đã được tạo: Train=1386, Val=173, Test=174
+2025-11-27 16:58:01,873 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 44.25%
+      - Balanced Accuracy: 44.05%
+      - Precision (Weighted): 43.92%
+      - Recall (Weighted): 44.25%
+      - F1-Score (Weighted): 43.84%
+      - Confusion Matrix:
+[[30 55]
+ [42 47]]
+2025-11-27 16:58:09,771 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+3 =====
+2025-11-27 16:58:09,941 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+3 (trước khi lọc nhiễu)
+2025-11-27 16:58:09,946 - trainer - INFO - Đã tạo 1764 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:58:09,949 - trainer - INFO - Số lượng lớp trong dữ liệu training: [687, 724]
+2025-11-27 16:58:09,950 - trainer - INFO - Trọng số lớp được tính toán: [1.0269286632537842, 0.97444748878479]
+2025-11-27 16:58:09,950 - trainer - INFO - DataLoaders đã được tạo: Train=1411, Val=176, Test=177
+2025-11-27 16:58:20,984 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 49.72%
+      - Balanced Accuracy: 51.53%
+      - Precision (Weighted): 52.58%
+      - Recall (Weighted): 49.72%
+      - F1-Score (Weighted): 45.20%
+      - Confusion Matrix:
+[[67 16]
+ [73 21]]
+2025-11-27 16:58:28,459 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+5 =====
+2025-11-27 16:58:28,634 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+5 (trước khi lọc nhiễu)
+2025-11-27 16:58:28,639 - trainer - INFO - Đã tạo 1787 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:58:28,643 - trainer - INFO - Số lượng lớp trong dữ liệu training: [700, 729]
+2025-11-27 16:58:28,643 - trainer - INFO - Trọng số lớp được tính toán: [1.020714282989502, 0.9801097512245178]
+2025-11-27 16:58:28,644 - trainer - INFO - DataLoaders đã được tạo: Train=1429, Val=178, Test=180
+2025-11-27 16:58:51,279 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 43.33%
+      - Balanced Accuracy: 43.36%
+      - Precision (Weighted): 44.35%
+      - Recall (Weighted): 43.33%
+      - F1-Score (Weighted): 43.58%
+      - Confusion Matrix:
+[[34 44]
+ [58 44]]
+2025-11-27 16:58:58,891 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+30 =====
+2025-11-27 16:58:59,035 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+30 (trước khi lọc nhiễu)
+2025-11-27 16:58:59,040 - trainer - INFO - Đã tạo 2038 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:58:59,046 - trainer - INFO - Số lượng lớp trong dữ liệu training: [698, 932]
+2025-11-27 16:58:59,046 - trainer - INFO - Trọng số lớp được tính toán: [1.1676217317581177, 0.8744634985923767]
+2025-11-27 16:58:59,046 - trainer - INFO - DataLoaders đã được tạo: Train=1630, Val=203, Test=205
+2025-11-27 16:59:11,700 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 63.90%
+      - Balanced Accuracy: 63.82%
+      - Precision (Weighted): 71.11%
+      - Recall (Weighted): 63.90%
+      - F1-Score (Weighted): 65.86%
+      - Confusion Matrix:
+[[35 20]
+ [54 96]]
+2025-11-27 16:59:19,282 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+60 =====
+2025-11-27 16:59:19,422 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+60 (trước khi lọc nhiễu)
+2025-11-27 16:59:19,427 - trainer - INFO - Đã tạo 2002 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:59:19,433 - trainer - INFO - Số lượng lớp trong dữ liệu training: [643, 958]
+2025-11-27 16:59:19,434 - trainer - INFO - Trọng số lớp được tính toán: [1.2449455261230469, 0.8355950117111206]
+2025-11-27 16:59:19,434 - trainer - INFO - DataLoaders đã được tạo: Train=1601, Val=200, Test=201
+2025-11-27 16:59:38,406 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 58.71%
+      - Balanced Accuracy: 66.43%
+      - Precision (Weighted): 87.15%
+      - Recall (Weighted): 58.71%
+      - F1-Score (Weighted): 66.56%
+      - Confusion Matrix:
+[[ 16   5]
+ [ 78 102]]
+2025-11-27 16:59:45,744 - trainer - INFO - ===== STARTING PIPELINE FOR: ACB_transformer_t+90 =====
+2025-11-27 16:59:45,891 - trainer - INFO - Đã tải 4000 mẫu cho ACB t+90 (trước khi lọc nhiễu)
+2025-11-27 16:59:45,897 - trainer - INFO - Đã tạo 1901 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 16:59:45,903 - trainer - INFO - Số lượng lớp trong dữ liệu training: [556, 964]
+2025-11-27 16:59:45,903 - trainer - INFO - Trọng số lớp được tính toán: [1.3669065237045288, 0.7883817553520203]
+2025-11-27 16:59:45,903 - trainer - INFO - DataLoaders đã được tạo: Train=1520, Val=190, Test=191
+2025-11-27 17:00:06,452 - trainer - INFO - 
+--- Kết quả Test cho ACB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 47.12%
+      - Balanced Accuracy: 73.14%
+      - Precision (Weighted): 98.47%
+      - Recall (Weighted): 47.12%
+      - F1-Score (Weighted): 62.37%
+      - Confusion Matrix:
+[[  3   0]
+ [101  87]]
+2025-11-27 17:00:13,776 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+1 =====
+2025-11-27 17:00:13,911 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+1 (trước khi lọc nhiễu)
+2025-11-27 17:00:13,914 - trainer - INFO - Đã tạo 908 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:00:13,915 - trainer - INFO - Số lượng lớp trong dữ liệu training: [377, 349]
+2025-11-27 17:00:13,915 - trainer - INFO - Trọng số lớp được tính toán: [0.9628646969795227, 1.0401146411895752]
+2025-11-27 17:00:13,915 - trainer - INFO - DataLoaders đã được tạo: Train=726, Val=90, Test=92
+2025-11-27 17:00:20,393 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+1 ---
+      - Accuracy: 44.57%
+      - Balanced Accuracy: 48.57%
+      - Precision (Weighted): 47.21%
+      - Recall (Weighted): 44.57%
+      - F1-Score (Weighted): 36.34%
+      - Confusion Matrix:
+[[35  6]
+ [45  6]]
+2025-11-27 17:00:26,808 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+3 =====
+2025-11-27 17:00:26,942 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+3 (trước khi lọc nhiễu)
+2025-11-27 17:00:26,944 - trainer - INFO - Đã tạo 1029 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:00:26,946 - trainer - INFO - Số lượng lớp trong dữ liệu training: [412, 411]
+2025-11-27 17:00:26,946 - trainer - INFO - Trọng số lớp được tính toán: [0.9987863898277283, 1.0012165307998657]
+2025-11-27 17:00:26,946 - trainer - INFO - DataLoaders đã được tạo: Train=823, Val=102, Test=104
+2025-11-27 17:00:30,892 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+3 ---
+      - Accuracy: 57.69%
+      - Balanced Accuracy: 52.40%
+      - Precision (Weighted): 64.96%
+      - Recall (Weighted): 57.69%
+      - F1-Score (Weighted): 45.55%
+      - Confusion Matrix:
+[[ 3 43]
+ [ 1 57]]
+2025-11-27 17:00:37,295 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+5 =====
+2025-11-27 17:00:37,428 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+5 (trước khi lọc nhiễu)
+2025-11-27 17:00:37,431 - trainer - INFO - Đã tạo 1086 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:00:37,433 - trainer - INFO - Số lượng lớp trong dữ liệu training: [425, 443]
+2025-11-27 17:00:37,434 - trainer - INFO - Trọng số lớp được tính toán: [1.0211764574050903, 0.9796839952468872]
+2025-11-27 17:00:37,434 - trainer - INFO - DataLoaders đã được tạo: Train=868, Val=108, Test=110
+2025-11-27 17:00:43,402 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+5 ---
+      - Accuracy: 47.27%
+      - Balanced Accuracy: 43.57%
+      - Precision (Weighted): 47.82%
+      - Recall (Weighted): 47.27%
+      - F1-Score (Weighted): 47.53%
+      - Confusion Matrix:
+[[12 28]
+ [30 40]]
+2025-11-27 17:00:49,866 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+30 =====
+2025-11-27 17:00:49,992 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+30 (trước khi lọc nhiễu)
+2025-11-27 17:00:49,995 - trainer - INFO - Đã tạo 1062 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:00:49,998 - trainer - INFO - Số lượng lớp trong dữ liệu training: [353, 496]
+2025-11-27 17:00:49,998 - trainer - INFO - Trọng số lớp được tính toán: [1.2025495767593384, 0.8558467626571655]
+2025-11-27 17:00:49,998 - trainer - INFO - DataLoaders đã được tạo: Train=849, Val=106, Test=107
+2025-11-27 17:00:54,173 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+30 ---
+      - Accuracy: 60.75%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 36.90%
+      - Recall (Weighted): 60.75%
+      - F1-Score (Weighted): 45.91%
+      - Confusion Matrix:
+[[ 0 42]
+ [ 0 65]]
+2025-11-27 17:01:00,602 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+60 =====
+2025-11-27 17:01:00,734 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+60 (trước khi lọc nhiễu)
+2025-11-27 17:01:00,736 - trainer - INFO - Đã tạo 1127 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:01:00,739 - trainer - INFO - Số lượng lớp trong dữ liệu training: [389, 512]
+2025-11-27 17:01:00,739 - trainer - INFO - Trọng số lớp được tính toán: [1.158097743988037, 0.8798828125]
+2025-11-27 17:01:00,740 - trainer - INFO - DataLoaders đã được tạo: Train=901, Val=112, Test=114
+2025-11-27 17:01:06,844 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+60 ---
+      - Accuracy: 92.98%
+      - Balanced Accuracy: 83.33%
+      - Precision (Weighted): 93.56%
+      - Recall (Weighted): 92.98%
+      - F1-Score (Weighted): 92.43%
+      - Confusion Matrix:
+[[16  8]
+ [ 0 90]]
+2025-11-27 17:01:13,292 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_cnn_bilstm_t+90 =====
+2025-11-27 17:01:13,435 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+90 (trước khi lọc nhiễu)
+2025-11-27 17:01:13,438 - trainer - INFO - Đã tạo 1238 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:01:13,442 - trainer - INFO - Số lượng lớp trong dữ liệu training: [446, 544]
+2025-11-27 17:01:13,442 - trainer - INFO - Trọng số lớp được tính toán: [1.109865427017212, 0.9099264740943909]
+2025-11-27 17:01:13,442 - trainer - INFO - DataLoaders đã được tạo: Train=990, Val=123, Test=125
+2025-11-27 17:01:18,293 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: CNN_BILSTM - Horizon: t+90 ---
+      - Accuracy: 75.20%
+      - Balanced Accuracy: 50.00%
+      - Precision (Weighted): 56.55%
+      - Recall (Weighted): 75.20%
+      - F1-Score (Weighted): 64.56%
+      - Confusion Matrix:
+[[ 0 31]
+ [ 0 94]]
+2025-11-27 17:01:24,686 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+1 =====
+2025-11-27 17:01:24,813 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+1 (trước khi lọc nhiễu)
+2025-11-27 17:01:24,817 - trainer - INFO - Đã tạo 908 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:01:24,819 - trainer - INFO - Số lượng lớp trong dữ liệu training: [377, 349]
+2025-11-27 17:01:24,819 - trainer - INFO - Trọng số lớp được tính toán: [0.9628646969795227, 1.0401146411895752]
+2025-11-27 17:01:24,819 - trainer - INFO - DataLoaders đã được tạo: Train=726, Val=90, Test=92
+2025-11-27 17:01:30,730 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+1 ---
+      - Accuracy: 54.35%
+      - Balanced Accuracy: 53.80%
+      - Precision (Weighted): 54.35%
+      - Recall (Weighted): 54.35%
+      - F1-Score (Weighted): 54.35%
+      - Confusion Matrix:
+[[20 21]
+ [21 30]]
+2025-11-27 17:01:37,069 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+3 =====
+2025-11-27 17:01:37,194 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+3 (trước khi lọc nhiễu)
+2025-11-27 17:01:37,197 - trainer - INFO - Đã tạo 1029 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:01:37,199 - trainer - INFO - Số lượng lớp trong dữ liệu training: [412, 411]
+2025-11-27 17:01:37,199 - trainer - INFO - Trọng số lớp được tính toán: [0.9987863898277283, 1.0012165307998657]
+2025-11-27 17:01:37,199 - trainer - INFO - DataLoaders đã được tạo: Train=823, Val=102, Test=104
+2025-11-27 17:01:49,130 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+3 ---
+      - Accuracy: 55.77%
+      - Balanced Accuracy: 50.22%
+      - Precision (Weighted): 53.28%
+      - Recall (Weighted): 55.77%
+      - F1-Score (Weighted): 41.58%
+      - Confusion Matrix:
+[[ 1 45]
+ [ 1 57]]
+2025-11-27 17:01:55,538 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+5 =====
+2025-11-27 17:01:55,666 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+5 (trước khi lọc nhiễu)
+2025-11-27 17:01:55,670 - trainer - INFO - Đã tạo 1086 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:01:55,672 - trainer - INFO - Số lượng lớp trong dữ liệu training: [425, 443]
+2025-11-27 17:01:55,672 - trainer - INFO - Trọng số lớp được tính toán: [1.0211764574050903, 0.9796839952468872]
+2025-11-27 17:01:55,672 - trainer - INFO - DataLoaders đã được tạo: Train=868, Val=108, Test=110
+2025-11-27 17:02:03,503 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+5 ---
+      - Accuracy: 65.45%
+      - Balanced Accuracy: 55.71%
+      - Precision (Weighted): 63.20%
+      - Recall (Weighted): 65.45%
+      - F1-Score (Weighted): 59.84%
+      - Confusion Matrix:
+[[ 8 32]
+ [ 6 64]]
+2025-11-27 17:02:09,878 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+30 =====
+2025-11-27 17:02:10,004 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+30 (trước khi lọc nhiễu)
+2025-11-27 17:02:10,009 - trainer - INFO - Đã tạo 1062 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:02:10,012 - trainer - INFO - Số lượng lớp trong dữ liệu training: [353, 496]
+2025-11-27 17:02:10,012 - trainer - INFO - Trọng số lớp được tính toán: [1.2025495767593384, 0.8558467626571655]
+2025-11-27 17:02:10,012 - trainer - INFO - DataLoaders đã được tạo: Train=849, Val=106, Test=107
+2025-11-27 17:02:16,096 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+30 ---
+      - Accuracy: 85.05%
+      - Balanced Accuracy: 87.69%
+      - Precision (Weighted): 89.17%
+      - Recall (Weighted): 85.05%
+      - F1-Score (Weighted): 85.19%
+      - Confusion Matrix:
+[[42  0]
+ [16 49]]
+2025-11-27 17:02:22,452 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+60 =====
+2025-11-27 17:02:22,578 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+60 (trước khi lọc nhiễu)
+2025-11-27 17:02:22,581 - trainer - INFO - Đã tạo 1127 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:02:22,584 - trainer - INFO - Số lượng lớp trong dữ liệu training: [389, 512]
+2025-11-27 17:02:22,584 - trainer - INFO - Trọng số lớp được tính toán: [1.158097743988037, 0.8798828125]
+2025-11-27 17:02:22,584 - trainer - INFO - DataLoaders đã được tạo: Train=901, Val=112, Test=114
+2025-11-27 17:02:30,422 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+60 ---
+      - Accuracy: 87.72%
+      - Balanced Accuracy: 83.06%
+      - Precision (Weighted): 88.14%
+      - Recall (Weighted): 87.72%
+      - F1-Score (Weighted): 87.90%
+      - Confusion Matrix:
+[[18  6]
+ [ 8 82]]
+2025-11-27 17:02:36,769 - trainer - INFO - ===== STARTING PIPELINE FOR: HDB_transformer_t+90 =====
+2025-11-27 17:02:36,889 - trainer - INFO - Đã tải 1997 mẫu cho HDB t+90 (trước khi lọc nhiễu)
+2025-11-27 17:02:36,892 - trainer - INFO - Đã tạo 1238 chuỗi hợp lệ sau khi loại bỏ các mẫu nhiễu.
+2025-11-27 17:02:36,895 - trainer - INFO - Số lượng lớp trong dữ liệu training: [446, 544]
+2025-11-27 17:02:36,895 - trainer - INFO - Trọng số lớp được tính toán: [1.109865427017212, 0.9099264740943909]
+2025-11-27 17:02:36,895 - trainer - INFO - DataLoaders đã được tạo: Train=990, Val=123, Test=125
+2025-11-27 17:02:48,682 - trainer - INFO - 
+--- Kết quả Test cho HDB - Model: TRANSFORMER - Horizon: t+90 ---
+      - Accuracy: 88.80%
+      - Balanced Accuracy: 92.55%
+      - Precision (Weighted): 92.28%
+      - Recall (Weighted): 88.80%
+      - F1-Score (Weighted): 89.38%
+      - Confusion Matrix:
+[[31  0]
+ [14 80]]

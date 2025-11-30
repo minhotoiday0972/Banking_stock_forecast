@@ -18,7 +18,6 @@ from ..utils.logger import get_logger
 from ..models.base_model import ModelTrainer 
 from ..models.cnn_bilstm import CNNBiLSTM
 from ..models.transformer import TransformerModel
-from ..models.baselines import get_baseline_model
 
 import logging
 
@@ -35,13 +34,12 @@ class ModelTrainingPipeline:
         
         # Get model names from config, with fallbacks to empty lists
         dl_model_names = models_to_train_config.get('dl_models', [])
-        self.baseline_models = models_to_train_config.get('baseline_models', [])
         
         # Create a dictionary of the DL models that are actually requested
         self.dl_models = {name: self._available_dl_models[name] for name in dl_model_names if name in self._available_dl_models}
         
         # Combine all models to be trained
-        self.models_to_train = {**self.dl_models, **{k: None for k in self.baseline_models}}
+        self.models_to_train = {**self.dl_models}
         self.logger.info(f"Models to train: {list(self.models_to_train.keys())}")
 
         self.horizons = self.config.get('models.shared.forecast_horizons', [1, 3, 5, 30, 60, 90])
@@ -157,15 +155,22 @@ class ModelTrainingPipeline:
 
     def _calculate_sklearn_metrics(self, y_true, y_pred) -> Dict:
         """
-        Tính toán metrics cho các mô hình scikit-learn.
-        SỬA ĐỔI: Thêm `labels=[0, 1]` để đảm bảo rằng cả hai lớp luôn được
-        tính đến, ngay cả khi một lớp không có trong `y_true` hoặc `y_pred` của một batch,
-        giúp tránh các cảnh báo và lỗi hình dạng (shape errors).
+        Calculates metrics for scikit-learn models.
+        MODIFIED: Added `labels=[0, 1]` to ensure that both classes are always
+        accounted for, even if one class is not in `y_true` or `y_pred` of a batch,
+        which helps avoid warnings and shape errors.
         """
+        # Return empty metrics if there are no true labels to score against.
+        if len(y_true) == 0:
+            return {}
+
         # Ensure labels are specified to handle cases where a class is missing in a batch
         labels = [0, 1]
         
         cm = confusion_matrix(y_true, y_pred, labels=labels)
+        
+        # balanced_accuracy_score handles the single-class case gracefully by itself.
+        # Other metrics require the labels and zero_division parameters.
         return {
             'accuracy': accuracy_score(y_true, y_pred),
             'balanced_accuracy': balanced_accuracy_score(y_true, y_pred),
@@ -174,42 +179,6 @@ class ModelTrainingPipeline:
             'f1': f1_score(y_true, y_pred, labels=labels, average='weighted', zero_division=0),
             'confusion_matrix': cm.tolist()
         }
-
-    def _prepare_baseline_data(self, df: pd.DataFrame, feature_cols: List[str], target_col: str) -> Optional[Dict]:
-        """
-        Chuẩn bị dữ liệu phẳng cho baseline, loại bỏ các mẫu nhiễu (target=NaN).
-        """
-        try:
-            # **LOGIC LỌC NHIỄU**
-            df_filtered = df.dropna(subset=[target_col])
-            
-            if len(df_filtered) < 100:
-                self.logger.error(f"Không đủ dữ liệu cho baseline model sau khi lọc nhiễu: {len(df_filtered)} mẫu.")
-                return None
-            
-            self.logger.info(f"Chuẩn bị {len(df_filtered)} mẫu cho baseline model (đã lọc nhiễu).")
-
-            X = df_filtered[feature_cols].values
-            y = df_filtered[target_col].values
-            
-            train_split = self.config.get('training.train_split', 0.7)
-            val_split = self.config.get('training.val_split', 0.15)
-            
-            if train_split + val_split > 0.9:
-                val_split = 0.9 - train_split
-                self.logger.warning(f"Tổng train+val > 0.9, điều chỉnh val_split còn {val_split:.2f}")
-
-            train_size = int(len(X) * train_split)
-            val_size = int(len(X) * val_split)
-            
-            return {
-                "X_train": X[:train_size], "y_train": y[:train_size],
-                "X_val": X[train_size:train_size+val_size], "y_val": y[train_size:train_size+val_size],
-                "X_test": X[train_size+val_size:], "y_test": y[train_size+val_size:]
-            }
-        except Exception as e:
-            self.logger.error(f"Lỗi khi chuẩn bị dữ liệu baseline: {e}", exc_info=True)
-            return None
 
     def _create_dataloaders(self, df: pd.DataFrame, feature_cols: List[str], target_col: str) -> Optional[Dict]:
         """
@@ -330,8 +299,6 @@ class ModelTrainingPipeline:
                 if self.mlflow_enabled and 'model' in results:
                     if model_type in self.dl_models:
                         mlflow.pytorch.log_model(results['model'], f"{model_type}_model", registered_model_name=model_key)
-                    else:
-                        mlflow.sklearn.log_model(results['model'], f"{model_type}_model")
 
                 return results['test_metrics']
 
@@ -339,32 +306,6 @@ class ModelTrainingPipeline:
             self.logger.exception(f"FATAL ERROR in pipeline {model_key}: {e}")
             self._log_and_print_metrics(ticker, model_type, horizon, None)
             return None
-
-    def _run_baseline_pipeline(self, model_type: str, ticker: str, horizon: int):
-        
-        def train_baseline(data_dict):
-            baseline_data = self._prepare_baseline_data(data_dict['df'], data_dict['feature_cols'], data_dict['target_col'])
-            if not baseline_data: return None
-
-            model = get_baseline_model(model_type, self.config)
-            self.logger.info(f"Fitting baseline model '{model_type}'...")
-            model.fit(baseline_data['X_train'], baseline_data['y_train'])
-
-            # Evaluate on validation set
-            self.logger.info("Evaluating baseline model on validation set...")
-            val_predictions = model.predict(baseline_data['X_val'])
-            val_metrics = self._calculate_sklearn_metrics(baseline_data['y_val'], val_predictions)
-            best_val_f1 = val_metrics.get('f1', 0)
-            self.logger.info(f"Validation F1 for {model_type}: {best_val_f1:.4f}")
-
-            # Evaluate on test set
-            self.logger.info("Evaluating baseline model on test set...")
-            test_predictions = model.predict(baseline_data['X_test'])
-            test_metrics = self._calculate_sklearn_metrics(baseline_data['y_test'], test_predictions)
-
-            return {"test_metrics": test_metrics, "model": model, "best_val_f1": best_val_f1}
-
-        return self._run_training_session(model_type, ticker, horizon, train_baseline)
 
     def _run_dl_pipeline(self, model_type: str, ticker: str, horizon: int):
 
@@ -399,8 +340,6 @@ class ModelTrainingPipeline:
                     
                     if model_type in self.dl_models:
                         results = self._run_dl_pipeline(model_type, ticker, horizon)
-                    elif model_type in self.baseline_models:
-                        results = self._run_baseline_pipeline(model_type, ticker, horizon)
                     else:
                         self.logger.error(f"Invalid model configuration for '{model_type}'.")
                         results = None
